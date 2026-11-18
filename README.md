@@ -5,10 +5,20 @@ Four agent skills that prefer evidence over adjectives: they refuse to invent nu
 ## Install
 
 ```bash
-npx skills add <owner>/lgd-skills --skill summarize-pro
-npx skills add <owner>/lgd-skills --skill debug-pro
-npx skills add <owner>/lgd-skills --skill wechat-viral-topic
-npx skills add <owner>/lgd-skills --skill lgd-skill-review
+npx skills add zhaoxinghua09-cell/lgd-skills --skill summarize-pro
+npx skills add zhaoxinghua09-cell/lgd-skills --skill debug-pro
+npx skills add zhaoxinghua09-cell/lgd-skills --skill wechat-viral-topic
+npx skills add zhaoxinghua09-cell/lgd-skills --skill lgd-skill-review
+```
+
+Every package is self-contained: `SKILL.md` + `references/` + `scripts/` + `tests/` + `demo/`. Copy the folder, run the golden set, and you have an answer in seconds — no keys, no network, no installation step.
+
+### From LobeHub marketplace
+
+Submitted for review as `zhaoxinghua09-cell/lgd-skills` on 2026-11-18. Once approved, each skill installs with its marketplace identifier:
+
+```bash
+npx -y @lobehub/market-cli skills install <identifier> --agent codex
 ```
 
 ## What's inside
