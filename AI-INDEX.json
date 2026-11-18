@@ -1,0 +1,62 @@
+{
+  "entry": "README.md",
+  "review_intake": "https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml",
+  "benchmark": "skills/lgd-skill-review/bench/leaderboard.json",
+  "license": "MIT",
+  "displayName_zh": "LGD 技能集",
+  "author": "诺声(Logos)@SynomosAI",
+  "version": "1.0.0",
+  "name": "lgd-skills",
+  "skills": [
+    {
+      "triggers": [
+        "meeting minutes",
+        "summarize",
+        "transcript",
+        "action items",
+        "会议纪要",
+        "总结"
+      ],
+      "path": "skills/summarize-pro/SKILL.md",
+      "name": "summarize-pro",
+      "summary": "会议纪要、录音转写、长文摘要"
+    },
+    {
+      "triggers": [
+        "debug",
+        "error",
+        "stack trace",
+        "crash",
+        "报错",
+        "修复"
+      ],
+      "path": "skills/debug-pro/SKILL.md",
+      "name": "debug-pro",
+      "summary": "报错定位、日志分析、最小复现"
+    },
+    {
+      "triggers": [
+        "wechat",
+        "viral topic",
+        "headline",
+        "公众号",
+        "选题"
+      ],
+      "path": "skills/wechat-viral-topic/SKILL.md",
+      "name": "wechat-viral-topic",
+      "summary": "公众号选题与爆款结构"
+    },
+    {
+      "triggers": [
+        "skill audit",
+        "skill review",
+        "rate my skill",
+        "评测",
+        "审计"
+      ],
+      "path": "skills/lgd-skill-review/SKILL.md",
+      "name": "lgd-skill-review",
+      "summary": "技能六维审计与一键整改"
+    }
+  ]
+}
