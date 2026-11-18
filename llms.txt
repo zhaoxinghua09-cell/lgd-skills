@@ -1,0 +1,24 @@
+# lgd-skills — machine-readable entry
+
+> For agents: this repository bundles four skills under `skills/<name>/SKILL.md`.
+> Install all: `npx skills add zhaoxinghua09-cell/lgd-skills`
+
+## skills
+
+- skills/summarize-pro/SKILL.md — meeting minutes, transcript summarization, action items, long-text digest
+- skills/debug-pro/SKILL.md — error debugging, stack trace analysis, minimal reproduction, log diagnosis
+- skills/wechat-viral-topic/SKILL.md — WeChat public-account topic selection, viral headline and structure
+- skills/lgd-skill-review/SKILL.md — skill auditing, six-dimension verifiability review, one-click mechanical fixes
+
+## evaluate
+
+- Reviewer: skills/lgd-skill-review/scripts/review.py (static, never executes the target's code)
+- One-click fixes: skills/lgd-skill-review/scripts/quickfix.py (dry-run by default)
+- Public benchmark + leaderboard: skills/lgd-skill-review/bench/
+- Request a review without contacting the author: open an issue with `review-request.yml`
+
+## limits
+
+- Measures verifiability, not usefulness or popularity.
+- Low score means evidence is missing, not that the skill is bad.
+- Snapshot at a point in time; the sample is not random.
