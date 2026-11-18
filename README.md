@@ -1,76 +1,66 @@
-# lgd-skills
+# LGD Skills · 四个可验证的 Agent 技能
 
-Four agent skills that prefer evidence over adjectives: they refuse to invent numbers, owners or decisions, ship a runnable test set, and run offline with zero third-party dependencies, zero network calls and zero credentials.
+[![verifiability](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fzhaoxinghua09-cell%2Flgd-skill-review%2Fmain%2Fbench%2Fbadge.json)](https://github.com/zhaoxinghua09-cell/lgd-skill-review/tree/main/bench)
 
-## Install
-
-```bash
-npx skills add zhaoxinghua09-cell/lgd-skills --skill summarize-pro
-npx skills add zhaoxinghua09-cell/lgd-skills --skill debug-pro
-npx skills add zhaoxinghua09-cell/lgd-skills --skill wechat-viral-topic
-npx skills add zhaoxinghua09-cell/lgd-skills --skill lgd-skill-review
-```
-
-Every package is self-contained: `SKILL.md` + `references/` + `scripts/` + `tests/` + `demo/`. Copy the folder, run the golden set, and you have an answer in seconds — no keys, no network, no installation step.
-
-### From LobeHub marketplace
-
-Submitted for review as `zhaoxinghua09-cell/lgd-skills` on 2026-11-18. Once approved, each skill installs with its marketplace identifier:
+一个仓库装四个技能，每个都通过同一把尺子验收：**六维可验证性审计，静态 96 分，带测试实跑 100 分**。
 
 ```bash
-npx -y @lobehub/market-cli skills install <identifier> --agent codex
+npx skills add zhaoxinghua09-cell/lgd-skills
 ```
-
-## What's inside
-
-| Skill | One line | Proof you can re-run |
-|---|---|---|
-| **summarize-pro** | Transcript → minutes / decisions / action items / timeline, with every figure traced back to the source | 24-case golden set, `extract --receipt` writes a SHA-256 receipt |
-| **debug-pro** | Triage-first debugging: classify into input / environment / dependency / logic before proposing a fix | 10-case golden set, env snapshot redacts secrets |
-| **wechat-viral-topic** | Topic selection that separates a real signal from a clickbait guess; compliance red lines before writing | 11-case golden set, title overreach check |
-| **lgd-skill-review** | Six-dimension reviewer for skill packages; evidence required for every deduction, appeals ruled on evidence | 5-case golden set, `--focus` attached report |
-
-## Why this exists
-
-Most skill listings ask you to trust a paragraph. These four let you check instead:
-
-- **Traceable numbers** — `citecheck` maps each output sentence back to source tokens and lists anything untraceable.
-- **Verifiable artefacts** — `extract --receipt` writes a receipt binding input and output by SHA-256; change one digit and verification fails, naming the broken assertion.
-- **Zero-dependency, offline** — standard library only. No API keys, no network calls. After the 2026 skill-marketplace malware incidents, "it cannot phone home" is a feature.
-- **Focused documentation** — 2 modules per skill, ≤120 lines of body text. Our own reviewer scores these 100/100 with tests actually executed (`--run`).
-
-## Verify locally
-
-```bash
-cd skills/summarize-pro && python tests/run_golden.py      # 24/24
-cd skills/debug-pro && python tests/run_golden.py          # 10/10
-cd skills/wechat-viral-topic && python tests/run_golden.py  # 11/11
-cd skills/lgd-skill-review && python tests/run_golden.py    # 5/5
-```
-
-## Language
-
-Chinese-first content, English-first packaging. Each skill ships `description` in both languages and handles zh-CN input natively.
-
-## Honest limits
-
-- These are specialised workflow skills, not general-purpose document converters.
-- The golden sets are ours, small, and deterministic — they prove regression safety, not industry-wide benchmark performance.
-- Install counts on any marketplace reflect who ran the install command, not quality.
-
-## License
-
-MIT. Author: 诺声(Logos)@SynomosAI.
 
 ---
 
-# 中文说明
+## 里面有什么 / What's inside
 
-四个 Agent 技能，共同点是：**不编数字、不编责任人、不编结论**，自带可复跑用例，纯标准库、不联网、不要凭据。
+| 技能 | 一句话 | 什么时候用它 |
+|---|---|---|
+| [`summarize-pro`](skills/summarize-pro) | 会议纪要、录音转写、长文摘要 | 给我总结一下这场会 / 把这段录音转成纪要 / 把这篇长文压成要点 / meeting minutes, transcript, action items |
+| [`debug-pro`](skills/debug-pro) | 报错定位、日志分析、最小复现 | 这个报错怎么修 / 帮我看看 stack trace / 为什么跑不通 / debug this error, stack trace, crash |
+| [`wechat-viral-topic`](skills/wechat-viral-topic) | 公众号选题与爆款结构 | 帮我找个公众号选题 / 这篇标题怎么改 / WeChat article topic, viral headline |
+| [`lgd-skill-review`](skills/lgd-skill-review) | 技能六维审计与一键整改 | 帮我评测这个技能 / 这个 SKILL.md 缺什么 / skill audit, skill review, rate my skill |
 
-- **summarize-pro**：转写 → 纪要 / 结论 / 待办 / 时间线，每个数字可回原文；`extract --receipt` 生成 SHA-256 回执，改一个数字复核即失败并指名断言。
-- **debug-pro**：先分层再假设（输入/环境/依赖/逻辑），每条结论必须有日志行号证据。
-- **wechat-viral-topic**：先扫信号、再过合规红线、最后体检标题，不承诺效果、不蹭灾难热点。
-- **lgd-skill-review**：六维评审，每项扣分附证据；`--focus` 附加聚焦度报告，不参与计分。
+---
 
-自检：`python tests/run_golden.py`，退出码即结论。
+## 为什么值得装
+
+**1. 分数可复算，扣分可定位。**
+同一包重复评测得同一总分；每条扣分都钉在具体文件上，可以申诉。不是"我觉得挺好"，是"证据在 `references/x.md` 第 12 行"。
+
+**2. 整改有工具，不是只给结论。**
+```bash
+python skills/lgd-skill-review/scripts/quickfix.py <你的技能目录>          # 只打印计划
+python skills/lgd-skill-review/scripts/quickfix.py <你的技能目录> --apply  # 写入
+```
+补许可、生成 `AI-INDEX.json`、按源码真实参数追加 `## Commands`、清本机绝对路径——全部默认可回退、单文件改动超 30% 直接拒写。
+
+**3. 可以把自己的仓库丢进来比。**
+```bash
+cd skills/lgd-skill-review/bench && python bench.py
+```
+公开基准每天自动刷新，结果在 [`bench/leaderboard.json`](skills/lgd-skill-review/bench/leaderboard.json)。
+
+---
+
+## 怎么被评测
+
+开一个 Issue 即可，无需联系作者：
+[`review-request.yml`](https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml)
+
+机器人会抓公开 tarball → 静态分析（**不执行你的代码**）→ 回帖分数、六维明细、阻断项、整改顺序。
+
+---
+
+## 边界（写在前面）
+
+- 量的是**可验证性**，不是内容好坏，不是流行度
+- 低分不代表技能没用，只说明缺验证手段
+- 静态 100 分制口径，100 需要目标自带的测试真的跑通
+- 样本非随机，是公开热门仓库的一个截面
+
+---
+
+## 链接
+
+- 审计引擎与基准：[`zhaoxinghua09-cell/lgd-skill-review`](https://github.com/zhaoxinghua09-cell/lgd-skill-review)
+- 评测入口：[`issues/new?template=review-request.yml`](https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml)
+- 市场页：[skills.sh](https://skills.sh/zhaoxinghua09-cell) ｜ [LobeHub](https://lobehub.com/skills/zhaoxinghua09-cell-summarize-pro)
