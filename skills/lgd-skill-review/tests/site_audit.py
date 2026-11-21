@@ -106,6 +106,12 @@ def main():
     if "## all pages" not in lm:
         fails.append("llms.txt 缺 all pages 段")
 
+    # llms-full.txt 同样是机器入口，同样不能有坏 URL
+    lf = io.open(os.path.join(DOCS, "llms-full.txt"), encoding="utf-8").read()
+    broken_full = re.findall(re.escape(SITE) + r"[A-Za-z0-9]", lf)
+    if broken_full:
+        fails.append("llms-full.txt 有 %d 处 URL 缺斜杠（%s）" % (len(broken_full), broken_full[0]))
+
     for f in fails:
         print("  - " + f)
     print("ALL PASS" if not fails else "FAIL: %d 处" % len(fails))
