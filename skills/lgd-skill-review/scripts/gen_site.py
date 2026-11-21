@@ -1144,14 +1144,18 @@ replies with score + blockers + fix order.
 {REPO}/blob/main/bench/badge.json — shields endpoint format, renders current numbers.
 
 ## 9. registry (verified list)
-{SITE}registry.json — tiers: verified ≥90 · watch 60-89 · blocked <60; rules and entries.
+{SITE}/registry.json — tiers: verified ≥90 · watch 60-89 · blocked <60; rules and entries.
 
 ## 10. third-party audits (machine-readable)
-{SITE}audits.json — two large public repos, full findings + fix order + reproduce command.
+{SITE}/audits.json — two large public repos, full findings + fix order + reproduce command.
 
 ## 11. site
 {SITE}/ — {', '.join(u.replace('.html','') for u in urls)}
 """
+    broken_full = re.findall(re.escape(SITE) + r"[A-Za-z0-9]", full)
+    if broken_full:
+        raise SystemExit("llms-full.txt: %d URL(s) missing the slash after the site root: %s"
+                         % (len(broken_full), broken_full[:3]))
     open(os.path.join(DOCS, "llms-full.txt"), "w", encoding="utf-8").write(full)
 
     print("pages:", len(urls), "| docs dir:", DOCS)
