@@ -981,6 +981,16 @@ lists the addresses an agent can hit directly instead of hoping a ranking puts u
 signals we cannot influence without faking them, which we will not do. If you need a verdict today,
 use the endpoints above; if you want us to be found by search, the honest lever is people choosing to
 install and cite us.</p></div>
+
+<h2>Every batch is one commit</h2>
+<div class="card"><p>A single file written at a time produces one commit per file, and CI can then run
+on a half-applied tree. That is not hypothetical: a URL audit landed one commit before the
+<code>docs/leaderboard.json</code> it referenced, and the check failed exactly as it should. Publishing
+now goes through the git data API — blobs, then one tree, then one commit, then one ref update —
+implemented in <code>scripts/push_atomic.py</code>, so a batch is either fully visible or not visible
+at all and CI never sees an intermediate state.</p>
+<p style="font-size:13px">Check it yourself: <code>git log --oneline</code> on this repo shows one commit
+per published batch, and <code>git show --stat</code> on any of them lists all files of that batch together.</p></div>
 """
     html += FOOT
     open(os.path.join(DOCS, "discover.html"), "w", encoding="utf-8").write(html)
