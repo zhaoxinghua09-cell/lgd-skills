@@ -1,7 +1,14 @@
 {
   "algorithm": "sha256(sorted relpath + NUL + file sha256, per line)",
+  "history": [
+    {
+      "root_digest": "14da49b990cb343b07b8e69212805a431dd8b90e572efc605ad41f151bab0d14",
+      "sequence": 1
+    }
+  ],
   "root_digest": "14da49b990cb343b07b8e69212805a431dd8b90e572efc605ad41f151bab0d14",
-  "schema_version": 1,
+  "schema_version": 2,
+  "sequence": 1,
   "skill_count": 5,
   "skills": [
     {
@@ -39,5 +46,6 @@
       "has_description": true,
       "path": "skills/wechat-viral-topic"
     }
-  ]
+  ],
+  "validated_against": []
 }
