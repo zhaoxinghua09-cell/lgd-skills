@@ -91,6 +91,39 @@ def walk(root):
     return out
 
 
+def junk_entries(root):
+    """垃圾判定只针对「交付出去的东西」，不针对运行产物。
+
+    两次踩坑后的定稿：
+      1. walk() 把 __pycache__ 整枝剪掉 → 判据对 __pycache__ 永远不触发（判据写了、代码看不见）
+      2. 改成全盘扫之后，CI 里跑一次 review 自己就生成 __pycache__ → 自评被自己扣 3 分（假阳性）
+    所以有 git 时只认受版本控制的文件（committed junk 才是 junk）；没有 git 时才退回文件系统扫描。
+    """
+    tracked = None
+    if os.path.isdir(os.path.join(root, ".git")):
+        try:
+            out = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True,
+                                 text=True, timeout=60)
+            if out.returncode == 0:
+                tracked = {os.path.join(root, p.replace("/", os.sep))
+                           for p in out.stdout.splitlines() if p.strip()}
+        except Exception:
+            tracked = None
+    entries = []
+    if tracked is not None:
+        for p in tracked:
+            if p.endswith((".pyc", ".zip")) or "__pycache__" in p.split(os.sep):
+                entries.append(p)
+        return entries
+    for dp, dns, fns in os.walk(root):
+        if "__pycache__" in dns:
+            entries.append(os.path.join(dp, "__pycache__"))
+        for fn in fns:
+            if fn.endswith((".pyc", ".zip")):
+                entries.append(os.path.join(dp, fn))
+    return entries
+
+
 def scripts_text(root):
     parts = []
     for p in walk(root):
@@ -119,8 +152,9 @@ def d_structure(root, fm, files):
         notes.append("层级 >3 段：%s" % depth_bad[0])
     else:
         got += 4
-    if any(p.endswith((".pyc", ".zip")) or "__pycache__" in p for p in files):
-        notes.append("含 junk 文件（.pyc/.zip/__pycache__）")
+    if junk_entries(root):
+        notes.append("含 junk 文件（.pyc/.zip/__pycache__）：%s"
+                     % os.path.relpath(junk_entries(root)[0], root))
     else:
         got += 3
     if fm.get("displayName") or fm.get("display_name") or fm.get("name"):
@@ -150,10 +184,19 @@ def d_consistency(root, fm, files):
     have_flags = {"--" + f for f in have_flags}
     have_cmds = set(re.findall(r'add_parser\(\s*"([a-z0-9_\-]+)', scripts_text(root)))
 
-    # 只校验「我们的脚本」承诺的 flag，避免把目标平台自身的 CLI 参数误判为我们的声明
-    ours = {f for f in declared_flags if f in have_flags}
-    unknown = {f for f in declared_flags
+    # 只校验「我们的脚本」承诺的 flag，避免把目标平台自身的 CLI 参数误判为我们的声明。
+    # 判据写的是「每个 --flag 都要实现」，原实现却多加了关键词门（我们的工具/子命令/…），
+    # 结果：一条普通命令行 `python scripts/x.py --foo` 即便 foo 不存在也不扣分 —— 判据没被执行。
+    # 现在的归属判定换成证据：命令行里的脚本在本仓存在，这一行的 flag 就是我们的承诺。
+    repo_names = {os.path.basename(p) for p in files}
+    ours_declared = set()
+    for l in cmd_lines:
+        scripts_on_line = re.findall(r"([\w./\\-]+\.(?:py|sh|js|ts))", l)
+        if any(os.path.basename(s) in repo_names for s in scripts_on_line):
+            ours_declared |= set(re.findall(r"--[a-z][a-z0-9\-]{1,20}", l))
+    unknown = {f for f in (declared_flags | ours_declared)
                if f not in have_flags and re.search(r"我们的?工具|本技能提供|子命令|脚本支持", skill_md)}
+    unknown |= {f for f in ours_declared if f not in have_flags}
     if have_flags:
         got += 10
         missing = unknown - have_flags
@@ -166,12 +209,28 @@ def d_consistency(root, fm, files):
     else:
         notes.append("未检出任何脚本参数声明（如无脚本可忽略）")
 
+    # 位置参数也算一种可验证的声明：SKILL.md 里写了 `python x.py <a> <b>`，脚本真的读 sys.argv。
+    # 这类用法以前被判 0 分，属于测量偏见——同一件事（声明与实现是否对得上）只是接口形式不同。
+    # 只给 5 分：位置参数没有名字，无法逐项核对语义，价值明显低于具名 flag。
+    if not have_flags:
+        pos_doc = re.search(r"\.py\s+(?:<[^>]+>\s*)+", skill_md)
+        argv_use = len(re.findall(r"sys\.argv\[[1-9]", scripts_text(root)))
+        if pos_doc and argv_use:
+            got += 5
+            notes.append("位置参数入口与 sys.argv 实现一致（未具名，仅部分可核）")
+        elif pos_doc and not argv_use:
+            notes.append("文档给了位置参数用法，但脚本未读取 sys.argv（声明与实现不符）")
+
     if have_cmds:
-        got += 5
         bad = {c for c in declared_cmds if c not in have_cmds and c not in ("run", "py")}
         if bad:
-            notes.append("SKILL 提到的子命令脚本内不存在：%s" % "、".join(sorted(bad)[:3]))
+            # 以前这里照样给满分：检出「文档写了、脚本里没有」却只记账不扣分。
+            # 这正是本维度要测的东西，扣分是对的——而且专挑我们自己的包开刀才对得住「同一把尺子」。
+            notes.append("SKILL 提到的子命令脚本内不存在：%s（声明与实现不符，扣 5）"
+                         % "、".join(sorted(bad)[:3]))
+            blocking.append("declared_subcommand_missing:%s" % sorted(bad)[0])
         else:
+            got += 5
             notes.append("子命令与实现一致：%s" % "、".join(sorted(have_cmds)))
     if "不编" in desc + skill_md or "faithful" in desc.lower():
         got += 5
@@ -243,6 +302,11 @@ def d_hygiene(root, files):
                     if CONTACT_CTX.search(ctx):
                         contact.append((os.path.relpath(p, root), m.group(0)))
                         continue
+                    # GitHub 的 bot / noreply 地址是平台生成的匿名身份，不含个人信息。
+                    # 判它泄露会让所有合规的自动化工作流被误封，属于测量偏见。
+                    if re.search(r"noreply\.github\.com$|github-actions\[bot\]@", m.group(0), re.I):
+                        contact.append((os.path.relpath(p, root), m.group(0)))
+                        continue
                 hits.append((os.path.relpath(p, root), label, m.group(0)[:24]))
     if hits:
         for h in hits[:5]:
@@ -280,7 +344,7 @@ def d_discoverable(root, fm, files):
         got += 3
     else:
         notes.append("缺互链段（无法形成生态入口网络）")
-    if any(re.search(r"(ai-index\.json|llms\.txt)", p) for p in files):
+    if any(re.search(r"(ai-index\.json|llms\.txt)", p.lower()) for p in files):
         got += 3
         notes.append("已提供机器可读索引")
     else:

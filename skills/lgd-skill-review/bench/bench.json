@@ -1,0 +1,333 @@
+[
+  {
+    "score": 24,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 10,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 4,
+      "licensing": 2
+    },
+    "dir": "agent-skills-HEAD/skills/react-best-practices",
+    "target": "vercel-labs/agent-skills@skills/react-best-practices",
+    "bucket": "third-party"
+  },
+  {
+    "score": 18,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 10,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 0,
+      "licensing": 0
+    },
+    "dir": "skills-HEAD/skills/engineering/code-review",
+    "target": "mattpocock/skills@skills/engineering/code-review",
+    "bucket": "third-party"
+  },
+  {
+    "score": 20,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 6,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 4,
+      "licensing": 2
+    },
+    "dir": "azure-skills-HEAD/.github/plugins/azure-skills/skills/azure-deploy",
+    "target": "microsoft/azure-skills@skills/azure-deploy",
+    "bucket": "third-party"
+  },
+  {
+    "score": 20,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 10,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 0,
+      "licensing": 2
+    },
+    "dir": "skills-HEAD/prisma-cli",
+    "target": "prisma/skills@prisma-cli",
+    "bucket": "third-party"
+  },
+  {
+    "score": 10,
+    "verdict": "BLOCK",
+    "blocking": [
+      "secret_leak:assets\\photos\\photos.json",
+      "secret_leak:assets\\photos\\photos.json"
+    ],
+    "dims": {
+      "structure": 6,
+      "consistency": 0,
+      "reproducible": 4,
+      "hygiene": 0,
+      "discoverable": 0,
+      "licensing": 0
+    },
+    "dir": "taste-skill-HEAD/skills/taste-skill",
+    "target": "leonxlnx/taste-skill@skills/taste-skill",
+    "bucket": "third-party"
+  },
+  {
+    "score": 18,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 10,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 0,
+      "licensing": 0
+    },
+    "dir": "caveman-HEAD/plugins/caveman/skills/caveman",
+    "target": "juliusbrussee/caveman@skills/caveman",
+    "bucket": "third-party"
+  },
+  {
+    "score": 22,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 10,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 4,
+      "licensing": 0
+    },
+    "dir": "agents-cli-HEAD/skills/google-agents-cli-adk-code",
+    "target": "google/agents-cli@skills/google-agents-cli-adk-code",
+    "bucket": "third-party"
+  },
+  {
+    "score": 21,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 10,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 0,
+      "licensing": 3
+    },
+    "dir": "skills-HEAD/skills/pdf",
+    "target": "anthropics/skills@skills/pdf",
+    "bucket": "third-party"
+  },
+  {
+    "score": 31,
+    "verdict": "BLOCK",
+    "blocking": [
+      "declared_command_missing:--convert-to",
+      "declared_command_missing:--headless"
+    ],
+    "dims": {
+      "structure": 6,
+      "consistency": 10,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 4,
+      "licensing": 3
+    },
+    "dir": "skills-HEAD/skills/pptx",
+    "target": "anthropics/skills@skills/pptx",
+    "bucket": "third-party"
+  },
+  {
+    "score": 31,
+    "verdict": "BLOCK",
+    "blocking": [
+      "declared_command_missing:--convert-to",
+      "declared_command_missing:--headless"
+    ],
+    "dims": {
+      "structure": 6,
+      "consistency": 10,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 4,
+      "licensing": 3
+    },
+    "dir": "skills-HEAD/skills/docx",
+    "target": "anthropics/skills@skills/docx",
+    "bucket": "third-party"
+  },
+  {
+    "score": 10,
+    "verdict": "BLOCK",
+    "blocking": [
+      "secret_leak:SKILL.md",
+      "secret_leak:SKILL.md",
+      "secret_leak:SKILL.md",
+      "secret_leak:references\\authentication.md",
+      "secret_leak:references\\authentication.md"
+    ],
+    "dims": {
+      "structure": 10,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 0,
+      "discoverable": 0,
+      "licensing": 0
+    },
+    "dir": "agent-browser-HEAD/skill-data/core",
+    "target": "vercel-labs/agent-browser@skill-data/core",
+    "bucket": "third-party"
+  },
+  {
+    "score": 18,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 10,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 0,
+      "licensing": 0
+    },
+    "dir": "superpowers-HEAD/skills/brainstorming",
+    "target": "obra/superpowers@skills/brainstorming",
+    "bucket": "third-party"
+  },
+  {
+    "score": 18,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 10,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 0,
+      "licensing": 0
+    },
+    "dir": "agent-skills-HEAD/skills/code-review-and-quality",
+    "target": "addyosmani/agent-skills@skills/code-review-and-quality",
+    "bucket": "third-party"
+  },
+  {
+    "score": 96,
+    "verdict": "PASS",
+    "blocking": [],
+    "dims": {
+      "structure": 20,
+      "consistency": 25,
+      "reproducible": 16,
+      "hygiene": 15,
+      "discoverable": 15,
+      "licensing": 5
+    },
+    "target": "summarize-pro",
+    "bucket": "lgd"
+  },
+  {
+    "score": 96,
+    "verdict": "PASS",
+    "blocking": [],
+    "dims": {
+      "structure": 20,
+      "consistency": 25,
+      "reproducible": 16,
+      "hygiene": 15,
+      "discoverable": 15,
+      "licensing": 5
+    },
+    "target": "debug-pro",
+    "bucket": "lgd"
+  },
+  {
+    "score": 96,
+    "verdict": "PASS",
+    "blocking": [],
+    "dims": {
+      "structure": 20,
+      "consistency": 25,
+      "reproducible": 16,
+      "hygiene": 15,
+      "discoverable": 15,
+      "licensing": 5
+    },
+    "target": "wechat-viral-topic",
+    "bucket": "lgd"
+  },
+  {
+    "score": 96,
+    "verdict": "PASS",
+    "blocking": [],
+    "dims": {
+      "structure": 20,
+      "consistency": 25,
+      "reproducible": 16,
+      "hygiene": 15,
+      "discoverable": 15,
+      "licensing": 5
+    },
+    "target": "lgd-skill-review",
+    "bucket": "lgd"
+  },
+  {
+    "score": 38,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 10,
+      "consistency": 15,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 4,
+      "licensing": 1
+    },
+    "dir": "skills-HEAD/skills/skill-creator",
+    "target": "anthropics/skills@skills/skill-creator",
+    "bucket": "third-party"
+  },
+  {
+    "score": 25,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 10,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 4,
+      "licensing": 3
+    },
+    "dir": "skills-HEAD/skills/frontend-design",
+    "target": "anthropics/skills@skills/frontend-design",
+    "bucket": "third-party"
+  },
+  {
+    "score": 22,
+    "verdict": "FAIL",
+    "blocking": [],
+    "dims": {
+      "structure": 10,
+      "consistency": 0,
+      "reproducible": 0,
+      "hygiene": 8,
+      "discoverable": 4,
+      "licensing": 0
+    },
+    "dir": "skills-HEAD/skills/apple-design",
+    "target": "emilkowalski/skills@skills/apple-design",
+    "bucket": "third-party"
+  }
+]

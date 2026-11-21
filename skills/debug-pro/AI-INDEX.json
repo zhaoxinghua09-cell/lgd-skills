@@ -1,0 +1,76 @@
+{
+  "schema": "lgd.ai-index/2",
+  "name": "debug-pro",
+  "displayName_zh": "排障专家",
+  "version": "2.1.4",
+  "license": "MIT",
+  "author": "诺声(Logos)@SynomosAI",
+  "homepage": "https://github.com/zhaoxinghua09-cell/debug-pro",
+  "registry": "https://github.com/zhaoxinghua09-cell/lgd-hit-list",
+  "family": [
+    "summarize-pro",
+    "wechat-viral-topic",
+    "lgd-skill-review"
+  ],
+  "language": [
+    "zh-CN",
+    "en"
+  ],
+  "purpose_en": "Triage-first debugging: locate the failing layer (input / environment / dependency / logic) before proposing any fix, then minimize, verify and regress.",
+  "purpose_zh": "先定位再动手的排障流程：先把故障钉在某一层（输入/环境/依赖/逻辑），再最小化、验证、回归。没有日志与复现步骤就不给根因。",
+  "use_when_en": "Use when a build fails, a regression appears, a bug cannot be reproduced, or you must decide whether the fault is in code, environment or data.",
+  "use_when_zh": "构建失败、出现回归、缺陷无法复现，或需判断故障位于代码、环境还是数据时使用。",
+  "entrypoints": [
+    "python tools/debughunt.py triage --file error.log --out ./out --json",
+    "python tools/debughunt.py envsnap --out ./out --json",
+    "python tools/debughunt.py reprocheck --file repro.md --json",
+    "python tests/run_golden.py"
+  ],
+  "outputs_en": "An evidence table (exception type, last stack frame, exit code, HTTP status, timestamp), a redacted environment block, and a repro score with missing items named.",
+  "outputs_zh": "证据表（异常类型/末栈帧/退出码/HTTP 状态/时间戳）、已脱敏的环境块、复现报告评分与缺失项点名。",
+  "verification": {
+    "golden_set": "10 cases",
+    "rerun_command": "python tests/run_golden.py",
+    "exit_code_semantics": "0 when all cases pass",
+    "differentiator": "single checkable command handed to the user for every claim"
+  },
+  "constraints": {
+    "offline": true,
+    "stdio_only": true,
+    "network": false,
+    "credentials": false
+  },
+  "intents": [
+    {
+      "id": "triage-first",
+      "ask_en": "Find which layer a failure is in before changing any code",
+      "ask_zh": "先定位故障在哪一层，再改代码",
+      "routes_to": "entrypoints[0]"
+    },
+    {
+      "id": "build-fail",
+      "ask_en": "My build fails and I need the failing layer pinpointed",
+      "ask_zh": "构建失败，需要定位到具体层",
+      "routes_to": "entrypoints[0]"
+    },
+    {
+      "id": "env-snapshot",
+      "ask_en": "Capture a redacted environment snapshot for a bug report",
+      "ask_zh": "为缺陷报告采集已脱敏的环境快照",
+      "routes_to": "entrypoints[1]"
+    },
+    {
+      "id": "repro-score",
+      "ask_en": "Score how reproducible my bug report actually is",
+      "ask_zh": "评估我的缺陷报告到底有多可复现",
+      "routes_to": "entrypoints[2]"
+    },
+    {
+      "id": "regression",
+      "ask_en": "A regression appeared and I must decide code vs environment vs data",
+      "ask_zh": "出现回归，需判断是代码、环境还是数据问题",
+      "routes_to": "use_when_en"
+    }
+  ],
+  "intents_note": "intents is a lookup surface, not a feature list: each ask is phrased the way a user or an agent would search it, and routes_to points at a real entrypoint in this package. 如果某条 ask 在本包做不到，那就是缺陷，应当删掉而不是留着。"
+}

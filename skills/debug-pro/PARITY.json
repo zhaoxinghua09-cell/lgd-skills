@@ -1,0 +1,38 @@
+{
+  "schema": "lgd-parity-v1",
+  "skill": "debug-pro",
+  "published": {
+    "path": "SKILL.md",
+    "sha256": "bb182e9eec568a34bdc34448b34d65059ad51fce0cecff4f2829023ce2841220",
+    "bytes": 7754,
+    "lines": 107
+  },
+  "restored": {
+    "path": "references/details.md",
+    "sha256": "facde8d27e11",
+    "sections_restored": [
+      "30 秒速查（先看这里）",
+      "什么时候不用（Not for）",
+      "七步流程",
+      "分层速查",
+      "本地工具链（零依赖、不联网）",
+      "执行自检（交付前必过）",
+      "失败与降级处理",
+      "一致性纪律",
+      "边界案例",
+      "硬规则清单（MUST / NEVER）",
+      "多语种",
+      "输出之后交给谁（链式路由）"
+    ],
+    "note": "v2.2.0 起，重写稿丢掉的小节逐段补回 references/details.md，文字取自 original，按需加载。补的是内容，不是分数：补前补后自评都是 96（静态）/ 100（实跑）。"
+  },
+  "original": {
+    "path": "references/original-SKILL.md",
+    "sha256": "f9f978c11485ed2a5158ba429e664b42b05a5757618dcd309486ea22829809fa",
+    "bytes": 18058,
+    "lines": 307
+  },
+  "original_matches_local_source": true,
+  "relation": "publish SKILL.md is a condensed rewrite (v2.1.0-slim), not an excerpt; v2.2.0 additionally restores the dropped sections into references/details.md, so the content gap is now only in SKILL.md itself, not in the package",
+  "check": "sha256(references/original-SKILL.md) == original.sha256"
+}

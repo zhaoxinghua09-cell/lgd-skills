@@ -1,0 +1,19 @@
+# lgd-skill-review golden-set run log
+
+run_at_utc: 2026-11-18T16:43:40Z
+python: 3.13.18
+os: Windows 11
+command: python tests/run_golden.py
+
+exit_code: 0
+
+--- stdout ---
+PASS T1-no-skill-md-blocks                  verdict=BLOCK total=None
+PASS T2-good-package-passes                 verdict=PASS  total=96
+PASS T3-secret-leak-blocks                  verdict=BLOCK total=88
+PASS T4-declared-command-missing-blocks     verdict=BLOCK total=91
+PASS T5-self-scores-100                     verdict=PASS  total=96
+---- 5/5 PASS ----
+
+--- stderr ---
+(empty)

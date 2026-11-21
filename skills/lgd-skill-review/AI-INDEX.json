@@ -1,0 +1,117 @@
+{
+  "schema": "lgd.ai-index/2",
+  "name": "lgd-skill-review",
+  "displayName_zh": "技能审计官",
+  "version": "1.1.7",
+  "license": "MIT",
+  "author": "诺声(Logos)@SynomosAI",
+  "homepage": "https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "registry": "https://github.com/zhaoxinghua09-cell/lgd-hit-list",
+  "family": [
+    "summarize-pro",
+    "debug-pro",
+    "wechat-viral-topic"
+  ],
+  "language": [
+    "zh-CN",
+    "en"
+  ],
+  "purpose_en": "A six-dimension auditor for agent skills: every deduction must cite evidence, and every package gets a score, a blocker list and a remediation order — so an author (or an agent) can fix, re-run and raise the score.",
+  "purpose_zh": "Agent 技能六维审计器：每一处扣分都必须给出证据，输出分数、阻断项与整改顺序，作者或 AI 可据此整改、复评、再提高。这是我们做「权威评测」的引擎。",
+  "use_when_en": "Use when you must judge whether a skill package is safe and complete before installing it, or when you want a score plus concrete remediation steps for a skill you wrote.",
+  "use_when_zh": "安装前判断一个技能包是否安全完整，或想为自己写的技能拿到分数与可执行整改步骤时使用。",
+  "entrypoints": [
+    "python scripts/review.py <package-dir> --run",
+    "python scripts/review.py <package-dir> --run --focus declared-consistency",
+    "python tests/run_golden.py"
+  ],
+  "outputs_en": "Per-dimension score, blocking items with file/line evidence, and an ordered remediation list; with --run it executes the package's own golden set instead of trusting the README.",
+  "outputs_zh": "逐维分数、带文件行号的阻断项证据、按优先级排好的整改清单；加 --run 会实际执行包内黄金集，而不是相信 README 的自述。",
+  "verification": {
+    "golden_set": "5 cases",
+    "rerun_command": "python tests/run_golden.py",
+    "exit_code_semantics": "0 when all cases pass",
+    "differentiator": "declared-CLI vs implemented-CLI consistency"
+  },
+  "constraints": {
+    "offline": true,
+    "stdio_only": true,
+    "network": false,
+    "credentials": false
+  },
+  "commands": [
+    {
+      "script": "scripts/handle_appeal.py",
+      "flags": [
+        "--out",
+        "--run"
+      ],
+      "subcommands": [],
+      "summary": "把一份申诉跑成可直接回帖的裁决。"
+    },
+    {
+      "script": "scripts/quickfix.py",
+      "flags": [
+        "--apply",
+        "--holder",
+        "--license"
+      ],
+      "subcommands": [],
+      "summary": "QuickFix: apply only the *mechanical* fixes that raise verifiability — and prove the delta."
+    },
+    {
+      "script": "scripts/review.py",
+      "flags": [
+        "--appeal",
+        "--eight",
+        "--focus",
+        "--json",
+        "--multi-role",
+        "--run",
+        "--token",
+        "--type"
+      ],
+      "subcommands": [],
+      "summary": "LGD 技能评测引擎（零依赖）。"
+    }
+  ],
+  "intents": [
+    {
+      "id": "skill-audit",
+      "ask_en": "Audit an agent skill package before installing it",
+      "ask_zh": "安装前审计一个 agent 技能包",
+      "routes_to": "entrypoints[0]"
+    },
+    {
+      "id": "score-and-fix",
+      "ask_en": "Give my skill a score plus concrete remediation steps",
+      "ask_zh": "给我的技能打分并给出可执行整改步骤",
+      "routes_to": "entrypoints[0]"
+    },
+    {
+      "id": "declared-vs-implemented",
+      "ask_en": "Check whether my SKILL.md promises commands the scripts do not implement",
+      "ask_zh": "检查 SKILL.md 承诺的命令脚本是否真的实现",
+      "routes_to": "verification.differentiator"
+    },
+    {
+      "id": "run-not-trust",
+      "ask_en": "Verify a skill by executing its own golden set instead of trusting its README",
+      "ask_zh": "通过实跑包内黄金集来验证技能，而不是相信 README",
+      "routes_to": "entrypoints[0]"
+    },
+    {
+      "id": "re-review",
+      "ask_en": "Re-score a skill after fixes and show the delta",
+      "ask_zh": "整改后重新评分并给出分数变化",
+      "routes_to": "entrypoints[0]"
+    },
+    {
+      "id": "compare-competitors",
+      "ask_en": "Compare several skill packages on the same ruler",
+      "ask_zh": "用同一把尺子横向比较多个技能包",
+      "routes_to": "entrypoints[0]"
+    }
+  ],
+  "intents_note": "intents is a lookup surface, not a feature list: each ask is phrased the way a user or an agent would search it, and routes_to points at a real entrypoint in this package. 如果某条 ask 在本包做不到，那就是缺陷，应当删掉而不是留着。"
+}

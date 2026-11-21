@@ -1,41 +1,58 @@
-# lgd-skill-review
+# lgd-skill-review · 技能审计官
 
-> A six-dimension, evidence-based reviewer for any AI skill package: score, fix list, rerun.
+> Machine-readable index for AI agents: `AI-INDEX.json`. Human/agent guide: `SKILL.md`. Chinese first, English follows.
 
-## When to use
+## What this is (EN)
+A six-dimension auditor for agent skills: every deduction must cite evidence, and every package gets a score, a blocker list and a remediation order — so an author (or an agent) can fix, re-run and raise the score.
 
-- 帮我评一下这个技能包  →  review.py <dir>
-- 我的技能为什么上架被拒  →  六维报告 + P0 阻断项
-- SKILL.md 里写的命令脚本里都有吗  →  consistency 维度
-- 这个技能有测试吗，能跑通吗  →  reproducible + --run
-- 这个包有没有泄露 key 或手机号  →  hygiene 扫描
-- 按评测结果自动改进再复测  →  P0/P1 清单 + rerun 命令
-- review this skill package and give me a fix list  →  same
+## 这是什么（中文）
+Agent 技能六维审计器：每一处扣分都必须给出证据，输出分数、阻断项与整改顺序，作者或 AI 可据此整改、复评、再提高。这是我们做「权威评测」的引擎。
 
-## When NOT to use
+## When to use it (EN)
+Use when you must judge whether a skill package is safe and complete before installing it, or when you want a score plus concrete remediation steps for a skill you wrote.
 
-- 评测一篇文章的写作质量
-- 评测模型回答的准确率
-- 商业方案尽调
+## 什么时候用它（中文）
+安装前判断一个技能包是否安全完整，或想为自己写的技能拿到分数与可执行整改步骤时使用。
 
-## Entrypoints
+## Entrypoints / 入口命令
+```bash
+python scripts/review.py <package-dir> --run
+python scripts/review.py <package-dir> --run --focus declared-consistency
+python tests/run_golden.py
+```
 
-- cli: `python scripts/review.py <skill_dir>`
-- json: `python scripts/review.py <skill_dir> --json`
-- run: `python scripts/review.py <skill_dir> --run`
-- gate: `python tests/run_golden.py`
-- demo: `python demo/run_demo.py`
+## Output (EN)
+Per-dimension score, blocking items with file/line evidence, and an ordered remediation list; with --run it executes the package's own golden set instead of trusting the README.
 
-## Scoring (100)
+## 输出（中文）
+逐维分数、带文件行号的阻断项证据、按优先级排好的整改清单；加 --run 会实际执行包内黄金集，而不是相信 README 的自述。
 
-- structure 20 / consistency 25 / reproducible 20 / hygiene 15 / discoverable 15 / licensing 5
-- Blocking: declared_command_missing, secret_leak, no_skill_md
-- Verdict: BLOCK / FAIL (<60) / WARN (<80) / PASS
+## Proof you can re-run / 可复跑的证据
+- Golden set: 5 cases — `python tests/run_golden.py` prints a pass count and exits 0.
+- Differentiator: declared-CLI vs implemented-CLI consistency
+- Zero dependencies, offline, no credentials. Standard library only.
 
-## Ecosystem
+## Family / 同族技能（LGD Skills）
+- [summarize-pro](https://github.com/zhaoxinghua09-cell/summarize-pro) — 会议纪要专家
+- [debug-pro](https://github.com/zhaoxinghua09-cell/debug-pro) — 排障专家
+- [wechat-viral-topic](https://github.com/zhaoxinghua09-cell/wechat-viral-topic) — 公众号选题专家
 
-- Author: 诺声(Logos)@SynomosAI (LGD / SynomosAI)
-- Theory anchor: 三律 —— 有籍（可追溯）／有证（可核验）／有门禁（可拦截）
-- summarize-pro — 评测摘要/纪要类技能时配合使用
-- debug-pro — 被测技能测试跑不通时定位
-- wechat-viral-topic — 评测选题/内容类技能时配合
+## Evaluation registry / 爆款清单
+Audited against six dimensions; passing packages are registered at https://github.com/zhaoxinghua09-cell/lgd-hit-list with score and receipt.
+经六维审计通过后登记于爆款清单 https://github.com/zhaoxinghua09-cell/lgd-hit-list，附分数与回执。
+
+<!-- LGD-INTENTS -->
+
+## Ask it like this / 这样问它
+
+Each line is phrased the way a person or an agent would actually search it. Routing target in parentheses.
+每一行都按「人和 AI 会怎么搜」来写，括号里是它在包内对应的入口。
+
+- Audit an agent skill package before installing it / 安装前审计一个 agent 技能包  (`entrypoints[0]`)
+- Give my skill a score plus concrete remediation steps / 给我的技能打分并给出可执行整改步骤  (`entrypoints[0]`)
+- Check whether my SKILL.md promises commands the scripts do not implement / 检查 SKILL.md 承诺的命令脚本是否真的实现  (`verification.differentiator`)
+- Verify a skill by executing its own golden set instead of trusting its README / 通过实跑包内黄金集来验证技能，而不是相信 README  (`entrypoints[0]`)
+- Re-score a skill after fixes and show the delta / 整改后重新评分并给出分数变化  (`entrypoints[0]`)
+- Compare several skill packages on the same ruler / 用同一把尺子横向比较多个技能包  (`entrypoints[0]`)
+
+<!-- /LGD-INTENTS -->

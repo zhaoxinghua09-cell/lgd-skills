@@ -1,0 +1,24 @@
+# debug-pro golden-set run log
+
+run_at_utc: 2026-11-18T16:43:40Z
+python: 3.13.18
+os: Windows 11
+command: python tests/run_golden.py
+
+exit_code: 0
+
+--- stdout ---
+D01-log-exc-type       PASS
+D02-log-last-frame     PASS
+D03-log-exit-code      PASS
+D04-log-http-500       PASS
+D05-log-timestamps     PASS
+D06-not-a-log          PASS
+D07-repro-complete     PASS
+D08-repro-no-env       PASS
+D09-repro-no-expect    PASS
+D10-envsnap-redact     PASS
+--- 10/10 PASS
+
+--- stderr ---
+(empty)

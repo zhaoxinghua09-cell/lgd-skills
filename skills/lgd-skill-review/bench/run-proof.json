@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": "2026-11-18T23:26:54Z",
+  "engine": "scripts/review.py --run",
+  "commit": null,
+  "note": "这些分数来自真实执行被评包自带测试，不是静态自述；静态上限 96，执行后可到 100。",
+  "packages": [
+    {
+      "package": "summarize-pro",
+      "score": 100,
+      "verdict": "PASS",
+      "blocking": [],
+      "dimensions": {
+        "structure": 20,
+        "consistency": 25,
+        "reproducible": 20,
+        "hygiene": 15,
+        "discoverable": 15,
+        "licensing": 5
+      },
+      "tests_executed": true
+    },
+    {
+      "package": "debug-pro",
+      "score": 100,
+      "verdict": "PASS",
+      "blocking": [],
+      "dimensions": {
+        "structure": 20,
+        "consistency": 25,
+        "reproducible": 20,
+        "hygiene": 15,
+        "discoverable": 15,
+        "licensing": 5
+      },
+      "tests_executed": true
+    },
+    {
+      "package": "wechat-viral-topic",
+      "score": 100,
+      "verdict": "PASS",
+      "blocking": [],
+      "dimensions": {
+        "structure": 20,
+        "consistency": 25,
+        "reproducible": 20,
+        "hygiene": 15,
+        "discoverable": 15,
+        "licensing": 5
+      },
+      "tests_executed": true
+    },
+    {
+      "package": "lgd-skill-review",
+      "score": 100,
+      "verdict": "PASS",
+      "blocking": [],
+      "dimensions": {
+        "structure": 20,
+        "consistency": 25,
+        "reproducible": 20,
+        "hygiene": 15,
+        "discoverable": 15,
+        "licensing": 5
+      },
+      "tests_executed": true
+    }
+  ]
+}

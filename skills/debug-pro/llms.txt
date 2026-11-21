@@ -1,34 +1,58 @@
-# debug-pro
+# debug-pro · 排障专家
 
-> A language-agnostic 7-step debugging protocol with a runnable toolchain that turns 'I reproduced it' into checkable evidence.
+> Machine-readable index for AI agents: `AI-INDEX.json`. Human/agent guide: `SKILL.md`. Chinese first, English follows.
 
-## When to use
+## What this is (EN)
+Triage-first debugging: locate the failing layer (input / environment / dependency / logic) before proposing any fix, then minimize, verify and regress.
 
-- 这个报错怎么查  →  triage 日志分诊
-- 改完还是报错，下一步查什么  →  7 步协议第 3 步最小化
-- 怎么写一个能复现的说明  →  reprocheck 五要素判分
-- 我这环境有问题，怎么描述  →  envsnap 环境快照（自动剔密钥）
-- 是代码问题还是环境问题  →  分层定位
-- debug this stack trace and find the root cause  →  same
+## 这是什么（中文）
+先定位再动手的排障流程：先把故障钉在某一层（输入/环境/依赖/逻辑），再最小化、验证、回归。没有日志与复现步骤就不给根因。
 
-## When NOT to use
+## When to use it (EN)
+Use when a build fails, a regression appears, a bug cannot be reproduced, or you must decide whether the fault is in code, environment or data.
 
-- 直接替用户改生产代码
-- 安全漏洞利用细节
-- 性能压测方案设计
+## 什么时候用它（中文）
+构建失败、出现回归、缺陷无法复现，或需判断故障位于代码、环境还是数据时使用。
 
-## Entrypoints
+## Entrypoints / 入口命令
+```bash
+python tools/debughunt.py triage --file error.log --out ./out --json
+python tools/debughunt.py envsnap --out ./out --json
+python tools/debughunt.py reprocheck --file repro.md --json
+python tests/run_golden.py
+```
 
-- cli: `python tools/debughunt.py triage --file <log>`
-- verify: `python tools/debughunt.py reprocheck --file <report>`
-- gate: `python tests/run_golden.py`
-- review: `python scripts/review.py <this_dir> --run`
+## Output (EN)
+An evidence table (exception type, last stack frame, exit code, HTTP status, timestamp), a redacted environment block, and a repro score with missing items named.
 
-## Ecosystem
+## 输出（中文）
+证据表（异常类型/末栈帧/退出码/HTTP 状态/时间戳）、已脱敏的环境块、复现报告评分与缺失项点名。
 
-- Author: 诺声(Logos)@SynomosAI (LGD / SynomosAI)
-- Theory anchor: 三律：有籍（可追溯）/ 有证（可核验）/ 有门禁（可拦截）
+## Proof you can re-run / 可复跑的证据
+- Golden set: 10 cases — `python tests/run_golden.py` prints a pass count and exits 0.
+- Differentiator: single checkable command handed to the user for every claim
+- Zero dependencies, offline, no credentials. Standard library only.
 
-- summarize-pro — 故障复盘会需要出纪要
-- wechat-viral-topic — 要把踩坑经历写成对外内容
-- lgd-skill-review — 要评测技能包并拿整改清单
+## Family / 同族技能（LGD Skills）
+- [summarize-pro](https://github.com/zhaoxinghua09-cell/summarize-pro) — 会议纪要专家
+- [wechat-viral-topic](https://github.com/zhaoxinghua09-cell/wechat-viral-topic) — 公众号选题专家
+- [lgd-skill-review](https://github.com/zhaoxinghua09-cell/lgd-skill-review) — 技能审计官
+
+## Evaluation registry / 爆款清单
+Audited against six dimensions; passing packages are registered at https://github.com/zhaoxinghua09-cell/lgd-hit-list with score and receipt.
+经六维审计通过后登记于爆款清单 https://github.com/zhaoxinghua09-cell/lgd-hit-list，附分数与回执。
+
+<!-- LGD-INTENTS -->
+
+## Ask it like this / 这样问它
+
+Each line is phrased the way a person or an agent would actually search it. Routing target in parentheses.
+每一行都按「人和 AI 会怎么搜」来写，括号里是它在包内对应的入口。
+
+- Find which layer a failure is in before changing any code / 先定位故障在哪一层，再改代码  (`entrypoints[0]`)
+- My build fails and I need the failing layer pinpointed / 构建失败，需要定位到具体层  (`entrypoints[0]`)
+- Capture a redacted environment snapshot for a bug report / 为缺陷报告采集已脱敏的环境快照  (`entrypoints[1]`)
+- Score how reproducible my bug report actually is / 评估我的缺陷报告到底有多可复现  (`entrypoints[2]`)
+- A regression appeared and I must decide code vs environment vs data / 出现回归，需判断是代码、环境还是数据问题  (`use_when_en`)
+
+<!-- /LGD-INTENTS -->
