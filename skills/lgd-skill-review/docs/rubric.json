@@ -1,0 +1,231 @@
+{
+  "schema_version": "1.0",
+  "engine": "scripts/review.py",
+  "generated_by": "scripts/gen_rubric.py",
+  "note": "数值由引擎常量导出；改引擎则此文件随之改变，不接受手改。",
+  "scale": {
+    "max_static": 96,
+    "max_with_run": 100,
+    "explanation": "静态模式上限 96；其余 4 分需被评包自带测试真实跑通"
+  },
+  "dimensions": [
+    {
+      "key": "structure",
+      "weight": 20,
+      "meaning": "元数据与目录结构是否机器可读：name/version/description/author、层级深度、体积上限",
+      "checks": [
+        {
+          "check": "front-matter 有 name / description / version 三项",
+          "points": 6,
+          "fix": "在 SKILL.md 头部补 `name:` `description:` `version:`"
+        },
+        {
+          "check": "version 是 SemVer（x.y.z）",
+          "points": 4,
+          "fix": "把 version 写成 `1.0.0` 这种三段"
+        },
+        {
+          "check": "没有任何文件路径层级超过 3 段",
+          "points": 4,
+          "fix": "把深层目录拍平，如 references/a/b/c.md → references/a-c.md"
+        },
+        {
+          "check": "无 junk 文件（.pyc / .zip / __pycache__）",
+          "points": 3,
+          "fix": "删掉并加 .gitignore"
+        },
+        {
+          "check": "有展示名（displayName / display_name / name）",
+          "points": 3,
+          "fix": "补 `displayName:`"
+        }
+      ],
+      "points_declared": 20
+    },
+    {
+      "key": "consistency",
+      "weight": 25,
+      "meaning": "SKILL.md 里声明的命令与参数，是否真的存在于源码（本体系权重最高）",
+      "checks": [
+        {
+          "check": "脚本里存在 add_argument 定义（即真的声明了参数）",
+          "points": 10,
+          "fix": "给脚本加 argparse，并在 SKILL.md 写真实可用的 `--flag`"
+        },
+        {
+          "check": "SKILL.md 声明的每个 --flag 都在脚本里实现",
+          "points": 5,
+          "fix": "要么实现它，要么从文档删掉——这一条是最常见的失分点"
+        },
+        {
+          "check": "（替代路径，与前两项互斥）文档写位置参数且脚本真读 sys.argv",
+          "points": 5,
+          "alternative": true,
+          "fix": "无暇加 argparse 时，至少让 `python x.py <a>` 与实现对齐（仅得部分分）"
+        },
+        {
+          "check": "声明的子命令在脚本里存在（add_parser）",
+          "points": 5,
+          "fix": "子命令名与实现对齐，或不要宣称子命令"
+        },
+        {
+          "check": "正文声明了「不编造 / faithful」类保真约束",
+          "points": 5,
+          "fix": "在 SKILL.md 明确写输出保真规则（不虚构、不补全缺失事实）"
+        }
+      ],
+      "points_declared": 25
+    },
+    {
+      "key": "reproducible",
+      "weight": 20,
+      "meaning": "是否有 golden 集与可执行 runner，让陌生人能复跑你的结论",
+      "checks": [
+        {
+          "check": "存在 tests/*.json（golden 集）",
+          "points": 6,
+          "fix": "放一个最小 case 集：输入 + 期望输出，json 即可"
+        },
+        {
+          "check": "存在可执行 runner（tests/run_*.py / test_*.py / *_test.py）",
+          "points": 6,
+          "fix": "写一个能离线跑、零依赖的 runner，打印 pass/fail"
+        },
+        {
+          "check": "存在 demo/（首次使用者能验证）",
+          "points": 4,
+          "fix": "加一个能一键跑的 demo 脚本"
+        },
+        {
+          "check": "（仅 --run 模式）runner 真实执行且退出码 0",
+          "points": 4,
+          "fix": "让测试真的能跑通；这 4 分辨不在静态 96 之内"
+        }
+      ],
+      "points_declared": 20
+    },
+    {
+      "key": "hygiene",
+      "weight": 15,
+      "meaning": "无明文密钥、无真实手机号/邮箱、无本机绝对路径",
+      "checks": [
+        {
+          "check": "全仓无明文密钥 / 手机号 / 真实个人邮箱",
+          "points": 8,
+          "fix": "删掉或改为占位符；Contact/安全报告语境下的邮箱不计泄露"
+        },
+        {
+          "check": "SKILL.md 有安全边界或降级规则声明",
+          "points": 7,
+          "fix": "加一段「边界与异常」：不做什么、失败如何降级"
+        }
+      ],
+      "points_declared": 15
+    },
+    {
+      "key": "discoverable",
+      "weight": 15,
+      "meaning": "触发词、生态互链、AI-INDEX.json 或 llms.txt，让 AI 能找到入口",
+      "checks": [
+        {
+          "check": "tags ≥ 3 个",
+          "points": 5,
+          "fix": "在 front-matter 补 `tags:` 列表"
+        },
+        {
+          "check": "有触发词段（Triggers / 触发）",
+          "points": 4,
+          "fix": "写清什么情况下该调用本技能"
+        },
+        {
+          "check": "有互链段（同系列 / 生态 / 系列技能）",
+          "points": 3,
+          "fix": "指向同系列其他技能或生态入口"
+        },
+        {
+          "check": "有 AI-INDEX.json 或 llms.txt",
+          "points": 3,
+          "fix": "加机器可读入口，让 agent 不用读全文就能定位"
+        }
+      ],
+      "points_declared": 15
+    },
+    {
+      "key": "licensing",
+      "weight": 5,
+      "meaning": "有独立许可文件且有声明字段",
+      "checks": [
+        {
+          "check": "front-matter 有 author",
+          "points": 2,
+          "fix": "补 `author:`"
+        },
+        {
+          "check": "front-matter 有 license 字段",
+          "points": 2,
+          "fix": "补 `license: MIT` 之类"
+        },
+        {
+          "check": "有独立许可文件（LICENSE / LICENSE.md）",
+          "points": 1,
+          "fix": "放许可文件本体——只有字段没有文件拿不到这 1 分"
+        }
+      ],
+      "points_declared": 5
+    }
+  ],
+  "drift_check": {
+    "consistent": true,
+    "warnings": []
+  },
+  "blocking_rules": [
+    {
+      "key": "declared_command_missing",
+      "meaning": "声明了不存在的命令/参数（体系最忌讳：声明与实现不符）",
+      "effect": "命中任意一条即整包不通过，总分不作数"
+    },
+    {
+      "key": "secret_leak",
+      "meaning": "包内含明文密钥或真实个人敏感信息",
+      "effect": "命中任意一条即整包不通过，总分不作数"
+    },
+    {
+      "key": "no_skill_md",
+      "meaning": "缺少 SKILL.md",
+      "effect": "命中任意一条即整包不通过，总分不作数"
+    }
+  ],
+  "sensitive_patterns": [
+    {
+      "pattern": "sk-[A-Za-z0-9]{16,}",
+      "label": "疑似 API Key"
+    },
+    {
+      "pattern": "(?<!\\d)1[3-9]\\d{9}(?!\\d)",
+      "label": "疑似手机号"
+    },
+    {
+      "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.(com|cn|org|net)",
+      "label": "疑似真实邮箱"
+    },
+    {
+      "pattern": "[A-Za-z]:\\\\Users\\\\[^\\\\<\\s]{2,}",
+      "label": "本机绝对路径"
+    }
+  ],
+  "verdicts": [
+    "PASS",
+    "FAIL",
+    "BLOCK"
+  ],
+  "how_to_use": {
+    "for_a_human": "python scripts/review.py <package-dir> --json",
+    "for_an_agent": "读本文件拿到权重与阻断项；逐维核对；按 findings 顺序整改；整改后重跑同一引擎复评",
+    "appeal": "每条扣分可申诉：提交方给路径与检查，引擎裁定 OVERTURNED / UPHELD 并记账"
+  },
+  "cascade_note": {
+    "rule": "one defect can fail more than one check; each failed check deducts its own points",
+    "example": "缺 version 同时失去「必填三项齐全 6」与「version 是 SemVer 4」，合计 10",
+    "audited_by": "tests/rubric_probe.py asserts the exact delta per case; tests/point_audit.py asserts the sums"
+  }
+}

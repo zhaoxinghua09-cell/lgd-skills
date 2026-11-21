@@ -55,9 +55,14 @@ def main(argv):
     print("parent: %s (tree %s)" % (parent[:10], base_tree[:10]))
 
     entries, changed = [], []
+    root_real = os.path.realpath(root)
+    if not os.path.isdir(root_real):
+        sys.exit("local root is not a directory: %s" % root)
     for p in paths:
         wanted = p[1:] if p.startswith("!") else p
-        local = os.path.join(root, wanted)
+        local = os.path.realpath(os.path.join(root_real, wanted))
+        if not local.startswith(root_real + os.sep):
+            sys.exit("refusing path outside the repo root: %s" % wanted)
         if p.startswith("!"):
             entries.append({"path": wanted, "mode": "100644", "type": "blob", "sha": None})
             changed.append("D " + wanted)

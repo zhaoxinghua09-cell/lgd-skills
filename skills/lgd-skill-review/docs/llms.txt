@@ -1,0 +1,78 @@
+# lgd-skill-review
+
+> Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result
+> ships with a remediation order. Static mode: the target's code is never executed.
+
+## what it answers
+- skill audit / skill review / "is this skill safe to install"
+- "why does my SKILL.md score low" / "what is missing"
+- compare public skills on verifiability: https://zhaoxinghua09-cell.github.io/lgd-skill-review/benchmark.html
+
+## reproducibility
+- engine: https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/scripts/review.py
+- one-click mechanical fixes: https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/scripts/quickfix.py
+- benchmark data: https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json
+- refreshed daily; every number rerunnable with `python bench.py`
+
+## rubric (machine-readable, generated from the engine)
+https://zhaoxinghua09-cell.github.io/lgd-skill-review/rubric.json — six weights, three blocking rules, sensitive patterns, verdicts, how to use.
+
+## executed proof (static cap 96 -> 100)
+https://zhaoxinghua09-cell.github.io/lgd-skill-review/run-proof.json — our four packages scored with `review.py --run` (tests actually executed),
+with timestamp and commit. This is the one number in this sample that comes from an executed run.
+
+## rubric, item by item (23 checks)
+https://zhaoxinghua09-cell.github.io/lgd-skill-review/rubric.json — every dimension broken into individual checks with points and the concrete fix.
+第 6 维共 23 条判据，每条给了分值和「怎么修」；`drift_check` 保证判据之和等于引擎权重，文档不会悄悄和引擎脱节。
+
+## re-review loop
+Comment `/re-review` in the same issue to re-score after a fix; the bot replies with before -> after delta.
+首次评审后，在同一 issue 留言 `/re-review` 即重评，回帖给出「改前 → 改后」分数变化。
+
+## registry (verified list), machine-readable
+https://zhaoxinghua09-cell.github.io/lgd-skill-review/registry.json — three tiers by score (verified ≥90 / watch 60-89 / blocked <60), generated from the
+benchmark. Admission rules, tier meaning and every entry in one file. Human page: https://zhaoxinghua09-cell.github.io/lgd-skill-review/registry.html
+
+## third-party audits, machine-readable
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/audits.json （两条真实大仓审计：分数、逐条 findings、整改顺序、复现命令）
+- 人读版：https://zhaoxinghua09-cell.github.io/lgd-skill-review/audits.html
+
+## parity: what is published vs what was authored
+https://zhaoxinghua09-cell.github.io/lgd-skill-review/parity.json — for each of our four packages: the published SKILL.md, the verbatim original at
+`references/original-SKILL.md`, both SHA-256 values, and the relation between them. The published file
+is a condensed rewrite (v2.1.0-slim), not an excerpt. Verify: sha256 of the original must equal the
+recorded hash.
+发布版是精简重写稿，非原文摘编；原始全文并列发布，哈希可自证。
+
+## submit a skill for review
+https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml
+
+## verify us yourself (one command, no token)
+https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/tools/outsider_check.py
+Run `python outsider_check.py`. It reads only the public endpoints listed above: it recomputes
+16 / 38 / 96 / 58 from https://zhaoxinghua09-cell.github.io/lgd-skill-review/leaderboard.json, checks that rubric weights sum to 100 with 23 checks,
+checks run-proof is PASS 100 for all four packages, and probes every machine entry for HTTP 200.
+Exit code 0 means every number published on this site is self-consistent; any mismatch prints the exact
+claim and the live value it contradicts.
+
+## all pages (every human-readable page on this site)
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/index.html
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/rubric.html
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/benchmark.html
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/compare.html
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/guide.html
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/badge.html
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/audits.html
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/registry.html
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/discover.html
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/positioning.html
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/skill-review.html
+- https://zhaoxinghua09-cell.github.io/lgd-skill-review/quickfix.html
+
+## limits
+- measures verifiability, not usefulness or popularity
+- static mode caps at 96 of 100; 100 needs the target's own tests to run
+- snapshot in time; sample is not random
+
+## current numbers
+third-party top: 38 | lgd top: 96 | gap: 58

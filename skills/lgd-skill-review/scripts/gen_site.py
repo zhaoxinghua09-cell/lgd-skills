@@ -1029,8 +1029,9 @@ by an execution we performed on someone's package.</p>
 directly instead of implying the space was empty.</p>
 <div class="card"><table>
 <tr><th>work</th><th>what it occupies</th><th>our relation (narrow claim)</th></tr>
-<tr><td><b>arXiv SkillsBench</b> (2602.12670)</td><td>86 tasks across 11 domains, deterministic verifiers,
-4-dimension quality rubric</td><td>We do not measure task efficacy. Our ruler asks only whether checkable
+<tr><td><b>arXiv SkillsBench</b> (2602.12670, v4)</td><td>87 tasks across 8 domains, deterministic
+verifiers, 18 model-harness configurations, paired with-skills / no-skills evaluation (+16.6 pp)</td>
+<td>We do not measure task efficacy and publish no paired runs. Our ruler asks only whether checkable
 evidence exists, and every check has a probe.</td></tr>
 <tr><td><b>NVIDIA SkillEvaluator</b></td><td>Three tiers: deterministic quality gates, dedup, sandboxed live
 evaluation (Skill Lift, pass@k)</td><td>We overlap on the Tier 1 shape. The difference is 23 checks that each
@@ -1046,6 +1047,22 @@ checks with probe evidence, and we do not cover execution efficacy.</td></tr>
 <li>Whether our sample is representative: 20 rows, 16 third-party targets, one point in time.</li>
 <li>Whether a third party has independently reviewed us — registry entries are still self-audited.</li>
 </ul></div>
+
+<h2>Capabilities they ship that we still do not</h2>
+<div class="card"><table>
+<tr><th>capability</th><th>who ships it</th><th>our state</th></tr>
+<tr><td>Semantic deduplication against an existing catalog</td><td>NVIDIA SkillEvaluator Tier 2</td>
+<td>not implemented</td></tr>
+<tr><td>Sandboxed live evaluation with skill lift / pass@k</td><td>NVIDIA Tier 3, SkillsBench</td>
+<td>not implemented; we only run the package's own tests</td></tr>
+<tr><td>Security scanning via a dedicated engine</td><td>NVIDIA Tier 1 (SkillSpector)</td>
+<td>pattern-based secret leakage only</td></tr>
+<tr><td>GitHub / GitLab CI templates for adopters</td><td>NVIDIA SkillEvaluator</td>
+<td>we publish our own workflow, not a drop-in template</td></tr>
+<tr><td>Loadability check (will a host load the package?)</td><td>NVIDIA Tier 1 Harness Check</td>
+<td><b>added 2026-11-21</b>: <code>tools/harness_check.py</code>; it immediately found our own
+description field at 1,644–1,806 characters, above the 1,024 host limit, and all four packages now pass</td></tr>
+</table></div>
 
 <h2>The claim we will defend in public</h2>
 <div class="card"><p><b>In these layers we are stricter, and you can run the check yourself:</b> 23 checks each

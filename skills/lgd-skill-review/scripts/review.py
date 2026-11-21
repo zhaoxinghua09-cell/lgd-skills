@@ -48,6 +48,23 @@ SENSITIVE = [
 ]
 
 
+def _hash_slice(text, m):
+    """纯数字命中若落在长十六进制串里，是哈希的偶然片段，不是手机号。
+
+    2026-11-21 实测：PARITY.json 记录的 sha256 里出现 11 位连续数字，被判成手机号并扣 8 分，
+    连带让 --run 拿不到执行分、golden 变成 4/5。哈希里出现长数字串是概率事件，不是个人信息。
+    """
+    if not m.group(0).isdigit():
+        return False
+    a, b = m.start(), m.end()
+    while a > 0 and text[a - 1] in "0123456789abcdefABCDEF":
+        a -= 1
+    while b < len(text) and text[b] in "0123456789abcdefABCDEF":
+        b += 1
+    token = text[a:b]
+    return len(token) >= 16 and not re.search(r"[g-zG-Z]", token)
+
+
 def read(p):
     try:
         with open(p, encoding="utf-8") as f:
@@ -295,6 +312,8 @@ def d_hygiene(root, files):
         lines = body.splitlines()
         for pat, label in SENSITIVE:
             for m in re.finditer(pat, body):
+                if label == "疑似手机号" and _hash_slice(body, m):
+                    continue
                 # 邮箱若出现在「联系方式 / 安全报告」语境里，属作者主动公开，不算泄露
                 if "邮箱" in label or "email" in label.lower():
                     ln = body[:m.start()].count("\n")
@@ -781,7 +800,9 @@ def multi_role(root, fm, files):
     # --- security 安全
     s, notes = 100, []
     for pat, label in SENSITIVE:
-        if re.search(pat, scripts) or re.search(pat, body):
+        hit = any(not (label == "疑似手机号" and _hash_slice(t, m))
+                  for t in (scripts, body) for m in re.finditer(pat, t))
+        if hit:
             s -= 25
             notes.append("命中 %s" % label)
     nets = re.findall(r'(?:requests\.|urllib|https?://)', scripts)

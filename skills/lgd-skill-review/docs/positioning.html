@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Positioning — what exists, what we do not claim</title>
+<meta name="description" content="Named prior work in skill evaluation, and the narrow layer we can prove on the spot.">
+<link rel="canonical" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/positioning.html">
+<meta property="og:title" content="Positioning — what exists, what we do not claim">
+<meta property="og:description" content="Named prior work in skill evaluation, and the narrow layer we can prove on the spot.">
+<meta property="og:type" content="website">
+<style>
+:root{--bg:#0b1220;--card:#111a2c;--line:rgba(122,160,255,.18);--fg:#e8eef8;--mut:#a9b8d0;--acc:#7fe7c4;--warn:#f2a65a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.7 -apple-system,"Segoe UI","Microsoft YaHei",Arial,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:56px 24px 96px}
+nav{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--mut);margin-bottom:36px}
+nav a{color:var(--mut);text-decoration:none;border-bottom:1px solid transparent}
+nav a:hover{color:var(--acc);border-color:var(--acc)}
+.kick{color:var(--acc);letter-spacing:.18em;text-transform:uppercase;font-size:12px}
+h1{font-size:38px;line-height:1.2;margin:10px 0 14px;letter-spacing:-.5px}
+h2{font-size:22px;margin:40px 0 12px}
+h3{font-size:16px;margin:20px 0 8px}
+p,li{color:var(--mut)}
+.lead{font-size:18px;color:var(--fg);max-width:760px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-top:16px}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--acc);font-weight:600;letter-spacing:.06em;font-size:12px;text-transform:uppercase}
+td.num{text-align:right;font-variant-numeric:tabular-nums;width:64px}
+.bad{color:var(--warn)} .good{color:var(--acc)}
+code{background:rgba(88,124,200,.14);padding:2px 6px;border-radius:4px;font-size:13px}
+pre{background:#0a0f1a;border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto;margin-top:12px}
+pre code{background:none;padding:0}
+ul{margin:10px 0 0 20px}
+.tag{display:inline-block;font-size:12px;color:var(--acc);border:1px solid rgba(127,231,196,.4);border-radius:4px;padding:3px 8px;margin:4px 6px 0 0}
+.a{color:var(--acc);text-decoration:none}
+.foot{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-size:13px;color:#6f86a6}
+</style>
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"lgd-skill-review",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "description":"Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result includes a remediation order.",
+  "url":"https://zhaoxinghua09-cell.github.io/lgd-skill-review/",
+  "codeRepository":"https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "license":"https://opensource.org/licenses/MIT",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}</script>
+
+</head>
+<body>
+<div class="wrap">
+<nav>
+<a href="./index.html">Home</a>
+<a href="./rubric.html">Rubric</a>
+<a href="./skill-review.html">Audit</a>
+<a href="./quickfix.html">QuickFix</a>
+<a href="./benchmark.html">Benchmark</a>
+<a href="./compare.html">Compare</a>
+<a href="./guide.html">Guide</a>
+<a href="./badge.html">Badge</a>
+<a href="./audits.html">Audits</a>
+<a href="./registry.html">Registry</a>
+<a href="./discover.html">Discover</a>
+<a href="https://github.com/zhaoxinghua09-cell/lgd-skill-review">GitHub</a>
+</nav>
+
+<div class="kick">positioning</div>
+<h1>Name what already exists, then claim only the narrow layer.</h1>
+<p class="lead">Anyone can say "benchmark". Three pieces of work already occupy this field, so we cite them
+directly instead of implying the space was empty.</p>
+<div class="card"><table>
+<tr><th>work</th><th>what it occupies</th><th>our relation (narrow claim)</th></tr>
+<tr><td><b>arXiv SkillsBench</b> (2602.12670, v4)</td><td>87 tasks across 8 domains, deterministic
+verifiers, 18 model-harness configurations, paired with-skills / no-skills evaluation (+16.6 pp)</td>
+<td>We do not measure task efficacy and publish no paired runs. Our ruler asks only whether checkable
+evidence exists, and every check has a probe.</td></tr>
+<tr><td><b>NVIDIA SkillEvaluator</b></td><td>Three tiers: deterministic quality gates, dedup, sandboxed live
+evaluation (Skill Lift, pass@k)</td><td>We overlap on the Tier 1 shape. The difference is 23 checks that each
+get a deliberate-violation probe, plus one-command outsider recomputation.</td></tr>
+<tr><td><b>huajielong/skill-evaluator</b></td><td>Community 100-point scheme (trigger 25 + execution 35 +
+economy 20 + trust 12 + comprehension 8)</td><td>Same 100-point shape. We bind the weight to 23 published
+checks with probe evidence, and we do not cover execution efficacy.</td></tr>
+</table></div>
+
+<h2>What we do not measure</h2>
+<div class="card"><ul>
+<li>Whether a skill makes an agent do a task better — that is SkillsBench / SkillEvaluator Tier 3.</li>
+<li>Whether our sample is representative: 20 rows, 16 third-party targets, one point in time.</li>
+<li>Whether a third party has independently reviewed us — registry entries are still self-audited.</li>
+</ul></div>
+
+<h2>Capabilities they ship that we still do not</h2>
+<div class="card"><table>
+<tr><th>capability</th><th>who ships it</th><th>our state</th></tr>
+<tr><td>Semantic deduplication against an existing catalog</td><td>NVIDIA SkillEvaluator Tier 2</td>
+<td>not implemented</td></tr>
+<tr><td>Sandboxed live evaluation with skill lift / pass@k</td><td>NVIDIA Tier 3, SkillsBench</td>
+<td>not implemented; we only run the package's own tests</td></tr>
+<tr><td>Security scanning via a dedicated engine</td><td>NVIDIA Tier 1 (SkillSpector)</td>
+<td>pattern-based secret leakage only</td></tr>
+<tr><td>GitHub / GitLab CI templates for adopters</td><td>NVIDIA SkillEvaluator</td>
+<td>we publish our own workflow, not a drop-in template</td></tr>
+<tr><td>Loadability check (will a host load the package?)</td><td>NVIDIA Tier 1 Harness Check</td>
+<td><b>added 2026-11-21</b>: <code>tools/harness_check.py</code>; it immediately found our own
+description field at 1,644–1,806 characters, above the 1,024 host limit, and all four packages now pass</td></tr>
+</table></div>
+
+<h2>The claim we will defend in public</h2>
+<div class="card"><p><b>In these layers we are stricter, and you can run the check yourself:</b> 23 checks each
+probed with a deliberate violation, a drift gate between the published rubric and the engine weights, the
+executed score kept separate from the static cap, and every published number recomputable by a stranger with
+<code>tools/outsider_check.py</code> and no token.</p>
+<p style="font-size:13px">A 100/100 executed score means: within the published 23 checks, the evidence we can
+execute was observed to hold, and a stranger reproduced it with the same engine. It does not claim the skill
+is useful, correct, or better than others, nor that the recorded inputs were complete.</p></div>

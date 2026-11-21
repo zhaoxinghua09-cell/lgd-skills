@@ -1,0 +1,68 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  golden:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run golden set (offline, stdlib only)
+        run: python tests/run_golden.py
+      - name: Scores must be reproducible
+        run: python demo/prove_score.py
+
+      - name: Self-audit with the LGD engine (static 96 + executed 100)
+        run: python scripts/review.py . --json --run
+
+      # 判据一致性：每一条公布的判据，都要能被一次人为违规真的扣到分。
+      # 没有这一步，判据就只是文案——写了、没执行、无人发现。
+      - name: Every published check must actually deduct
+        run: python tests/rubric_probe.py
+
+      # 分值审计：判据之和 == 权重 == 引擎常量，且满分样本逐维真的拿到。
+      # 探针只验「会不会扣」，这一步验「扣得对不对」。
+      - name: Point values must add up and must be actually awarded
+        run: python tests/point_audit.py
+
+      # intents 审计：routes_to 必须解析到真实字段/真实脚本，ask 必须进 llms.txt。
+      # 「声称能路由」和「真的路由」是两件事。
+      - name: Published intents must point at things that exist
+        run: python tests/intent_audit.py
+
+      # 站点审计：每个页面必须有实质内容（h2 + 表格或代码块），关键数字与可运行命令必须在页面上。
+      # 起因：stub 循环曾把三个手写详情页整页覆盖，线上榜单页连续多日零表格而没人发现。
+      - name: Every published page must contain real content
+        run: |
+          python scripts/gen_site.py
+          python tests/site_audit.py
+
+      # URL 体检：机器入口里的每个 URL 必须可解析、本站 URL 必须真有文件。
+      # 起因：llms.txt / llms-full.txt 连续两轮把「站点根 + 文件名」拼成坏链，
+      # 而所有「页面有没有内容」的断言全绿——机器读到的是 404。
+      - name: Every machine-readable URL must resolve
+        run: python tests/url_audit.py
+
+      # 主张审查：对外材料不得出现「首创 / 唯一 / 最强 / 断崖领先」这类表述，
+      # 且必须公开点名已有工作（SkillsBench / NVIDIA SkillEvaluator / 社区百分制）。
+      # 起因：2026-11-21 定位核查发现这些位置已被占，任何"空位"叙述都会被一封事实核查推翻。
+      - name: No overclaiming, and prior work must be named
+        run: |
+          python scripts/gen_site.py
+          python tests/claim_audit.py
+
+      # 可加载性：front-matter 合法、描述不超宿主上限、引用的文件真存在、路径可移植。
+      # 起因：对标 NVIDIA Tier 1 Harness Check 时补上这一层，首次运行就发现我们四包描述 1.6–1.8k 字符，
+      # 超过 1,024 上限会被宿主截断——截掉的正是触发词。
+      - name: The package must survive being loaded by a host
+        run: python tools/harness_check.py .

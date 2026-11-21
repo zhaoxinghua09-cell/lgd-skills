@@ -3,9 +3,9 @@
   "skill": "debug-pro",
   "published": {
     "path": "SKILL.md",
-    "sha256": "bb182e9eec568a34bdc34448b34d65059ad51fce0cecff4f2829023ce2841220",
-    "bytes": 7754,
-    "lines": 107
+    "sha256": "90274702a988a8f8e252dbbbf1b3c6c847a958d510c640a5148a276c797aa06e",
+    "bytes": 6804,
+    "lines": 106
   },
   "restored": {
     "path": "references/details.md",

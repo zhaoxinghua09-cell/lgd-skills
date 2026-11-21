@@ -1,0 +1,70 @@
+# lgd-skill-review — full corpus
+
+> One fetch, everything an agent needs. Numbers below are generated at 2026-11-19T05:07:44Z
+> from bench/leaderboard.json; they change when the benchmark changes.
+
+## 1. what this is
+A six-dimension verifiability auditor for agent skills. Static analysis only — the target's code is
+never executed. Output: total score, per-dimension breakdown, blocking findings, remediation order,
+and a projected ceiling that separates mechanical fixes from work the author still has to do.
+
+## 2. scoring rubric (100 points)
+- consistency 25 — documented flags and subcommands exist in the source
+- structure 20 — entry file, version, name, description are machine-findable
+- reproducibility 20 — a golden set exists and a runner actually executes it
+- hygiene 15 — no absolute paths, secrets or leaked contact details
+- discoverability 15 — triggers, ecosystem links, AI-INDEX.json or llms.txt
+- licensing 5 — a real license file plus a declared field
+Static mode caps at 96; the remaining 4 points require the target's own tests to run.
+
+## 3. known measurement biases, found and fixed
+- index detection used to be case-sensitive: a correct AI-INDEX.json in upper case scored zero
+- position-argument CLIs used to score zero in consistency; now they earn 5 of 25, with a note that
+  unnamed arguments are only partly checkable
+- GitHub bot / noreply addresses used to be flagged as leaked contact details; now exempt
+
+## 4. leaderboard (bucket | target | score | verdict)
+| bucket | target | score | verdict |
+|---|---|---|---|
+| lgd | summarize-pro | 96 | PASS |
+| lgd | debug-pro | 96 | PASS |
+| lgd | wechat-viral-topic | 96 | PASS |
+| lgd | lgd-skill-review | 96 | PASS |
+| third-party | anthropics/skills@skills/skill-creator | 38 | FAIL |
+| third-party | anthropics/skills@skills/pptx | 31 | BLOCK |
+| third-party | anthropics/skills@skills/docx | 31 | BLOCK |
+| third-party | anthropics/skills@skills/frontend-design | 25 | FAIL |
+| third-party | vercel-labs/agent-skills@skills/react-best-practices | 24 | FAIL |
+| third-party | google/agents-cli@skills/google-agents-cli-adk-code | 22 | FAIL |
+| third-party | emilkowalski/skills@skills/apple-design | 22 | FAIL |
+| third-party | anthropics/skills@skills/pdf | 21 | FAIL |
+| third-party | microsoft/azure-skills@skills/azure-deploy | 20 | FAIL |
+| third-party | prisma/skills@prisma-cli | 20 | FAIL |
+| third-party | mattpocock/skills@skills/engineering/code-review | 18 | FAIL |
+| third-party | juliusbrussee/caveman@skills/caveman | 18 | FAIL |
+| third-party | obra/superpowers@skills/brainstorming | 18 | FAIL |
+| third-party | addyosmani/agent-skills@skills/code-review-and-quality | 18 | FAIL |
+| third-party | leonxlnx/taste-skill@skills/taste-skill | 10 | BLOCK |
+| third-party | vercel-labs/agent-browser@skill-data/core | 10 | BLOCK |
+
+## 5. what the score cannot tell you
+usefulness, correctness, popularity, maintainer responsiveness, or anything about packages not measured.
+
+## 6. how to reproduce
+https://github.com/zhaoxinghua09-cell/lgd-skill-review/tree/main/bench — `python bench.py`
+
+## 7. how to get reviewed
+https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml — bot fetches the public tarball, runs static analysis,
+replies with score + blockers + fix order.
+
+## 8. badge (live endpoint)
+https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/badge.json — shields endpoint format, renders current numbers.
+
+## 9. registry (verified list)
+https://zhaoxinghua09-cell.github.io/lgd-skill-review/registry.json — tiers: verified ≥90 · watch 60-89 · blocked <60; rules and entries.
+
+## 10. third-party audits (machine-readable)
+https://zhaoxinghua09-cell.github.io/lgd-skill-review/audits.json — two large public repos, full findings + fix order + reproduce command.
+
+## 11. site
+https://zhaoxinghua09-cell.github.io/lgd-skill-review/ — index, rubric, benchmark, compare, guide, badge, audits, registry, discover, positioning, skill-review, quickfix

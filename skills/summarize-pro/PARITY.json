@@ -3,9 +3,9 @@
   "skill": "summarize-pro",
   "published": {
     "path": "SKILL.md",
-    "sha256": "da47ded32d4827ad745f70613c25934b07fa2b78283d3a2638d2dd97dc8d14b6",
-    "bytes": 8297,
-    "lines": 115
+    "sha256": "cb75bcb25310187e8b394c07317fec64c17946b6b8a92340e589f2f73d98b87a",
+    "bytes": 7444,
+    "lines": 114
   },
   "original": {
     "path": "references/original-SKILL.md",
