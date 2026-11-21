@@ -1028,6 +1028,11 @@ by an execution we performed on someone's package.</p>
     open(os.path.join(DOCS, "robots.txt"), "w", encoding="utf-8").write(
         "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n" % SITE)
 
+    # leaderboard.json — discover.html and outside readers point at this address,
+    # so the file has to exist here too, not only under bench/.
+    open(os.path.join(DOCS, "leaderboard.json"), "w", encoding="utf-8").write(
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n")
+
     pages_txt = "\n".join("- %s/%s" % (SITE, u) for u in urls)
 
     llms = f"""# lgd-skill-review
@@ -1066,7 +1071,7 @@ Comment `/re-review` in the same issue to re-score after a fix; the bot replies 
 benchmark. Admission rules, tier meaning and every entry in one file. Human page: {SITE}/registry.html
 
 ## third-party audits, machine-readable
-- {SITE}/audits.json（两条真实大仓审计：分数、逐条 findings、整改顺序、复现命令）
+- {SITE}/audits.json （两条真实大仓审计：分数、逐条 findings、整改顺序、复现命令）
 - 人读版：{SITE}/audits.html
 
 ## parity: what is published vs what was authored
