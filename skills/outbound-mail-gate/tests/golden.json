@@ -1,0 +1,151 @@
+{
+  "version": 1,
+  "note": "All correspondents, subjects and times are synthetic. The shape of cases c01 and c02 is taken from a real incident on 2026-11-20 in which a follow-up email asked 'did it arrive?' of someone who had already replied, and called a 19 November message 'this morning'. Case c03 and c10 are controls: the gate must stay silent when the body is honest.",
+  "cases": [
+    {
+      "id": "c01-did-it-arrive-after-reply",
+      "thread": {
+        "sent": [
+          {"ts": "2026-11-19T08:20:52+08:00", "subject": "An outsider run of our suite, and a request to run it on yours"},
+          {"ts": "2026-11-19T11:18:44+08:00", "subject": "Re: An outsider run of our suite"}
+        ],
+        "inbound": [
+          {"ts": "2026-11-19T10:49:21+08:00", "subject": "Re: An outsider run of our suite"}
+        ]
+      },
+      "draft": {
+        "now": "2026-11-20T09:20:57+08:00",
+        "subject": "Re: An outsider run of our suite - three lines",
+        "body": "A short follow-up on the message I sent on 19 Nov 2026 at 08:20.\n1. Did it arrive?"
+      },
+      "expect": {"verdict": "BLOCK", "rules": ["R3", "R4"]}
+    },
+    {
+      "id": "c02-called-it-this-morning",
+      "thread": {
+        "sent": [
+          {"ts": "2026-11-19T08:20:53+08:00", "subject": "About the rollout, and a three-minute request"},
+          {"ts": "2026-11-19T11:18:44+08:00", "subject": "Re: About the rollout"}
+        ],
+        "inbound": [
+          {"ts": "2026-11-19T10:49:21+08:00", "subject": "Re: About the rollout"}
+        ]
+      },
+      "draft": {
+        "now": "2026-11-20T09:21:02+08:00",
+        "subject": "Three more lines",
+        "body": "A follow-up on the message I sent this morning (08:20). If you have seen it but cannot run it, three lines here."
+      },
+      "expect": {"verdict": "BLOCK", "rules": ["R1", "R2", "R4"]}
+    },
+    {
+      "id": "c03-clean-after-the-window",
+      "thread": {
+        "sent": [
+          {"ts": "2026-11-19T08:20:52+08:00", "subject": "An outsider run of our suite"},
+          {"ts": "2026-11-19T11:18:44+08:00", "subject": "Re: An outsider run of our suite"}
+        ],
+        "inbound": [
+          {"ts": "2026-11-19T10:49:21+08:00", "subject": "Re: An outsider run of our suite"}
+        ]
+      },
+      "draft": {
+        "now": "2026-11-21T12:00:00+08:00",
+        "subject": "Re: An outsider run of our suite",
+        "body": "Your run of 19 Nov 2026 10:49 is on record, and I answered at 11:18 the same day. The only open item is the optional summary on pull request #169, which is yours to decide."
+      },
+      "expect": {"verdict": "PASS", "rules": []}
+    },
+    {
+      "id": "c04-prior-message-without-a-date",
+      "thread": {
+        "sent": [{"ts": "2026-11-05T15:00:00+08:00", "subject": "A request"}],
+        "inbound": []
+      },
+      "draft": {
+        "now": "2026-11-21T12:00:00+08:00",
+        "subject": "Re: A request",
+        "body": "Following up on the note I sent before: two lines only."
+      },
+      "expect": {"verdict": "BLOCK", "rules": ["R2"]}
+    },
+    {
+      "id": "c05-prior-message-that-never-existed",
+      "thread": {"sent": [], "inbound": []},
+      "draft": {
+        "now": "2026-11-21T12:00:00+08:00",
+        "subject": "Re: A request",
+        "body": "The message I sent last week did not bounce, so I am writing again."
+      },
+      "expect": {"verdict": "BLOCK", "rules": ["R1", "R2"]}
+    },
+    {
+      "id": "c06-two-hours-later-no-reply",
+      "thread": {
+        "sent": [{"ts": "2026-11-20T07:00:00+08:00", "subject": "One command"}],
+        "inbound": []
+      },
+      "draft": {
+        "now": "2026-11-20T09:00:00+08:00",
+        "subject": "One command, again",
+        "body": "One more line so this is not lost."
+      },
+      "expect": {"verdict": "BLOCK", "rules": ["R4"]}
+    },
+    {
+      "id": "c07-invented-clock-time",
+      "thread": {
+        "sent": [
+          {"ts": "2026-11-19T08:20:52+08:00", "subject": "An outsider run of our suite"},
+          {"ts": "2026-11-19T11:18:44+08:00", "subject": "Re: An outsider run of our suite"}
+        ],
+        "inbound": [{"ts": "2026-11-19T10:49:21+08:00", "subject": "Re: An outsider run of our suite"}]
+      },
+      "draft": {
+        "now": "2026-11-21T12:00:00+08:00",
+        "subject": "A note",
+        "body": "I wrote at 07:41 and have not heard back."
+      },
+      "expect": {"verdict": "BLOCK", "rules": ["R5"]}
+    },
+    {
+      "id": "c08-standing-claim",
+      "thread": {"sent": [], "inbound": []},
+      "draft": {
+        "now": "2026-11-21T12:00:00+08:00",
+        "subject": "Our verifier",
+        "body": "Our verifier is state-of-the-art and stands alone."
+      },
+      "expect": {"verdict": "BLOCK", "rules": ["R6"]}
+    },
+    {
+      "id": "c09-asks-again-after-a-reply",
+      "thread": {
+        "sent": [{"ts": "2026-11-19T11:18:44+08:00", "subject": "Re: An outsider run"}],
+        "inbound": [{"ts": "2026-11-20T08:00:00+08:00", "subject": "Re: An outsider run"}]
+      },
+      "draft": {
+        "now": "2026-11-21T12:00:00+08:00",
+        "subject": "Re: An outsider run",
+        "body": "If you have not received my note, here it is again."
+      },
+      "expect": {"verdict": "BLOCK", "rules": ["R3"]}
+    },
+    {
+      "id": "c10-control-honest-body-with-times",
+      "thread": {
+        "sent": [
+          {"ts": "2026-11-19T08:20:52+08:00", "subject": "An outsider run of our suite"},
+          {"ts": "2026-11-19T11:18:44+08:00", "subject": "Re: An outsider run of our suite"}
+        ],
+        "inbound": [{"ts": "2026-11-19T10:49:21+08:00", "subject": "Re: An outsider run of our suite"}]
+      },
+      "draft": {
+        "now": "2026-11-21T12:00:00+08:00",
+        "subject": "Re: An outsider run of our suite",
+        "body": "Your 10:49 reply of 19 Nov 2026 is recorded, and my 11:18 answer of the same day follows from it. Nothing else is asked of you."
+      },
+      "expect": {"verdict": "PASS", "rules": []}
+    }
+  ]
+}
