@@ -1,8 +1,8 @@
-# LGD Skills · 四个可验证的 Agent 技能
+# LGD Skills · 五个可验证的 Agent 技能
 
 [![verifiability](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fzhaoxinghua09-cell%2Flgd-skill-review%2Fmain%2Fbench%2Fbadge.json)](https://github.com/zhaoxinghua09-cell/lgd-skill-review/tree/main/bench)
 
-一个仓库装四个技能，每个都通过同一把尺子验收：**六维可验证性审计，静态 96 分，带测试实跑 100 分**。
+一个仓库装五个技能，每个都通过同一把尺子验收：**六维可验证性审计 + 带测试实跑**。新增的 `outbound-mail-gate` 实测结构制 **100/100（PASS）**、语义制 **112/120（A）**、黄金集 **10/10**（数字由 `review.py --run --eight` 现场给出，可复跑）。
 
 ```bash
 npx skills add zhaoxinghua09-cell/lgd-skills
@@ -18,6 +18,7 @@ npx skills add zhaoxinghua09-cell/lgd-skills
 | [`debug-pro`](skills/debug-pro) | 报错定位、日志分析、最小复现 | 这个报错怎么修 / 帮我看看 stack trace / 为什么跑不通 / debug this error, stack trace, crash |
 | [`wechat-viral-topic`](skills/wechat-viral-topic) | 公众号选题与爆款结构 | 帮我找个公众号选题 / 这篇标题怎么改 / WeChat article topic, viral headline |
 | [`lgd-skill-review`](skills/lgd-skill-review) | 技能六维审计与一键整改 | 帮我评测这个技能 / 这个 SKILL.md 缺什么 / skill audit, skill review, rate my skill |
+| [`outbound-mail-gate`](skills/outbound-mail-gate) | 发信前的线索对账门禁 | 这封追问能不能发 / 别对已回的人问收到没 / mail gate, follow-up email, did it arrive |
 
 ---
 
