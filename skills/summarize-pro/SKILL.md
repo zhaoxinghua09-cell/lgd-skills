@@ -111,4 +111,4 @@ python tests/run_golden.py            # 22 条黄金集，退出码即结论
 
 - 需要定位故障根因 → `debug-pro`
 - 需要选题或标题体检 → `wechat-viral-topic`
-- 需要对外证明本包质量 → `lgd-skill-review`（六维评审，`--focus` 附加聚焦度报告）
+- 需要对外证明本包质量 → `lgd-skill-review`（六维评审，`--focus` 附加聚焦度报告） 
