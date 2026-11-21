@@ -19,7 +19,7 @@ DOCS = os.path.join(ROOT, "docs")
 LB = os.path.join(ROOT, "bench", "leaderboard.json")
 
 PAGES = ["index", "rubric", "skill-review", "quickfix", "benchmark", "compare", "guide",
-         "badge", "audits", "registry", "discover"]
+         "badge", "audits", "registry", "discover", "positioning"]
 
 
 def read(name):
@@ -83,6 +83,14 @@ def main():
     for k in ("golden.json", "run_golden.py", "verify.yml", "非零退出", "data.total"):
         if k not in gd:
             fails.append("guide 未提及 %s" % k)
+
+    # positioning 页：必须点名已有工作，否则「不得主张整体更强」没有落点
+    pos = read("positioning")
+    for k in ("SkillsBench", "SkillEvaluator", "skill-evaluator", "What we do not measure"):
+        if k not in pos:
+            fails.append("positioning 未提及 %s" % k)
+    if len(re.findall(r"<tr>", pos)) < 4:
+        fails.append("positioning 表格行 %d < 4（三行已有工作 + 表头）" % len(re.findall(r"<tr>", pos)))
 
     # 机器出口与页面数一致
     sm = io.open(os.path.join(DOCS, "sitemap.xml"), encoding="utf-8").read()

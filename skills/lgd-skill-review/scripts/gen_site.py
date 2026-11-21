@@ -519,7 +519,7 @@ python scripts/review.py &lt;package-dir&gt; --run --json</code></pre>
 <div class="kick">compare</div>
 <h1>Same ruler, two packages, six dimensions.</h1>
 <p class="lead">竞品只给一个总分，读者没法知道差在哪。这里把每一维拆开：
-<b>{tp['target']}</b>（样本里第三方最强，{tp['score']} 分）与我们自己的
+<b>{tp['target']}</b>（样本内最高分，{tp['score']} 分）与我们自己的
 <b>{own['target'].split('/')[-1]}</b>（{own['score']} 分）。</p>
 
 <div class="card"><table>
@@ -560,7 +560,7 @@ cd bench &amp;&amp; python bench.py</code></pre>
     html += """
 <div class="kick">guide</div>
 <h1>从「只有文档」到「陌生人能重跑」，三步。</h1>
-<p class="lead">市场上最缺的不是文档，是<b>能让别人验的证据</b>。样本里最强的三方包
+<p class="lead">我们看到的缺口不是文档数量，是<b>能让别人验的证据</b>。样本内最高分的三方包
 reproducible 都是 0 分——不是它们写得差，是没人写过 golden set。这里给可照抄的模板。</p>
 
 <h2>第一步：写一份 golden.json（20 行）</h2>
@@ -1018,9 +1018,49 @@ by an execution we performed on someone's package.</p>
         json.dump(proof, open(os.path.join(DOCS, "run-proof.json"), "w", encoding="utf-8"),
                   ensure_ascii=False, indent=2)
 
+    # positioning — 公开点名已有工作，只主张能当场复算的那一层
+    html = head("Positioning — what exists, what we do not claim",
+                "Named prior work in skill evaluation, and the narrow layer we can prove on the spot.",
+                "positioning.html")
+    html += f"""
+<div class="kick">positioning</div>
+<h1>Name what already exists, then claim only the narrow layer.</h1>
+<p class="lead">Anyone can say "benchmark". Three pieces of work already occupy this field, so we cite them
+directly instead of implying the space was empty.</p>
+<div class="card"><table>
+<tr><th>work</th><th>what it occupies</th><th>our relation (narrow claim)</th></tr>
+<tr><td><b>arXiv SkillsBench</b> (2602.12670)</td><td>86 tasks across 11 domains, deterministic verifiers,
+4-dimension quality rubric</td><td>We do not measure task efficacy. Our ruler asks only whether checkable
+evidence exists, and every check has a probe.</td></tr>
+<tr><td><b>NVIDIA SkillEvaluator</b></td><td>Three tiers: deterministic quality gates, dedup, sandboxed live
+evaluation (Skill Lift, pass@k)</td><td>We overlap on the Tier 1 shape. The difference is 23 checks that each
+get a deliberate-violation probe, plus one-command outsider recomputation.</td></tr>
+<tr><td><b>huajielong/skill-evaluator</b></td><td>Community 100-point scheme (trigger 25 + execution 35 +
+economy 20 + trust 12 + comprehension 8)</td><td>Same 100-point shape. We bind the weight to 23 published
+checks with probe evidence, and we do not cover execution efficacy.</td></tr>
+</table></div>
+
+<h2>What we do not measure</h2>
+<div class="card"><ul>
+<li>Whether a skill makes an agent do a task better — that is SkillsBench / SkillEvaluator Tier 3.</li>
+<li>Whether our sample is representative: 20 rows, 16 third-party targets, one point in time.</li>
+<li>Whether a third party has independently reviewed us — registry entries are still self-audited.</li>
+</ul></div>
+
+<h2>The claim we will defend in public</h2>
+<div class="card"><p><b>In these layers we are stricter, and you can run the check yourself:</b> 23 checks each
+probed with a deliberate violation, a drift gate between the published rubric and the engine weights, the
+executed score kept separate from the static cap, and every published number recomputable by a stranger with
+<code>tools/outsider_check.py</code> and no token.</p>
+<p style="font-size:13px">A 100/100 executed score means: within the published 23 checks, the evidence we can
+execute was observed to hold, and a stranger reproduced it with the same engine. It does not claim the skill
+is useful, correct, or better than others, nor that the recorded inputs were complete.</p></div>
+"""
+    open(os.path.join(DOCS, "positioning.html"), "w", encoding="utf-8").write(html)
+
     # sitemap：去重 + 带 lastmod（没有 lastmod，搜索引擎无法判断"这页更新过没有"）
     base = ["index.html", "rubric.html", "benchmark.html", "compare.html", "guide.html", "badge.html",
-            "audits.html", "registry.html", "discover.html"]
+            "audits.html", "registry.html", "discover.html", "positioning.html"]
     urls = list(dict.fromkeys(base + [s["slug"] + ".html" for s in SKILLS]))
     today = datetime.date.today().isoformat()
     sm = ['<?xml version="1.0" encoding="UTF-8"?>',
@@ -1067,7 +1107,7 @@ by an execution we performed on someone's package.</p>
 
 ## executed proof (static cap 96 -> 100)
 {SITE}/run-proof.json — our four packages scored with `review.py --run` (tests actually executed),
-with timestamp and commit. This is the only number in the sample backed by a real run.
+with timestamp and commit. This is the one number in this sample that comes from an executed run.
 
 ## rubric, item by item (23 checks)
 {SITE}/rubric.json — every dimension broken into individual checks with points and the concrete fix.
