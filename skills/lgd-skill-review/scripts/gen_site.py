@@ -918,7 +918,7 @@ be useless; a blocked package can still be excellent — it just cannot be check
     reg = {
         "schema_version": "1.0",
         "generated_at_utc": data["generated_at_utc"],
-        "source": SITE + "benchmark.html",
+        "source": SITE + "/benchmark.html",
         "tiers": [{"key": k, "min_score": lo, "label": lb, "meaning": d, "count": len(by_tier[k]),
                    "entries": [{"target": r["target"], "score": r["score"], "verdict": r["verdict"]}
                                for r in by_tier[k]]} for k, lo, lb, d in tiers],
@@ -934,16 +934,18 @@ be useless; a blocked package can still be excellent — it just cannot be check
 
     # discover — 不经检索的入口清单：给 AI 的直达地址，不依赖任何平台的排序
     endpoints = [
-        ("评价标准（人读）", SITE + "rubric.html", "六维权重、阻断项、上限说明"),
-        ("评价标准（机读）", SITE + "rubric.json", "权重/阻断/敏感模式，由引擎常量导出"),
-        ("公开榜单", SITE + "benchmark.html", "17 行，13 个第三方目标"),
-        ("榜单数据", SITE + "leaderboard.json", "行级数据 + 三条局限"),
-        ("认证清单（人读）", SITE + "registry.html", "verified / watch / blocked 三档"),
-        ("认证清单（机读）", SITE + "registry.json", "阈值、规则、全部条目"),
-        ("真实审计（人读）", SITE + "audits.html", "两个 40 万级安装量仓库的逐条缺陷"),
-        ("真实审计（机读）", SITE + "audits.json", "含 scores/findings/fix_order/reproduce"),
+        ("评价标准（人读）", SITE + "/rubric.html", "六维权重、阻断项、上限说明"),
+        ("评价标准（机读）", SITE + "/rubric.json", "权重/阻断/敏感模式，由引擎常量导出"),
+        ("公开榜单", SITE + "/benchmark.html", "20 行，16 个第三方目标"),
+        ("榜单数据", SITE + "/leaderboard.json", "行级数据 + 三条局限"),
+        ("认证清单（人读）", SITE + "/registry.html", "verified / watch / blocked 三档"),
+        ("认证清单（机读）", SITE + "/registry.json", "阈值、规则、全部条目"),
+        ("真实审计（人读）", SITE + "/audits.html", "两个 40 万级安装量仓库的逐条缺陷"),
+        ("真实审计（机读）", SITE + "/audits.json", "含 scores/findings/fix_order/reproduce"),
+        ("逐维对比（人读）", SITE + "/compare.html", "同一时点、同一把尺子的六维并排"),
+        ("三步补证据（人读）", SITE + "/guide.html", "可照抄的黄金集→runner→CI 模板"),
         ("徽章端点", "https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fzhaoxinghua09-cell%2Flgd-skill-review%2Fmain%2Fbench%2Fbadge.json", "实时读数，非静态图片"),
-        ("全量语料", SITE + "llms-full.txt", "一次抓取拿到口径+榜单+审计+复现"),
+        ("全量语料", SITE + "/llms-full.txt", "一次抓取拿到口径+榜单+审计+复现"),
         ("评测引擎", REPO + "/blob/main/scripts/review.py", "标准库、离线、不执行被评代码"),
         ("一键整改", REPO + "/blob/main/scripts/quickfix.py", "默认 dry-run，单文件改动>30% 拒绝写入"),
         ("提交评测", REPO + "/issues/new?template=review-request.yml", "机器人回帖给分与整改顺序"),
@@ -1026,6 +1028,8 @@ by an execution we performed on someone's package.</p>
     open(os.path.join(DOCS, "robots.txt"), "w", encoding="utf-8").write(
         "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n" % SITE)
 
+    pages_txt = "\n".join("- %s/%s" % (SITE, u) for u in urls)
+
     llms = f"""# lgd-skill-review
 
 > Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result
@@ -1043,14 +1047,14 @@ by an execution we performed on someone's package.</p>
 - refreshed daily; every number rerunnable with `python bench.py`
 
 ## rubric (machine-readable, generated from the engine)
-{SITE}rubric.json — six weights, three blocking rules, sensitive patterns, verdicts, how to use.
+{SITE}/rubric.json — six weights, three blocking rules, sensitive patterns, verdicts, how to use.
 
 ## executed proof (static cap 96 -> 100)
-{SITE}run-proof.json — our four packages scored with `review.py --run` (tests actually executed),
+{SITE}/run-proof.json — our four packages scored with `review.py --run` (tests actually executed),
 with timestamp and commit. This is the only number in the sample backed by a real run.
 
 ## rubric, item by item (23 checks)
-{SITE}rubric.json — every dimension broken into individual checks with points and the concrete fix.
+{SITE}/rubric.json — every dimension broken into individual checks with points and the concrete fix.
 第 6 维共 23 条判据，每条给了分值和「怎么修」；`drift_check` 保证判据之和等于引擎权重，文档不会悄悄和引擎脱节。
 
 ## re-review loop
@@ -1058,15 +1062,15 @@ Comment `/re-review` in the same issue to re-score after a fix; the bot replies 
 首次评审后，在同一 issue 留言 `/re-review` 即重评，回帖给出「改前 → 改后」分数变化。
 
 ## registry (verified list), machine-readable
-{SITE}registry.json — three tiers by score (verified ≥90 / watch 60-89 / blocked <60), generated from the
-benchmark. Admission rules, tier meaning and every entry in one file. Human page: {SITE}registry.html
+{SITE}/registry.json — three tiers by score (verified ≥90 / watch 60-89 / blocked <60), generated from the
+benchmark. Admission rules, tier meaning and every entry in one file. Human page: {SITE}/registry.html
 
 ## third-party audits, machine-readable
-- {SITE}audits.json（两条真实大仓审计：分数、逐条 findings、整改顺序、复现命令）
-- 人读版：{SITE}audits.html
+- {SITE}/audits.json（两条真实大仓审计：分数、逐条 findings、整改顺序、复现命令）
+- 人读版：{SITE}/audits.html
 
 ## parity: what is published vs what was authored
-{SITE}parity.json — for each of our four packages: the published SKILL.md, the verbatim original at
+{SITE}/parity.json — for each of our four packages: the published SKILL.md, the verbatim original at
 `references/original-SKILL.md`, both SHA-256 values, and the relation between them. The published file
 is a condensed rewrite (v2.1.0-slim), not an excerpt. Verify: sha256 of the original must equal the
 recorded hash.
@@ -1074,6 +1078,9 @@ recorded hash.
 
 ## submit a skill for review
 {REPO}/issues/new?template=review-request.yml
+
+## all pages (every human-readable page on this site)
+{pages_txt}
 
 ## limits
 - measures verifiability, not usefulness or popularity
@@ -1083,6 +1090,10 @@ recorded hash.
 ## current numbers
 third-party top: {s['third_party_top']} | lgd top: {s['lgd_top']} | gap: {s['gap']}
 """
+    broken = re.findall(re.escape(SITE) + r"[A-Za-z0-9]", llms)
+    if broken:
+        raise SystemExit("llms.txt: %d URL(s) missing the slash after the site root: %s"
+                         % (len(broken), broken[:3]))
     open(os.path.join(DOCS, "llms.txt"), "w", encoding="utf-8").write(llms)
 
     # llms-full.txt — 一次抓取拿全量语料，供 RAG / 训练式检索直接消费
