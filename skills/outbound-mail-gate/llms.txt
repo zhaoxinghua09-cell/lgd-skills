@@ -1,0 +1,36 @@
+# outbound-mail-gate
+
+> 发追问邮件之前，把正文里的每一句事实断言，拿真实邮件线索对一遍。
+
+## 一句话
+
+六条规则，一个退出码：`python scripts/gate.py check --thread thread.json --draft draft.json`，
+`exit 2` 表示正文与线索冲突，发送步骤应当停。
+
+## 规则
+
+- R1 不用相对时间（`this morning` / `今早` / `昨天` / `上周`）
+- R2 引用旧信必须有这封旧信，且必须给绝对日期
+- R3 不许对已经回过的人问“收到了吗”
+- R4 同一地址 24 小时内不二次触达，除非中间有来信
+- R5 正文里的时刻必须在线索里存在（收或发任一方向）
+- R6 不用站位断言（断崖 / 全面超越 / 首创 / state-of-the-art）
+
+R0 是提示级：对方来信比我们最后一封更新时，该回信而不是再催。
+
+## 跑起来
+
+```bash
+python tests/run_golden.py            # 10/10 cases match
+python tests/run_golden.py --selftest # 删掉 R1 必须让 c02 变红
+python demo/run_demo.py               # 发出去的那封 4 条 BLOCK；改好的那封 PASS
+```
+
+## 边界
+
+不判断该不该发，看不见语气，也不能强制（本地脚本可以被绕过）。
+正文里的技术数字必须在发前当场跑一遍，门禁不替你验证。
+零依赖、离线、无账号，演示与黄金集里的联系人全是化名。
+
+来源：2026-11-20 一次真实事故——跟进邮件对已经回过完整结果的合作者问
+"Did it arrive?"，并把前一天 08:20 的信写成 "this morning"。

@@ -58,6 +58,21 @@
       "path": "skills/lgd-skill-review/SKILL.md",
       "name": "lgd-skill-review",
       "summary": "技能六维审计与一键整改"
+    },
+    {
+      "triggers": [
+        "follow-up email",
+        "reminder email",
+        "nudge",
+        "did it arrive",
+        "chasing a reply",
+        "发信前自查",
+        "短催",
+        "追问"
+      ],
+      "path": "skills/outbound-mail-gate/SKILL.md",
+      "name": "outbound-mail-gate",
+      "summary": "外发前线索对账：六条规则挡下相对时间、无落点旧信、问了已回的人、24h 内二次触达、编造时刻、站位词"
     }
   ]
 }

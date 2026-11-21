@@ -1,0 +1,10 @@
+{
+  "sent": [
+    {"ts": "2026-11-19T08:20:52+08:00", "subject": "An outsider run of our suite, and a request to run it on yours"},
+    {"ts": "2026-11-19T11:18:44+08:00", "subject": "Re: An outsider run of our suite"},
+    {"ts": "2026-11-20T09:20:57+08:00", "subject": "Re: An outsider run of our suite - three lines"}
+  ],
+  "inbound": [
+    {"ts": "2026-11-19T10:49:21+08:00", "subject": "Re: An outsider run of our suite"}
+  ]
+}

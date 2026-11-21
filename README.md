@@ -1,8 +1,8 @@
-# LGD Skills · 四个可验证的 Agent 技能
+# LGD Skills · 五个可验证的 Agent 技能
 
 [![verifiability](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fzhaoxinghua09-cell%2Flgd-skill-review%2Fmain%2Fbench%2Fbadge.json)](https://github.com/zhaoxinghua09-cell/lgd-skill-review/tree/main/bench)
 
-一个仓库装四个技能，每个都通过同一把尺子验收：**六维可验证性审计，静态 96 分，带测试实跑 100 分**。
+一个仓库装五个技能，每个都通过同一把尺子验收：**六维可验证性审计 + 带测试实跑**。原有四个技能的静态 / 实跑分数见各自 README；新增的 `outbound-mail-gate` 实测结构制 **100/100（PASS）**、语义制 **112/120（A）**、黄金集 **10/10**（由 `review.py --run --eight` 现场给出，可复跑）。
 
 ```bash
 npx skills add zhaoxinghua09-cell/lgd-skills

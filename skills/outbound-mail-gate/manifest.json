@@ -1,0 +1,11 @@
+{
+  "name": "outbound-mail-gate",
+  "normalizedName": "outbound-mail-gate",
+  "description": "A pre-send gate for follow-up and reminder email. It compares a draft's claims against the thread as the mailbox records it and blocks six classes of contradiction: relative time wording ('this morning' for a message sent yesterday), a claimed prior message that does not exist or carries no date, 'did it arrive?' asked of someone who already replied, a second contact inside 24 hours, a clock time that appears nowhere in the thread, and standing claims. Zero dependency, offline, JSON in and verdict out, exit code 2 on a blocked draft. Ships a 10-case golden set with a runner and a negative self-test that removes a rule and requires a case to flip, plus a demo built from a real 2026-11-20 incident. It does not decide whether a message should be sent and cannot see tone. Triggers: follow-up email, reminder email, nudge, did it arrive, chasing a reply, mail gate.",
+  "description_zh": "发任何追问/短催/提醒邮件之前的线索对账门禁。拿真实邮件线索核对草稿的事实断言：把前一天的写信成「今早」、对已回过的人再问「收到了吗」、24 小时内二次打扰、正文里的时刻在线索里不存在、以及「断崖式领先」这类站位断言，都会拦下并给出规则编号。零依赖、离线、JSON 进结论出，退出码 2 可直接挡在发送步骤前；附 10 条黄金集与反向自检（删规则必须变红），以及一条 2026-11-20 真实事故的演示。不判断该不该发，也看不见语气。",
+  "description_en": "A pre-send gate for follow-up and reminder email. It compares a draft's claims against the thread as the mailbox records it and blocks: relative time wording, an undated or nonexistent prior message, 'did it arrive?' asked of someone who already replied, a second contact inside 24 hours, a clock time absent from the thread, and standing claims. Zero dependency, offline, a 10-case golden set with a negative self-test, and a demo from a real 2026-11-20 incident.",
+  "author": "Xinghua Zhao",
+  "copyright": "Xinghua Zhao",
+  "version": "1.0.0",
+  "license": "MIT"
+}
