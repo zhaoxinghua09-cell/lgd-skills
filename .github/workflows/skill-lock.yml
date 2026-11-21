@@ -42,7 +42,7 @@ jobs:
         run: |
           set -euo pipefail
           cd repo
-          python3 -c "import pytest" 2>/dev/null || python3 -m pip install --quiet pytest
+          python3 -c "import pytest, cryptography" 2>/dev/null || python3 -m pip install --quiet pytest cryptography
           python3 -m pytest tests/test_skill_lock.py -q
 
       - name: Verify the skills lock
