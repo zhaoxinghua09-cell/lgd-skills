@@ -1,0 +1,64 @@
+name: bench-nightly
+
+# 每天刷新公开基准，并把结果写回仓库。
+# 目的：bench.json / leaderboard.json / badge.json 永远是"当前时点"的真实数字，
+# 而不是某天手动跑一次的旧快照。数字变了，徽章跟着变。
+
+on:
+  schedule:
+    - cron: "17 1 * * *"      # UTC 01:17 = 北京 09:17
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bench-nightly
+  cancel-in-progress: true
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5.6.0
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install requests || true
+          python -m pip show pypdf >/dev/null 2>&1 || python -m pip install pypdf || true
+
+      - name: Run benchmark (static mode only)
+        working-directory: bench
+        run: python bench.py
+
+      - name: Show summary
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          p = pathlib.Path("bench/leaderboard.json")
+          d = json.loads(p.read_text(encoding="utf-8"))
+          s = d["summary"]
+          print("third-party top: %s | LGD top: %s | gap: %s"
+                % (s["third_party_top"], s["lgd_top"], s["gap"]))
+          print("rows:", len(d["rows"]))
+          PY
+
+      - name: Commit refreshed results
+        run: |
+          git config user.name  "lgd-bench-bot"
+          git config user.email "bench@users.noreply.github.com"
+          git add bench/bench.json bench/leaderboard.json bench/badge.json
+          if git diff --cached --quiet; then
+            echo "no change"
+          else
+            git commit -m "chore(bench): nightly refresh $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi

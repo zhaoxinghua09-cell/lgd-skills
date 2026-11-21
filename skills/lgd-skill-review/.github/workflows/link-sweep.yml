@@ -1,0 +1,20 @@
+name: Link sweep
+
+on:
+  schedule:
+    - cron: "20 1 * * 1"   # 每周一 01:20 UTC / 北京 09:20
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.4.0
+      - uses: actions/setup-python@v5.6.0
+        with:
+          python-version: "3.11"
+      - name: Check every internal link on the published site
+        run: python scripts/link_sweep.py

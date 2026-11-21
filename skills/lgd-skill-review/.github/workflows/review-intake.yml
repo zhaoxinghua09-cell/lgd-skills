@@ -1,0 +1,41 @@
+name: Review Request
+
+on:
+  issues:
+    types: [opened, reopened]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  review:
+    # 模板会自动打 review-request 标签；但手动开的 issue 只要正文里有仓库地址也照评，
+    # 否则第三方"直接留言"会被静默跳过——那等于把入口关掉。
+    if: contains(github.event.issue.labels.*.name, 'review-request') || contains(github.event.issue.body, 'github.com/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.4.0
+      - uses: actions/setup-python@v5.6.0
+        with:
+          python-version: "3.11"
+
+      - name: Run static dual-ruler review
+        id: review
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          python scripts/intake_review.py "$ISSUE_BODY" > verdict.md
+          cat verdict.md
+
+      - name: Post verdict as comment
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          if [ -s verdict.md ]; then
+            gh issue comment "$ISSUE" --body-file verdict.md
+          else
+            gh issue comment "$ISSUE" --body "评审未完成：无法下载仓库或找不到 SKILL.md。请确认仓库为公开仓库并包含 SKILL.md。/ Review could not run: please confirm the repository is public and contains SKILL.md."
+          fi

@@ -13,8 +13,8 @@ jobs:
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v4.4.0
+      - uses: actions/setup-python@v5.6.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Run golden set (offline, stdlib only)
@@ -66,3 +66,8 @@ jobs:
       # 超过 1,024 上限会被宿主截断——截掉的正是触发词。
       - name: The package must survive being loaded by a host
         run: python tools/harness_check.py .
+
+      # 锁一致性：GitHub 会因为 `uses: xxx@v4` 与 actions.lock 里登记的 `xxx@v4.4.0`
+      # 不一致而直接 startup_failure——本地 YAML 合法也照样连 job 都不排。
+      - name: Action refs must match the lockfile
+        run: python tests/workflow_lock_audit.py

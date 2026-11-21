@@ -1,0 +1,53 @@
+name: Re-review
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  rereview:
+    # 提交者在同一 issue 里留言 `/re-review` 即重评；`/appeal <维度>` 只重测被申诉的那一维
+    if: |
+      github.event.issue.pull_request == null &&
+      (contains(github.event.comment.body, '/re-review') ||
+       contains(github.event.comment.body, '/appeal'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.4.0
+      - uses: actions/setup-python@v5.6.0
+        with:
+          python-version: "3.11"
+
+      - name: Re-run static dual-ruler review
+        id: review
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          COMMENT: ${{ github.event.comment.body }}
+        run: |
+          python scripts/intake_review.py "$ISSUE_BODY" > verdict.md
+          echo "$COMMENT" > comment.txt
+          if grep -qi '/appeal' comment.txt; then
+            DIM=$(grep -io '/appeal[[:space:]]\+[a-z_]*' comment.txt | head -1 | sed 's#/appeal[[:space:]]*##I')
+            python scripts/appeal.py "${{ github.event.issue.number }}" "${{ github.repository }}" "$DIM" verdict.md > verdict2.md
+          else
+            python scripts/rereview.py "${{ github.event.issue.number }}" "${{ github.repository }}" verdict.md > verdict2.md
+          fi
+          cat verdict2.md
+
+      - name: Post verdict
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          if [ -s verdict2.md ]; then
+            gh issue comment "$ISSUE" --body-file verdict2.md
+          elif [ -s verdict.md ]; then
+            gh issue comment "$ISSUE" --body-file verdict.md
+          else
+            gh issue comment "$ISSUE" --body "复评未完成：无法下载仓库或找不到 SKILL.md。/ Re-review could not run."
+          fi

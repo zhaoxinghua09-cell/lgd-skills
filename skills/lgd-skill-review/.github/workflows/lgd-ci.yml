@@ -1,0 +1,19 @@
+name: LGD CI
+
+# 逻辑在 LGD-AI/lgd-ci（跨仓引用必须 pin 完整 SHA）。
+# 测试由各仓自己的 CI 负责；这里只做布局与 JSON 卫生 + 合并后守门。
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: LGD-AI/lgd-ci/.github/workflows/lgd-reusable-ci.yml@1d53939f8a0bdcb65086a6184d1bdb833dc3ffab
+    with:
+      python-version: "3.11"
+      run-tests: false
+      require-skill-md: false
