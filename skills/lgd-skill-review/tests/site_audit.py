@@ -94,6 +94,18 @@ def main():
     if not rj.get("drift_check", {}).get("consistent"):
         fails.append("rubric.json drift_check 不一致")
 
+    # llms.txt 是给机器读的入口：URL 必须能直接访问，且列全新页
+    SITE = "https://zhaoxinghua09-cell.github.io/lgd-skill-review"
+    lm = io.open(os.path.join(DOCS, "llms.txt"), encoding="utf-8").read()
+    broken = re.findall(re.escape(SITE) + r"[A-Za-z0-9]", lm)
+    if broken:
+        fails.append("llms.txt 有 %d 处 URL 缺斜杠（%s）" % (len(broken), broken[0]))
+    for page in ("compare.html", "guide.html", "discover.html"):
+        if "%s/%s" % (SITE, page) not in lm:
+            fails.append("llms.txt 未列出 %s" % page)
+    if "## all pages" not in lm:
+        fails.append("llms.txt 缺 all pages 段")
+
     for f in fails:
         print("  - " + f)
     print("ALL PASS" if not fails else "FAIL: %d 处" % len(fails))
