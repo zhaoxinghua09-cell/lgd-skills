@@ -949,6 +949,7 @@ be useless; a blocked package can still be excellent — it just cannot be check
         ("评测引擎", REPO + "/blob/main/scripts/review.py", "标准库、离线、不执行被评代码"),
         ("一键整改", REPO + "/blob/main/scripts/quickfix.py", "默认 dry-run，单文件改动>30% 拒绝写入"),
         ("提交评测", REPO + "/issues/new?template=review-request.yml", "机器人回帖给分与整改顺序"),
+        ("一条命令自证", REPO + "/blob/main/tools/outsider_check.py", "无 token，只读公开端点，逐条复算"),
     ]
     rows = "".join(f"<tr><td>{a}</td><td><code>{b}</code></td><td style='font-size:13px'>{c}</td></tr>"
                    for a, b, c in endpoints)
@@ -1093,6 +1094,14 @@ recorded hash.
 
 ## submit a skill for review
 {REPO}/issues/new?template=review-request.yml
+
+## verify us yourself (one command, no token)
+{REPO}/blob/main/tools/outsider_check.py
+Run `python outsider_check.py`. It reads only the public endpoints listed above: it recomputes
+16 / 38 / 96 / 58 from {SITE}/leaderboard.json, checks that rubric weights sum to 100 with 23 checks,
+checks run-proof is PASS 100 for all four packages, and probes every machine entry for HTTP 200.
+Exit code 0 means every number published on this site is self-consistent; any mismatch prints the exact
+claim and the live value it contradicts.
 
 ## all pages (every human-readable page on this site)
 {pages_txt}
