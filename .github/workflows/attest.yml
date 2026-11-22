@@ -34,8 +34,8 @@ jobs:
           cd repo
           echo "attesting $(git rev-parse HEAD) / skills.lock.json"
 
-      # 唯一一个第三方 action：钉到 v4.2.2 的 40 位 commit
+      # 唯一一个第三方 action：工作流用 tag 引用，实际固定版本由 actions.lock 提供
       - name: Attest the lockfile
-        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8
+        uses: actions/attest-build-provenance@v4.2.2
         with:
           subject-path: repo/skills.lock.json
