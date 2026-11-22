@@ -6,9 +6,9 @@
       "skill": "summarize-pro",
       "published": {
         "path": "SKILL.md",
-        "sha256": "da47ded32d4827ad745f70613c25934b07fa2b78283d3a2638d2dd97dc8d14b6",
-        "bytes": 8297,
-        "lines": 115
+        "sha256": "cb75bcb25310187e8b394c07317fec64c17946b6b8a92340e589f2f73d98b87a",
+        "bytes": 7444,
+        "lines": 114
       },
       "original": {
         "path": "references/original-SKILL.md",
@@ -25,9 +25,9 @@
       "skill": "debug-pro",
       "published": {
         "path": "SKILL.md",
-        "sha256": "bb182e9eec568a34bdc34448b34d65059ad51fce0cecff4f2829023ce2841220",
-        "bytes": 7754,
-        "lines": 107
+        "sha256": "90274702a988a8f8e252dbbbf1b3c6c847a958d510c640a5148a276c797aa06e",
+        "bytes": 6804,
+        "lines": 106
       },
       "restored": {
         "path": "references/details.md",
@@ -63,9 +63,9 @@
       "skill": "wechat-viral-topic",
       "published": {
         "path": "SKILL.md",
-        "sha256": "d8b7d452bc03b9d95b1eb17202b5ad83ae85e9e21903c65883e858785a733441",
-        "bytes": 7726,
-        "lines": 107
+        "sha256": "2c795067d939b33d3a8a7385ae46e55cffc06be3a86570130a0d4ec98333f830",
+        "bytes": 6832,
+        "lines": 106
       },
       "original": {
         "path": "references/original-SKILL.md",
@@ -82,9 +82,9 @@
       "skill": "lgd-skill-review",
       "published": {
         "path": "SKILL.md",
-        "sha256": "ed15e8c3fd9a7fc8cb6adb2af1d339e9c54ad1905fa4948ad4540bc71e5399b1",
-        "bytes": 9105,
-        "lines": 114
+        "sha256": "19dc73ba31bd9501b027482c25a20ee4f484249d79fd8d33c44b15372945334f",
+        "bytes": 8156,
+        "lines": 113
       },
       "original": {
         "path": "references/original-SKILL.md",

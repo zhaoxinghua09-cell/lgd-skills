@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Registry — the verified list</title>
+<meta name="description" content="A tiered registry of agent skills by verifiability score. Machine-readable at registry.json; entries are generated from the public benchmark, not curated by hand.">
+<link rel="canonical" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/registry.html">
+<meta property="og:title" content="Registry — the verified list">
+<meta property="og:description" content="A tiered registry of agent skills by verifiability score. Machine-readable at registry.json; entries are generated from the public benchmark, not curated by hand.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"lgd-skill-review",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "description":"Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result includes a remediation order.",
+  "url":"https://zhaoxinghua09-cell.github.io/lgd-skill-review/",
+  "codeRepository":"https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "license":"https://opensource.org/licenses/MIT",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}</script>
+
+</head>
+<body>
+<div class="wrap">
+<nav>
+<nav><a href="./index.html">Home</a><a href="./rubric.html">Rubric</a><a href="./skill-review.html">Audit</a><a href="./quickfix.html">QuickFix</a><a href="./benchmark.html">Benchmark</a><a href="./compare.html">Compare</a><a href="./guide.html">Guide</a><a href="./badge.html">Badge</a><a href="./audits.html">Audits</a><a href="./registry.html">Registry</a><a href="./discover.html">Discover</a><a href="https://github.com/zhaoxinghua09-cell/lgd-skill-review">GitHub</a></nav>
+
+<div class="kick">registry</div>
+<h1>The verified list, built from numbers rather than opinions.</h1>
+<p class="lead">Three tiers. Nobody is promoted by application, nobody pays, and no entry is edited by
+hand — every row is a score produced by the same runner. To appear here, submit the package; to change
+your tier, change the package.</p>
+
+<div class="card">
+<h3>LGD Verified · 认证</h3>
+<p style="font-size:13px;color:#6b6459">≥90：陌生人十分钟内可核实全部主张 · 本档 4 条</p>
+<table><tr><th>package</th><th style="text-align:right">score</th></tr><tr><td>summarize-pro</td><td class="num">96</td></tr><tr><td>debug-pro</td><td class="num">96</td></tr><tr><td>wechat-viral-topic</td><td class="num">96</td></tr><tr><td>lgd-skill-review</td><td class="num">96</td></tr></table>
+</div>
+
+<div class="card">
+<h3>LGD Watch · 观察</h3>
+<p style="font-size:13px;color:#6b6459">60–89：有一部分能核实，关键项缺失 · 本档 0 条</p>
+<table><tr><th>package</th><th style="text-align:right">score</th></tr><tr><td colspan="2" style="color:#8a8378">（本档暂无条目）</td></tr></table>
+</div>
+
+<div class="card">
+<h3>LGD Blocked · 未通过</h3>
+<p style="font-size:13px;color:#6b6459"><60：核心证据缺失，无法核实 · 本档 16 条</p>
+<table><tr><th>package</th><th style="text-align:right">score</th></tr><tr><td>anthropics/skills@skills/skill-creator</td><td class="num bad">38</td></tr><tr><td>anthropics/skills@skills/pptx</td><td class="num bad">31</td></tr><tr><td>anthropics/skills@skills/docx</td><td class="num bad">31</td></tr><tr><td>anthropics/skills@skills/frontend-design</td><td class="num bad">25</td></tr><tr><td>vercel-labs/agent-skills@skills/react-best-practices</td><td class="num bad">24</td></tr><tr><td>google/agents-cli@skills/google-agents-cli-adk-code</td><td class="num bad">22</td></tr><tr><td>emilkowalski/skills@skills/apple-design</td><td class="num bad">22</td></tr><tr><td>anthropics/skills@skills/pdf</td><td class="num bad">21</td></tr><tr><td>microsoft/azure-skills@skills/azure-deploy</td><td class="num bad">20</td></tr><tr><td>prisma/skills@prisma-cli</td><td class="num bad">20</td></tr><tr><td>mattpocock/skills@skills/engineering/code-review</td><td class="num bad">18</td></tr><tr><td>juliusbrussee/caveman@skills/caveman</td><td class="num bad">18</td></tr><tr><td>obra/superpowers@skills/brainstorming</td><td class="num bad">18</td></tr><tr><td>addyosmani/agent-skills@skills/code-review-and-quality</td><td class="num bad">18</td></tr><tr><td>leonxlnx/taste-skill@skills/taste-skill</td><td class="num bad">10</td></tr><tr><td>vercel-labs/agent-browser@skill-data/core</td><td class="num bad">10</td></tr></table>
+</div>
+
+<h2>How to get on this list</h2>
+<div class="card"><ul>
+<li>Submit a public repository: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">review request</a>（机器人取包、静态分析、回帖给分与整改顺序）</li>
+<li>No payment, no negotiation, no editorial discretion. The runner decides.</li>
+<li>Rejected? The reply lists what is missing and in what order to fix it. Resubmit after fixing.</li>
+</ul>
+<p style="margin-top:10px;font-size:13px">机器可读版：<a class="a" href="./registry.json">registry.json</a>（含每档阈值与全部条目）。</p></div>
+
+<h2>What a tier is not</h2>
+<div class="card"><p>It is not a quality endorsement, not a security audit, not a warranty. It says one thing:
+<b>how much of this package's claims a stranger can verify in ten minutes</b>. A verified package can still
+be useless; a blocked package can still be excellent — it just cannot be checked.</p></div>
+
+<div class="foot">
+Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad. Snapshot at a point in time; the sample is not random. Data: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json">leaderboard.json</a> · Machine entry: <a class="a" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/llms.txt">llms.txt</a> · Request a review: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">open an issue</a>
+</div>
+</div>
+</body>
+</html>

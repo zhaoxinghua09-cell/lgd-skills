@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Badge — embed the verifiability score</title>
+<meta name="description" content="Copy-paste snippets to show a skill's verifiability score in your README. The badge reads live data, so it changes when the score changes.">
+<link rel="canonical" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/badge.html">
+<meta property="og:title" content="Badge — embed the verifiability score">
+<meta property="og:description" content="Copy-paste snippets to show a skill's verifiability score in your README. The badge reads live data, so it changes when the score changes.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"lgd-skill-review",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "description":"Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result includes a remediation order.",
+  "url":"https://zhaoxinghua09-cell.github.io/lgd-skill-review/",
+  "codeRepository":"https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "license":"https://opensource.org/licenses/MIT",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"HowTo","name":"Embed the LGD verifiability badge","step":[{"@type":"HowToStep","text":"Copy the Markdown snippet"},{"@type":"HowToStep","text":"Paste it into your README"}]}</script>
+</head>
+<body>
+<div class="wrap">
+<nav>
+<nav><a href="./index.html">Home</a><a href="./rubric.html">Rubric</a><a href="./skill-review.html">Audit</a><a href="./quickfix.html">QuickFix</a><a href="./benchmark.html">Benchmark</a><a href="./compare.html">Compare</a><a href="./guide.html">Guide</a><a href="./badge.html">Badge</a><a href="./audits.html">Audits</a><a href="./registry.html">Registry</a><a href="./discover.html">Discover</a><a href="https://github.com/zhaoxinghua09-cell/lgd-skill-review">GitHub</a></nav>
+
+<div class="kick">badge</div>
+<h1>A badge that reads live data.</h1>
+<p class="lead">Most badges are a picture someone typed once. This one is an endpoint:
+it renders whatever the latest benchmark says, so it cannot go stale and cannot be cherry-picked.</p>
+
+<div class="card">
+<h3>What it currently says</h3>
+<p><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fzhaoxinghua09-cell%2Flgd-skill-review%2Fmain%2Fbench%2Fbadge.json" alt="verifiability badge" style="height:22px"></p>
+<p style="margin-top:12px;font-size:13px">Label: verifiability · Message: peers &lt;third-party top&gt; / LGD &lt;our top&gt; ·
+Colour flips to orange if the gap drops below 50 points.</p>
+</div>
+
+<h2>Markdown</h2>
+<div class="card"><pre><code>[![verifiability](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fzhaoxinghua09-cell%2Flgd-skill-review%2Fmain%2Fbench%2Fbadge.json)](https://zhaoxinghua09-cell.github.io/lgd-skill-review/benchmark.html)</code></pre>
+<p style="margin-top:10px;font-size:13px">Works on GitHub, GitLab, most README renderers.</p></div>
+
+<h2>HTML</h2>
+<div class="card"><pre><code>&lt;a href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/benchmark.html"&gt;&lt;img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fzhaoxinghua09-cell%2Flgd-skill-review%2Fmain%2Fbench%2Fbadge.json" alt="verifiability score" height="22"&gt;&lt;/a&gt;</code></pre></div>
+
+<h2>Raw JSON, if you want to build your own</h2>
+<div class="card"><pre><code>https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/badge.json</code></pre>
+<p style="margin-top:10px">Shields endpoint schema: <code>{"schemaVersion":1,"label":...,"message":...,"color":...}</code>.
+The leaderboard behind it: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json">leaderboard.json</a>.</p></div>
+
+<h2>What the badge does and does not mean</h2>
+<div class="card"><ul>
+<li><b>Does</b> mean: this package's claims are checkable by a third party — license present, commands match the source, index machine-readable, no leaked paths.</li>
+<li><b>Does not</b> mean: the skill is useful, correct, popular, or endorsed by anyone.</li>
+<li>It is not a certification body. It is a public ruler with a public runner.</li>
+</ul></div>
+
+<div class="foot">
+Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad. Snapshot at a point in time; the sample is not random. Data: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json">leaderboard.json</a> · Machine entry: <a class="a" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/llms.txt">llms.txt</a> · Request a review: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">open an issue</a>
+</div>
+</div>
+</body>
+</html>

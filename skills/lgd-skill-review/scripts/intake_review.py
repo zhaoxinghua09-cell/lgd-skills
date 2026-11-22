@@ -178,6 +178,14 @@ def fetch_sparse(owner, repo, path, dest):
 
 
 def extract(blob, dest):
+    """解包前把每个成员的名字收敛成工作区内路径。
+
+    2026-11-21 SonarCloud 报 BLOCKER（S6096 Zip Slip）：单看 `".." in name.split("/")`
+    是够的，但静态分析看不到"先判断、后拼接"的因果，而且 `os.path.join` 之后没有任何
+    落地校验。这里改成对最终路径做 realpath 包含性断言——即便名字被构造成绝对路径、
+    或带 `..` 前缀、或大小写/分隔符变形，落点也必须仍在 dest 里。
+    """
+    dest_real = os.path.realpath(dest)
     count = 0
     total = 0
     with tarfile.open(fileobj=io.BytesIO(blob), mode="r:gz") as tf:
@@ -191,7 +199,9 @@ def extract(blob, dest):
             count += 1
             if count > MAX_FILES or total > MAX_BYTES:
                 raise SystemExit("超出体积/文件数上限 / archive exceeds limits")
-            target = os.path.join(dest, name)
+            target = os.path.realpath(os.path.join(dest, name))
+            if target != dest_real and not target.startswith(dest_real + os.sep):
+                raise SystemExit("解包路径越界，已中止 / archive entry escapes dest: %s" % name)
             os.makedirs(os.path.dirname(target), exist_ok=True)
             with tf.extractfile(member) as src, open(target, "wb") as out:
                 shutil.copyfileobj(src, out)

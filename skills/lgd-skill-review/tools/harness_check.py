@@ -20,6 +20,10 @@ import os
 import re
 import sys
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scripts"))
+import safeio  # noqa: E402  （读包内文件前统一做根目录包含校验）
+import cliscan  # noqa: E402  （线性解析 front-matter 键）
+
 NAME_MAX = 64
 DESC_MAX = 1024
 REQUIRED = ("name", "description")
@@ -41,19 +45,19 @@ def frontmatter(text):
         if line.startswith((" ", "\t")) and key:
             out[key] = (out[key] + " " + line.strip()).strip()
             continue
-        m = re.match(r"^([A-Za-z0-9_-]+)\s*:\s*(.*)$", line)
-        if m:
-            key = m.group(1)
-            out[key] = m.group(2).strip().strip('"').strip("'")
+        kv = cliscan.split_key(line)
+        if kv:
+            key, out[key] = kv[0], kv[1].strip('"').strip("'")
     return out
 
 
 def check(pkg):
     fails, notes = [], []
+    safeio.set_root(pkg)
     skill = os.path.join(pkg, "SKILL.md")
     if not os.path.isfile(skill):
         return ["SKILL.md 不存在（agent 无法加载）"], notes
-    raw = io.open(skill, encoding="utf-8", errors="strict").read()
+    raw = safeio.read_text(skill)
     fm = frontmatter(raw)
     if fm is None:
         fails.append("SKILL.md 缺少以 --- 包裹的 front-matter 块")

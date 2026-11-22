@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LGD SkillBench — verifiability, measured</title>
+<meta name="description" content="Public benchmark for agent skills: third-party skills score 10-31, LGD packages 96-100. One command reproduces every number.">
+<link rel="canonical" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/index.html">
+<meta property="og:title" content="LGD SkillBench — verifiability, measured">
+<meta property="og:description" content="Public benchmark for agent skills: third-party skills score 10-31, LGD packages 96-100. One command reproduces every number.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"lgd-skill-review",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "description":"Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result includes a remediation order.",
+  "url":"https://zhaoxinghua09-cell.github.io/lgd-skill-review/",
+  "codeRepository":"https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "license":"https://opensource.org/licenses/MIT",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}</script>
+
+</head>
+<body>
+<div class="wrap">
+<nav>
+<nav><a href="./index.html">Home</a><a href="./rubric.html">Rubric</a><a href="./skill-review.html">Audit</a><a href="./quickfix.html">QuickFix</a><a href="./benchmark.html">Benchmark</a><a href="./compare.html">Compare</a><a href="./guide.html">Guide</a><a href="./badge.html">Badge</a><a href="./audits.html">Audits</a><a href="./registry.html">Registry</a><a href="./discover.html">Discover</a><a href="https://github.com/zhaoxinghua09-cell/lgd-skill-review">GitHub</a></nav>
+
+<div class="kick">verifiability, measured — not claimed</div>
+<h1>We measure whether a stranger can check your skill.</h1>
+<p class="lead">16 third-party targets + our 4 packages, one ruler, one command. Third-party skills with
+hundreds of thousands of installs score <b>38</b> at best here; our four
+packages score <b>96</b> static and 100 with their own tests. The gap is not prose
+quality — it is <b>whether the evidence is checkable</b>.</p>
+
+<div class="card">
+<h3>Current gap</h3>
+<table>
+<tr><th>Metric</th><th style="text-align:right">Value</th></tr>
+<tr><td>Third-party entries</td><td class="num">16</td></tr>
+<tr><td>LGD entries</td><td class="num">4</td></tr>
+<tr><td>Third-party top score</td><td class="num bad">38</td></tr>
+<tr><td>LGD top score</td><td class="num good">96</td></tr>
+<tr><td>Gap</td><td class="num good">58</td></tr>
+</table>
+<p style="margin-top:12px;font-size:13px">Generated 2026-11-19T05:07:44Z · engine: static mode, never executes the target's code</p>
+</div>
+
+
+<h2>Parity — we publish the version we measured, and the original next to it</h2>
+<div class="card">
+<p>Our packages ship a <b>condensed rewrite</b> (<code>v2.1.0-slim</code>), not an excerpt of the
+source document. That is a fact a stranger cannot check from the rendered page — so every repo
+carries the verbatim original at <code>references/original-SKILL.md</code> plus a
+<code>PARITY.json</code> with both SHA-256 values. Here is what the difference actually is:</p>
+<table>
+<tr><th>Package</th><th style="text-align:right">Original lines</th><th style="text-align:right">Published lines</th><th style="text-align:right">Not in SKILL.md</th><th>Original SHA-256</th></tr>
+<tr><td><b>summarize-pro</b></td><td class='num'>407</td><td class='num'>114</td><td class='num'>72%</td><td><code>1d63be5c71e4</code></td></tr><tr><td><b>debug-pro</b></td><td class='num'>307</td><td class='num'>106</td><td class='num'>65%</td><td><code>f9f978c11485</code></td></tr><tr><td><b>wechat-viral-topic</b></td><td class='num'>285</td><td class='num'>106</td><td class='num'>63%</td><td><code>f51b6979f97a</code></td></tr><tr><td><b>lgd-skill-review</b></td><td class='num'>176</td><td class='num'>113</td><td class='num'>36%</td><td><code>5e0abdb33d59</code></td></tr>
+</table>
+<p style="margin-top:12px;font-size:13px">“Published lines” counts <code>SKILL.md</code> only — the rest of
+the body lives in <code>references/details.md</code>. So this column is a floor, not the real gap.
+Verify any row: <code>curl -s https://github.com/zhaoxinghua09-cell/<repo>/raw/main/references/original-SKILL.md | sha256sum</code></p>
+<p style="margin-top:8px"><a class="a" href="./parity.json">parity.json (machine-readable) →</a></p>
+</div>
+
+<h2>What we measure</h2>
+<div class="card">
+<ul>
+<li><b>Structure</b> — can a machine find the entry, version, license?</li>
+<li><b>Consistency</b> — do the documented commands exist in the source?</li>
+<li><b>Reproducibility</b> — is there a golden set and a runner that actually runs?</li>
+<li><b>Hygiene</b> — absolute paths, secrets, leaked contact details</li>
+<li><b>Discoverability</b> — triggers, ecosystem links, machine-readable index</li>
+<li><b>Licensing</b> — a real license, not a claim</li>
+</ul>
+<p style="margin-top:12px"><a class="a" href="./rubric.html">Full rubric →</a></p>
+</div>
+
+<h2>Reproduce it</h2>
+<div class="card">
+<pre><code>git clone https://github.com/zhaoxinghua09-cell/lgd-skill-review.git
+cd lgd-skill-review/bench
+python bench.py</code></pre>
+<p style="margin-top:10px">Refreshed automatically every day at 09:17 Beijing time. If you disagree with
+a number, the JSON is public and the runner is public.</p>
+</div>
+
+<h2>Our ruler is tested too</h2>
+<div class="card">
+<p>It is easy to publish checks and never enforce them. So every published check has a probe that
+breaks it on purpose and asserts the score actually drops — 22 cases covering all 23 checks (one check
+shares its evidence with another), run in CI on every push:</p>
+<pre style="margin-top:10px"><code>python tests/rubric_probe.py
+# 22/22 enforced</code></pre>
+<p style="margin-top:10px">Two of those probes found real defects in <b>this project</b>: a junk scan that
+could never fire (its walk pruned the very directory it was looking for), and a flag check that
+recorded a mismatch without deducting. Both are fixed — and the third-party top went from 36 to
+<b>38</b> the moment the flag check started enforcing. The gap widened because the
+ruler got stricter, not because competitors got worse.</p>
+</div>
+
+<h2>Get your skill reviewed — without talking to us</h2>
+<div class="card">
+<p>Open an issue with the review form. A bot fetches your public tarball, runs static analysis
+(<b>it never executes your code</b>), and replies with the score, the six-dimension breakdown,
+the blockers, and the order to fix them.</p>
+<p style="margin-top:10px"><a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">Submit a skill for review →</a></p>
+</div>
+
+<div class="foot">
+Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad. Snapshot at a point in time; the sample is not random. Data: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json">leaderboard.json</a> · Machine entry: <a class="a" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/llms.txt">llms.txt</a> · Request a review: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">open an issue</a>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+{
+  "schema": "lgd-parity-feed-v1",
+  "items": [
+    {
+      "schema": "lgd-parity-v1",
+      "skill": "summarize-pro",
+      "published": {
+        "path": "SKILL.md",
+        "sha256": "cb75bcb25310187e8b394c07317fec64c17946b6b8a92340e589f2f73d98b87a",
+        "bytes": 7444,
+        "lines": 114
+      },
+      "original": {
+        "path": "references/original-SKILL.md",
+        "sha256": "1d63be5c71e4f99b06fa04feae1b85aed9215837ea4c7a137ecbe8798b4301db",
+        "bytes": 26541,
+        "lines": 407
+      },
+      "original_matches_local_source": true,
+      "relation": "publish SKILL.md is a condensed rewrite (v2.1.0-slim), not an excerpt; the verbatim original ships alongside it so users can verify both",
+      "check": "sha256(references/original-SKILL.md) == original.sha256"
+    },
+    {
+      "schema": "lgd-parity-v1",
+      "skill": "debug-pro",
+      "published": {
+        "path": "SKILL.md",
+        "sha256": "90274702a988a8f8e252dbbbf1b3c6c847a958d510c640a5148a276c797aa06e",
+        "bytes": 6804,
+        "lines": 106
+      },
+      "restored": {
+        "path": "references/details.md",
+        "sha256": "facde8d27e11",
+        "sections_restored": [
+          "30 秒速查（先看这里）",
+          "什么时候不用（Not for）",
+          "七步流程",
+          "分层速查",
+          "本地工具链（零依赖、不联网）",
+          "执行自检（交付前必过）",
+          "失败与降级处理",
+          "一致性纪律",
+          "边界案例",
+          "硬规则清单（MUST / NEVER）",
+          "多语种",
+          "输出之后交给谁（链式路由）"
+        ],
+        "note": "v2.2.0 起，重写稿丢掉的小节逐段补回 references/details.md，文字取自 original，按需加载。补的是内容，不是分数：补前补后自评都是 96（静态）/ 100（实跑）。"
+      },
+      "original": {
+        "path": "references/original-SKILL.md",
+        "sha256": "f9f978c11485ed2a5158ba429e664b42b05a5757618dcd309486ea22829809fa",
+        "bytes": 18058,
+        "lines": 307
+      },
+      "original_matches_local_source": true,
+      "relation": "publish SKILL.md is a condensed rewrite (v2.1.0-slim), not an excerpt; v2.2.0 additionally restores the dropped sections into references/details.md, so the content gap is now only in SKILL.md itself, not in the package",
+      "check": "sha256(references/original-SKILL.md) == original.sha256"
+    },
+    {
+      "schema": "lgd-parity-v1",
+      "skill": "wechat-viral-topic",
+      "published": {
+        "path": "SKILL.md",
+        "sha256": "2c795067d939b33d3a8a7385ae46e55cffc06be3a86570130a0d4ec98333f830",
+        "bytes": 6832,
+        "lines": 106
+      },
+      "original": {
+        "path": "references/original-SKILL.md",
+        "sha256": "f51b6979f97ac48a973b2c46c4d162319f344c83f321fb983572c4088099ab87",
+        "bytes": 16584,
+        "lines": 285
+      },
+      "original_matches_local_source": true,
+      "relation": "publish SKILL.md is a condensed rewrite (v2.1.0-slim), not an excerpt; the verbatim original ships alongside it so users can verify both",
+      "check": "sha256(references/original-SKILL.md) == original.sha256"
+    },
+    {
+      "schema": "lgd-parity-v1",
+      "skill": "lgd-skill-review",
+      "published": {
+        "path": "SKILL.md",
+        "sha256": "19dc73ba31bd9501b027482c25a20ee4f484249d79fd8d33c44b15372945334f",
+        "bytes": 8156,
+        "lines": 113
+      },
+      "original": {
+        "path": "references/original-SKILL.md",
+        "sha256": "5e0abdb33d5958e8e573389636a1123ec55b53c87167adf5301cb9c2e39f0444",
+        "bytes": 12169,
+        "lines": 176
+      },
+      "original_matches_local_source": true,
+      "relation": "publish SKILL.md is a condensed rewrite (v2.1.0-slim), not an excerpt; the verbatim original ships alongside it so users can verify both",
+      "check": "sha256(references/original-SKILL.md) == original.sha256"
+    }
+  ]
+}

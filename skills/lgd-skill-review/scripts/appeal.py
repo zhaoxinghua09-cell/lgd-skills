@@ -14,6 +14,11 @@ import re
 import sys
 import urllib.request
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+import safeio  # noqa: E402
+
 
 def comments(owner, repo, number):
     url = "https://api.github.com/repos/%s/%s/issues/%d/comments?per_page=100" % (owner, repo, number)
@@ -45,7 +50,8 @@ def last_machine(bodies):
 def main():
     number, slug, dim, path = int(sys.argv[1]), sys.argv[2], sys.argv[3], sys.argv[4]
     owner, repo = slug.split("/", 1)
-    text = open(path, encoding="utf-8").read()
+    safeio.set_root(os.path.dirname(os.path.abspath(path)) or ".")
+    text = safeio.read_text(path)
     m = re.search(r'```json\s*(\{.*?\})\s*```', text, re.S)
     new = json.loads(m.group(1)) if m else {}
     dims_now = new.get("dimensions") or {}

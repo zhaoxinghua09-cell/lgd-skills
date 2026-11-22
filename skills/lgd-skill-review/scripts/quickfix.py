@@ -19,6 +19,13 @@ import argparse
 import json
 import os
 import re
+import sys
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+import safeio  # noqa: E402  （写盘前统一做根目录包含校验）
+import cliscan  # noqa: E402  （线性扫描 front-matter 键与 CLI 声明）
 
 TEXT_EXT = {".md", ".txt", ".json", ".yml", ".yaml"}
 
@@ -64,16 +71,16 @@ SOFTWARE.
 def read_frontmatter(skill_md):
     if not os.path.isfile(skill_md):
         return {}, ""
-    text = open(skill_md, encoding="utf-8", errors="replace").read()
+    text = safeio.read_text(skill_md, errors="replace")
     parts = re.split(r"(?m)^---\s*$", text, maxsplit=2)
     if len(parts) < 3:
         return {}, text
     fm_text = parts[1]
     fm = {}
     for line in fm_text.splitlines():
-        m = re.match(r"^([A-Za-z_][A-Za-z0-9_-]*)\s*:\s*(.*)$", line)
-        if m:
-            fm[m.group(1)] = m.group(2).strip().strip("\"'")
+        kv = cliscan.split_key(line)
+        if kv:
+            fm[kv[0]] = kv[1].strip("\"'")
     return fm, text
 
 
@@ -91,8 +98,8 @@ def scan_commands(root):
                 src = open(path, encoding="utf-8", errors="replace").read()
             except OSError:
                 continue
-            flags = sorted({"--" + x for x in re.findall(r'add_argument\(\s*"--([a-z0-9\-]+)', src)})
-            subs = sorted(set(re.findall(r'add_parser\(\s*"([a-z0-9_\-]+)', src)))
+            decl = cliscan.declared(src)
+            flags, subs = decl["flags"], decl["subcommands"]
             if flags or subs:
                 scripts.append({"script": rel, "flags": flags, "subcommands": subs, "help": _first_doc(src)})
     return scripts
@@ -214,6 +221,7 @@ def main():
 
     APPLY = args.apply
     ROOT = os.path.abspath(args.path)
+    safeio.set_root(ROOT)  # 只允许改动用户点名的这个技能目录
     LICENSE_NAME = args.license
     skill_md = os.path.join(ROOT, "SKILL.md")
     if not os.path.isfile(skill_md):
@@ -234,35 +242,33 @@ def main():
                 body = MIT_TEXT.format(year=2026, holder=args.holder)
             else:
                 body = "%s\n\nCopyright (c) 2026 %s\n" % (LICENSE_NAME, args.holder)
-            open(os.path.join(ROOT, "LICENSE"), "w", encoding="utf-8").write(body)
+            safeio.write_text(os.path.join(ROOT, "LICENSE"), body)
 
     if not fm.get("license"):
         plan.append("add `license: %s` to SKILL.md frontmatter" % LICENSE_NAME)
         if APPLY:
             new_text = re.sub(r"(?m)^---$", "license: %s\n---" % LICENSE_NAME, text, count=1)
-            open(skill_md, "w", encoding="utf-8").write(new_text)
+            safeio.write_text(skill_md, new_text)
 
     index_path = os.path.join(ROOT, "AI-INDEX.json")
     if not os.path.isfile(index_path):
         plan.append("add AI-INDEX.json (%d command(s))" % len(scripts))
         if APPLY:
             payload = build_index(fm, scripts, LICENSE_NAME)
-            open(index_path, "w", encoding="utf-8").write(
-                json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+            safeio.write_text(index_path, json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
     elif scripts:
-        existing = open(index_path, encoding="utf-8", errors="replace").read()
+        existing = safeio.read_text(index_path, errors="replace")
         if "commands" not in existing:
             plan.append("extend AI-INDEX.json with commands block")
             if APPLY:
                 obj = json.loads(existing)
                 obj["commands"] = build_index(fm, scripts, LICENSE_NAME)["commands"]
-                open(index_path, "w", encoding="utf-8").write(
-                    json.dumps(obj, ensure_ascii=False, indent=2) + "\n")
+                safeio.write_text(index_path, json.dumps(obj, ensure_ascii=False, indent=2) + "\n")
 
     if scripts and "## Commands" not in text:
         plan.append("append ## Commands section to SKILL.md (%d script(s))" % len(scripts))
         if APPLY:
-            open(skill_md, "a", encoding="utf-8").write(commands_section(scripts) + "\n")
+            safeio.append_text(skill_md, commands_section(scripts) + "\n")
 
     hits, skipped = scrub_paths(ROOT)
     if hits:

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Audit a skill — score, blockers, fix order</title>
+<meta name="description" content="One command turns a skill package into a score, a blocker list with file:line evidence, and an ordered remediation list. Re-run after fixing to see the delta.">
+<link rel="canonical" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/skill-review.html">
+<meta property="og:title" content="Audit a skill — score, blockers, fix order">
+<meta property="og:description" content="One command turns a skill package into a score, a blocker list with file:line evidence, and an ordered remediation list. Re-run after fixing to see the delta.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"lgd-skill-review",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "description":"Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result includes a remediation order.",
+  "url":"https://zhaoxinghua09-cell.github.io/lgd-skill-review/",
+  "codeRepository":"https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "license":"https://opensource.org/licenses/MIT",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}</script>
+
+</head>
+<body>
+<div class="wrap">
+<nav>
+<nav><a href="./index.html">Home</a><a href="./rubric.html">Rubric</a><a href="./skill-review.html">Audit</a><a href="./quickfix.html">QuickFix</a><a href="./benchmark.html">Benchmark</a><a href="./compare.html">Compare</a><a href="./guide.html">Guide</a><a href="./badge.html">Badge</a><a href="./audits.html">Audits</a><a href="./registry.html">Registry</a><a href="./discover.html">Discover</a><a href="https://github.com/zhaoxinghua09-cell/lgd-skill-review">GitHub</a></nav>
+
+<div class="kick">audit</div>
+<h1>Score, blockers, fix order — from one command.</h1>
+<p class="lead">It never reads your README and trusts it. With <code>--run</code> it executes the
+package's own golden set, so 「我自己测过」和「它真的能跑」是两件事。</p>
+
+<h2>Run it</h2>
+<div class="card"><pre><code># 静态六维评分（不执行目标代码）
+python scripts/review.py &lt;package-dir&gt; --json
+
+# 加上实跑：执行包内黄金集，拿到最后 4 分
+python scripts/review.py &lt;package-dir&gt; --run --json
+
+# 只看某一维的整改（例如「声明与实现是否一致」）
+python scripts/review.py &lt;package-dir&gt; --run --focus declared-consistency</code></pre>
+<p style="margin-top:10px;font-size:13px">零依赖、不联网、标准库即可跑。退出码 0 通过 / 1 有阻断 / 2 参数错误。</p></div>
+
+<h2>What you get</h2>
+<div class="card"><table>
+<tr><th>输出</th><th>内容</th></tr>
+<tr><td>逐维分数</td><td>structure 20 · consistency 25 · reproducible 20 · hygiene 15 · discoverability 15 · licensing 5</td></tr>
+<tr><td>阻断项</td><td>每条带 <code>file:line</code> 证据，不给「建议优化一下」这种无法执行的结论</td></tr>
+<tr><td>整改顺序</td><td>按「先修能一次修好的」排，改完复评能直接看到分数差</td></tr>
+<tr><td>机器可读</td><td><code>--json</code> 输出 <code>{ok, data}</code>，可直接进 CI</td></tr>
+</table></div>
+
+<h2>What it deliberately does not do</h2>
+<div class="card"><ul>
+<li>不判断技能「好不好用」——它只判断「陌生人能否核验」</li>
+<li>不替代人工评审：分数高不等于内容正确</li>
+<li>不执行不可信代码，除非你显式加 <code>--run</code></li>
+</ul></div>
+
+<div class="foot">
+Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad. Snapshot at a point in time; the sample is not random. Data: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json">leaderboard.json</a> · Machine entry: <a class="a" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/llms.txt">llms.txt</a> · Request a review: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">open an issue</a>
+</div>
+</div>
+</body>
+</html>

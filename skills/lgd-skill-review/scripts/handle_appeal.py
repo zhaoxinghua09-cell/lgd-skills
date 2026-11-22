@@ -14,6 +14,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import review as R  # noqa: E402
+import safeio  # noqa: E402
 
 MARKS = {"OVERTURNED": "推翻", "UPHELD": "维持",
          "UNKNOWN_ID": "无效 ID", "REJECTED": "拒收"}
@@ -62,6 +63,7 @@ def main():
     root = os.path.abspath(a.package)
     if not os.path.isdir(root):
         sys.exit("包目录不存在：%s" % root)
+    safeio.set_root(root)
 
     r = R.review(root, a.run, None)
     if not r.get("ok"):
@@ -71,8 +73,7 @@ def main():
     md = build_md(root, r, ar)
 
     if a.out:
-        with open(a.out, "w", encoding="utf-8", newline="\n") as f:
-            f.write(md + "\n")
+        safeio.write_text(a.out, md + "\n", newline="\n", allow_outside=True)
         print("已写出 %s" % a.out)
     else:
         print(md)

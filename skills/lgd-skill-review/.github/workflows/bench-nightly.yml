@@ -29,11 +29,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install deps
+      # 依赖钉版本 + 只允许 wheel（不允许源码包执行 setup 脚本）。
+      # 起因：SonarCloud 报 S8544/S8541——`pip install requests` 没有锁版本，也没有 --only-binary。
+      - name: Install deps (pinned, wheels only)
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install requests || true
-          python -m pip show pypdf >/dev/null 2>&1 || python -m pip install pypdf || true
+          python -m pip install --only-binary :all: "requests==2.32.5" "pypdf==6.1.1"
 
       - name: Run benchmark (static mode only)
         working-directory: bench

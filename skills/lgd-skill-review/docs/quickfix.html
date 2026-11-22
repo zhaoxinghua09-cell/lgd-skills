@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QuickFix — only the fixes that raise verifiability</title>
+<meta name="description" content="Applies mechanical fixes (license, machine-readable index, declared commands) and proves the score delta. Dry-run by default; refuses a single file changed over 30%.">
+<link rel="canonical" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/quickfix.html">
+<meta property="og:title" content="QuickFix — only the fixes that raise verifiability">
+<meta property="og:description" content="Applies mechanical fixes (license, machine-readable index, declared commands) and proves the score delta. Dry-run by default; refuses a single file changed over 30%.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"lgd-skill-review",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "description":"Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result includes a remediation order.",
+  "url":"https://zhaoxinghua09-cell.github.io/lgd-skill-review/",
+  "codeRepository":"https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "license":"https://opensource.org/licenses/MIT",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}</script>
+
+</head>
+<body>
+<div class="wrap">
+<nav>
+<nav><a href="./index.html">Home</a><a href="./rubric.html">Rubric</a><a href="./skill-review.html">Audit</a><a href="./quickfix.html">QuickFix</a><a href="./benchmark.html">Benchmark</a><a href="./compare.html">Compare</a><a href="./guide.html">Guide</a><a href="./badge.html">Badge</a><a href="./audits.html">Audits</a><a href="./registry.html">Registry</a><a href="./discover.html">Discover</a><a href="https://github.com/zhaoxinghua09-cell/lgd-skill-review">GitHub</a></nav>
+
+<div class="kick">quickfix</div>
+<h1>Fix what a machine can fix. Prove the delta.</h1>
+<p class="lead">大多数审计报告读完还是不会改。这条命令只做「机械可判定」的那几件事，并且改完立刻复评，
+把分数差贴出来——不接受「我们改好了」这种自述。</p>
+
+<h2>Run it</h2>
+<div class="card"><pre><code># 先看它想改什么（默认 dry-run，不写盘）
+python scripts/quickfix.py &lt;package-dir&gt;
+
+# 真改：补 LICENSE + 声明 license 字段 + 生成 AI-INDEX.json + 对齐已声明命令
+python scripts/quickfix.py &lt;package-dir&gt; --apply
+
+# 改完立刻复评，拿到前后分数差
+python scripts/review.py &lt;package-dir&gt; --run --json</code></pre>
+<p style="margin-top:10px;font-size:13px">默认只动「机械可判定」项，语义改写一律不碰；单文件改动超过 30% 会被拒绝写入。</p></div>
+
+<h2>What it actually moves</h2>
+<div class="card"><table>
+<tr><th>缺陷</th><th>它能做什么</th><th>实测效果</th></tr>
+<tr><td>无 LICENSE、无 license 字段</td><td>补 MIT 许可文件 + 加 front-matter 字段</td><td>licensing 2 → 3</td></tr>
+<tr><td>无机器可读索引</td><td>生成 AI-INDEX.json（含入口与命令）</td><td>discoverability 4 → 7</td></tr>
+<tr><td>文档声明的命令脚本不存在</td><td><em>只报告，不代写</em>——这需要人决定</td><td>保持阻断，避免掩盖</td></tr>
+</table>
+<p style="margin-top:12px;font-size:13px">真实案例：microsoft/azure-skills 的 azure-deploy 从 20 分，仅靠机械整改到 24 分；
+再补 tests/golden、可跑 runner、llms.txt、tags 到 57 分——剩下的必须由人写内容，机器补不了。</p></div>
+
+<div class="foot">
+Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad. Snapshot at a point in time; the sample is not random. Data: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json">leaderboard.json</a> · Machine entry: <a class="a" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/llms.txt">llms.txt</a> · Request a review: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">open an issue</a>
+</div>
+</div>
+</body>
+</html>

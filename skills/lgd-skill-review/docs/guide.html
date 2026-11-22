@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guide — how to earn the last points</title>
+<meta name="description" content="A copy-paste path from a documentation-only skill to one a stranger can rerun. Three steps, real templates, and the points no machine can award.">
+<link rel="canonical" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/guide.html">
+<meta property="og:title" content="Guide — how to earn the last points">
+<meta property="og:description" content="A copy-paste path from a documentation-only skill to one a stranger can rerun. Three steps, real templates, and the points no machine can award.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"lgd-skill-review",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "description":"Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result includes a remediation order.",
+  "url":"https://zhaoxinghua09-cell.github.io/lgd-skill-review/",
+  "codeRepository":"https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "license":"https://opensource.org/licenses/MIT",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}</script>
+
+</head>
+<body>
+<div class="wrap">
+<nav>
+<nav><a href="./index.html">Home</a><a href="./rubric.html">Rubric</a><a href="./skill-review.html">Audit</a><a href="./quickfix.html">QuickFix</a><a href="./benchmark.html">Benchmark</a><a href="./compare.html">Compare</a><a href="./guide.html">Guide</a><a href="./badge.html">Badge</a><a href="./audits.html">Audits</a><a href="./registry.html">Registry</a><a href="./discover.html">Discover</a><a href="https://github.com/zhaoxinghua09-cell/lgd-skill-review">GitHub</a></nav>
+
+<div class="kick">guide</div>
+<h1>从「只有文档」到「陌生人能重跑」，三步。</h1>
+<p class="lead">我们看到的缺口不是文档数量，是<b>能让别人验的证据</b>。样本内最高分的三方包
+reproducible 都是 0 分——不是它们写得差，是没人写过 golden set。这里给可照抄的模板。</p>
+
+<h2>第一步：写一份 golden.json（20 行）</h2>
+<div class="card"><pre><code>{
+  "cases": [
+    {"id": "T1-missing-skill-md", "kind": "no_skill_md",
+     "expect": {"verdict": "BLOCK"}},
+    {"id": "T2-clean-package", "kind": "clean",
+     "expect": {"verdict": "PASS", "min_score": 90}}
+  ]
+}
+</code></pre>
+<p style="margin-top:10px;font-size:13px">只写「输入是什么、期望结果是什么」。不要写实现细节——
+否则测试会跟着实现一起错。</p></div>
+
+<h2>第二步：写一个能跑、能非零退出的 runner</h2>
+<div class="card"><pre><code>import json, subprocess, sys, tempfile, shutil
+
+def run_case(case):
+    tmp = tempfile.mkdtemp()
+    try:
+        shutil.copytree("fixtures/" + case["kind"], tmp, dirs_exist_ok=True)
+        out = subprocess.run([sys.executable, "scripts/review.py", tmp, "--json"],
+                             capture_output=True, text=True)
+        j = json.loads(out.stdout if out.stdout.strip() else out.stderr)
+        if not j.get("ok", False):
+            # 无效包：JSON 走 stderr，形如 {"ok":false,"error_id":"R001","msg":"目录下没有 SKILL.md"}
+            got = {"verdict": "BLOCK", "total": 0, "error_id": j.get("error_id")}
+        else:
+            got = j["data"]                    # {"total":..,"verdict":..,"dimensions":..}
+        want = case["expect"]
+        if "verdict" in want and got.get("verdict") != want["verdict"]:
+            return False, "%s: want verdict %r got %r" % (case["id"], want["verdict"], got.get("verdict"))
+        if "min_score" in want and got.get("total", 0) &lt; want["min_score"]:
+            return False, "%s: want total&gt;=%d got %d" % (case["id"], want["min_score"], got.get("total", 0))
+        return True, case["id"]
+    except Exception as e:
+        return False, "%s: %s" % (case["id"], e)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+def main():
+    cases = json.load(open("tests/golden.json"))["cases"]
+    results = [run_case(c) for c in cases]
+    bad = [msg for ok, msg in results if not ok]
+    print("%d/%d passed" % (len(results) - len(bad), len(results)))
+    for m in bad:
+        print("  FAIL " + m)
+    return 1 if bad else 0      # ← 这一行是关键：失败必须非零退出
+
+sys.exit(main())
+</code></pre>
+<p style="margin-top:10px;font-size:13px">评分器认「有 runner 且退出码为 0」和「runner 真能跑通」。退出码恒为 0 的脚本不算分。
+两个契约要点：正常结果在 <code>data.total</code>（不是 <code>score</code>）；
+无效包返回 <code>ok=false + error_id</code> 且 <b>JSON 写在 stderr</b>、<b>没有 data</b>——
+这几个坑不踩一遍就会写出「永远通过」的假测试。</p></div>
+
+<h2>第三步：把它接进 CI，让它每次都被执行</h2>
+<div class="card"><pre><code># .github/workflows/verify.yml
+- name: Golden set must actually run
+  run: python tests/run_golden.py
+</code></pre>
+<p style="margin-top:10px;font-size:13px">声明了却从不执行的测试，等于没有。CI 上跑过，才有「它今天仍然能跑」的证据。</p></div>
+
+<h2>做完之后，分数会怎么变</h2>
+<div class="card"><table>
+<tr><th>维度</th><th>做到哪一步</th><th>分数</th></tr>
+<tr><td>reproducible 20</td><td>golden.json + 可跑 runner + 非零退出 + CI 执行</td><td>0 → 16（静态）→ 20（加 --run）</td></tr>
+<tr><td>discoverable 15</td><td>加 AI-INDEX.json 或 llms.txt</td><td>4 → 7</td></tr>
+<tr><td>licensing 5</td><td>许可文件 + 声明字段，二者兼备</td><td>1 → 3 → 5</td></tr>
+</table>
+<p style="margin-top:12px;font-size:13px">以上都是可机械补齐的。剩下这些<b>机器给不了</b>：文档里声明的命令必须真的存在于脚本（要人写或删声明）、
+结构里的 name/description 要写得让人能判断用途、内容本身是否正确——这些只有作者能做。</p></div>
+
+<h2>我们对自己也用同一套</h2>
+<div class="card"><ul>
+<li>本仓的 <code>tests/golden.json</code> + <code>tests/run_golden.py</code> 就是上面这套模板的真实版本（5 条用例，CI 每次跑）</li>
+<li>四个发布包各有 golden 集，<code>review.py --run</code> 实跑 100/100，结果落在 <code>run-proof.json</code></li>
+<li>尺子本身也被测：<code>rubric_probe</code> 造 22 处违规，<code>point_audit</code> 核分值加总——我们不给别人立一套自己不遵守的规矩</li>
+</ul></div>
+
+<div class="foot">
+Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad. Snapshot at a point in time; the sample is not random. Data: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json">leaderboard.json</a> · Machine entry: <a class="a" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/llms.txt">llms.txt</a> · Request a review: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">open an issue</a>
+</div>
+</div>
+</body>
+</html>

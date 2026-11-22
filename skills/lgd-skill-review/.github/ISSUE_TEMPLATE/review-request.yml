@@ -1,0 +1,45 @@
+name: Review Request Intake
+description: Submit a skill package for an LGD dual-ruler review. Static analysis only — we never execute code from your repository.
+title: "[Review] <owner/repo>"
+labels: ["review-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **What you get:** a structure score (0-100), a semantics score (0-120), every deduction pinned to a file, and a numbered remediation list. Static analysis only: nothing from your repo is executed.
+        **中文：** 结构分（0-100）+ 语义分（0-120），每条扣分定位到文件，附编号整改清单。只做静态分析，不执行你仓库里的任何代码。
+  - type: input
+    id: repo
+    attributes:
+      label: Repository URL
+      description: Public GitHub repository, e.g. https://github.com/owner/repo
+      placeholder: https://github.com/owner/repo
+    validations:
+      required: true
+  - type: input
+    id: path
+    attributes:
+      label: Skill directory (optional)
+      description: Path inside the repo that contains SKILL.md. Leave empty to auto-detect the shallowest one.
+      placeholder: skills/my-skill
+    validations:
+      required: false
+  - type: dropdown
+    id: type
+    attributes:
+      label: Skill type (optional)
+      options:
+        - auto
+        - tool
+        - knowledge
+        - workflow
+        - hybrid
+    validations:
+      required: false
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything we should know
+      description: Context, known gaps, or what you want stressed in the review.
+    validations:
+      required: false

@@ -1,0 +1,178 @@
+{
+  "schema": "lgd-skillbench/leaderboard/1",
+  "generated_at_utc": "2026-11-19T05:07:44Z",
+  "engine": "lgd-skill-review/scripts/review.py (static mode, no target code executed)",
+  "scale": {
+    "max": 100,
+    "static_cap_note": "100 requires --run with the target's own tests"
+  },
+  "summary": {
+    "third_party_entries": 16,
+    "lgd_entries": 4,
+    "third_party_top": 38,
+    "lgd_top": 96,
+    "gap": 58
+  },
+  "rows": [
+    {
+      "target": "summarize-pro",
+      "bucket": "lgd",
+      "score": 96,
+      "verdict": "PASS",
+      "blocking": []
+    },
+    {
+      "target": "debug-pro",
+      "bucket": "lgd",
+      "score": 96,
+      "verdict": "PASS",
+      "blocking": []
+    },
+    {
+      "target": "wechat-viral-topic",
+      "bucket": "lgd",
+      "score": 96,
+      "verdict": "PASS",
+      "blocking": []
+    },
+    {
+      "target": "lgd-skill-review",
+      "bucket": "lgd",
+      "score": 96,
+      "verdict": "PASS",
+      "blocking": []
+    },
+    {
+      "target": "anthropics/skills@skills/skill-creator",
+      "bucket": "third-party",
+      "score": 38,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "anthropics/skills@skills/pptx",
+      "bucket": "third-party",
+      "score": 31,
+      "verdict": "BLOCK",
+      "blocking": [
+        "declared_command_missing:--convert-to",
+        "declared_command_missing:--headless"
+      ]
+    },
+    {
+      "target": "anthropics/skills@skills/docx",
+      "bucket": "third-party",
+      "score": 31,
+      "verdict": "BLOCK",
+      "blocking": [
+        "declared_command_missing:--convert-to",
+        "declared_command_missing:--headless"
+      ]
+    },
+    {
+      "target": "anthropics/skills@skills/frontend-design",
+      "bucket": "third-party",
+      "score": 25,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "vercel-labs/agent-skills@skills/react-best-practices",
+      "bucket": "third-party",
+      "score": 24,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "google/agents-cli@skills/google-agents-cli-adk-code",
+      "bucket": "third-party",
+      "score": 22,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "emilkowalski/skills@skills/apple-design",
+      "bucket": "third-party",
+      "score": 22,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "anthropics/skills@skills/pdf",
+      "bucket": "third-party",
+      "score": 21,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "microsoft/azure-skills@skills/azure-deploy",
+      "bucket": "third-party",
+      "score": 20,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "prisma/skills@prisma-cli",
+      "bucket": "third-party",
+      "score": 20,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "mattpocock/skills@skills/engineering/code-review",
+      "bucket": "third-party",
+      "score": 18,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "juliusbrussee/caveman@skills/caveman",
+      "bucket": "third-party",
+      "score": 18,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "obra/superpowers@skills/brainstorming",
+      "bucket": "third-party",
+      "score": 18,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "addyosmani/agent-skills@skills/code-review-and-quality",
+      "bucket": "third-party",
+      "score": 18,
+      "verdict": "FAIL",
+      "blocking": []
+    },
+    {
+      "target": "leonxlnx/taste-skill@skills/taste-skill",
+      "bucket": "third-party",
+      "score": 10,
+      "verdict": "BLOCK",
+      "blocking": [
+        "secret_leak:assets\\photos\\photos.json",
+        "secret_leak:assets\\photos\\photos.json"
+      ]
+    },
+    {
+      "target": "vercel-labs/agent-browser@skill-data/core",
+      "bucket": "third-party",
+      "score": 10,
+      "verdict": "BLOCK",
+      "blocking": [
+        "secret_leak:SKILL.md",
+        "secret_leak:SKILL.md",
+        "secret_leak:SKILL.md",
+        "secret_leak:references\\authentication.md",
+        "secret_leak:references\\authentication.md"
+      ]
+    }
+  ],
+  "limits": [
+    "measures verifiability, not usefulness or popularity",
+    "low score means evidence is missing, not that the skill is bad",
+    "single point-in-time snapshot; sample is not random"
+  ]
+}

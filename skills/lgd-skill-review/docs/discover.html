@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Discover — direct endpoints, no search required</title>
+<meta name="description" content="Every entry point to the LGD verifiability system as a direct URL: rubric, leaderboard, registry, audits, badge, engine, intake.">
+<link rel="canonical" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/discover.html">
+<meta property="og:title" content="Discover — direct endpoints, no search required">
+<meta property="og:description" content="Every entry point to the LGD verifiability system as a direct URL: rubric, leaderboard, registry, audits, badge, engine, intake.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"lgd-skill-review",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "description":"Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result includes a remediation order.",
+  "url":"https://zhaoxinghua09-cell.github.io/lgd-skill-review/",
+  "codeRepository":"https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "license":"https://opensource.org/licenses/MIT",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}</script>
+
+</head>
+<body>
+<div class="wrap">
+<nav>
+<nav><a href="./index.html">Home</a><a href="./rubric.html">Rubric</a><a href="./skill-review.html">Audit</a><a href="./quickfix.html">QuickFix</a><a href="./benchmark.html">Benchmark</a><a href="./compare.html">Compare</a><a href="./guide.html">Guide</a><a href="./badge.html">Badge</a><a href="./audits.html">Audits</a><a href="./registry.html">Registry</a><a href="./discover.html">Discover</a><a href="https://github.com/zhaoxinghua09-cell/lgd-skill-review">GitHub</a></nav>
+
+<div class="kick">discover</div>
+<h1>Direct endpoints. No marketplace search required.</h1>
+<p class="lead">We measured both marketplaces: skills.sh returns us for brand queries
+(<code>lgd</code>, <code>lgd skill review</code>) but not for generic ones; LobeHub market search
+returns 500 popularity-ranked items and does not surface us even on our own display name. So this page
+lists the addresses an agent can hit directly instead of hoping a ranking puts us first.</p>
+<div class="card"><table>
+<tr><th>what</th><th>where</th><th>why</th></tr>
+<tr><td>评价标准（人读）</td><td><code>https://zhaoxinghua09-cell.github.io/lgd-skill-review/rubric.html</code></td><td style='font-size:13px'>六维权重、阻断项、上限说明</td></tr><tr><td>评价标准（机读）</td><td><code>https://zhaoxinghua09-cell.github.io/lgd-skill-review/rubric.json</code></td><td style='font-size:13px'>权重/阻断/敏感模式，由引擎常量导出</td></tr><tr><td>公开榜单</td><td><code>https://zhaoxinghua09-cell.github.io/lgd-skill-review/benchmark.html</code></td><td style='font-size:13px'>20 行，16 个第三方目标</td></tr><tr><td>榜单数据</td><td><code>https://zhaoxinghua09-cell.github.io/lgd-skill-review/leaderboard.json</code></td><td style='font-size:13px'>行级数据 + 三条局限</td></tr><tr><td>认证清单（人读）</td><td><code>https://zhaoxinghua09-cell.github.io/lgd-skill-review/registry.html</code></td><td style='font-size:13px'>verified / watch / blocked 三档</td></tr><tr><td>认证清单（机读）</td><td><code>https://zhaoxinghua09-cell.github.io/lgd-skill-review/registry.json</code></td><td style='font-size:13px'>阈值、规则、全部条目</td></tr><tr><td>真实审计（人读）</td><td><code>https://zhaoxinghua09-cell.github.io/lgd-skill-review/audits.html</code></td><td style='font-size:13px'>两个 40 万级安装量仓库的逐条缺陷</td></tr><tr><td>真实审计（机读）</td><td><code>https://zhaoxinghua09-cell.github.io/lgd-skill-review/audits.json</code></td><td style='font-size:13px'>含 scores/findings/fix_order/reproduce</td></tr><tr><td>逐维对比（人读）</td><td><code>https://zhaoxinghua09-cell.github.io/lgd-skill-review/compare.html</code></td><td style='font-size:13px'>同一时点、同一把尺子的六维并排</td></tr><tr><td>三步补证据（人读）</td><td><code>https://zhaoxinghua09-cell.github.io/lgd-skill-review/guide.html</code></td><td style='font-size:13px'>可照抄的黄金集→runner→CI 模板</td></tr><tr><td>徽章端点</td><td><code>https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fzhaoxinghua09-cell%2Flgd-skill-review%2Fmain%2Fbench%2Fbadge.json</code></td><td style='font-size:13px'>实时读数，非静态图片</td></tr><tr><td>全量语料</td><td><code>https://zhaoxinghua09-cell.github.io/lgd-skill-review/llms-full.txt</code></td><td style='font-size:13px'>一次抓取拿到口径+榜单+审计+复现</td></tr><tr><td>评测引擎</td><td><code>https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/scripts/review.py</code></td><td style='font-size:13px'>标准库、离线、不执行被评代码</td></tr><tr><td>一键整改</td><td><code>https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/scripts/quickfix.py</code></td><td style='font-size:13px'>默认 dry-run，单文件改动>30% 拒绝写入</td></tr><tr><td>提交评测</td><td><code>https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml</code></td><td style='font-size:13px'>机器人回帖给分与整改顺序</td></tr><tr><td>一条命令自证</td><td><code>https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/tools/outsider_check.py</code></td><td style='font-size:13px'>无 token，只读公开端点，逐条复算</td></tr>
+</table></div>
+
+<h2>What an agent can do without contacting anyone</h2>
+<div class="card"><ol>
+<li>Fetch <code>rubric.json</code> to get weights, blocking rules and the static cap.</li>
+<li>Score any local package with <code>review.py --json</code>.</li>
+<li>Read <code>findings</code>, apply the fixes in the given order.</li>
+<li>Re-run the same engine; the score change is the proof.</li>
+<li>If the result seems wrong, appeal with a path and a check — the ruling is recorded.</li>
+</ol></div>
+
+<h2>Two entry points that are actively hostile to newcomers</h2>
+<div class="card"><p>We are not hiding this: marketplace search ranks by install counts and star
+signals we cannot influence without faking them, which we will not do. If you need a verdict today,
+use the endpoints above; if you want us to be found by search, the honest lever is people choosing to
+install and cite us.</p></div>
+
+<h2>Every batch is one commit</h2>
+<div class="card"><p>A single file written at a time produces one commit per file, and CI can then run
+on a half-applied tree. That is not hypothetical: a URL audit landed one commit before the
+<code>docs/leaderboard.json</code> it referenced, and the check failed exactly as it should. Publishing
+now goes through the git data API — blobs, then one tree, then one commit, then one ref update —
+implemented in <code>scripts/push_atomic.py</code>, so a batch is either fully visible or not visible
+at all and CI never sees an intermediate state.</p>
+<p style="font-size:13px">Check it yourself: <code>git log --oneline</code> on this repo shows one commit
+per published batch, and <code>git show --stat</code> on any of them lists all files of that batch together.</p></div>
+
+<div class="foot">
+Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad. Snapshot at a point in time; the sample is not random. Data: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json">leaderboard.json</a> · Machine entry: <a class="a" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/llms.txt">llms.txt</a> · Request a review: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">open an issue</a>
+</div>
+</div>
+</body>
+</html>

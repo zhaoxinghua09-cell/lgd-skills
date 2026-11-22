@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Audits — two large public repos, real findings</title>
+<meta name="description" content="Full-dimension audits of microsoft/azure-skills and prisma/skills, with the findings and the part that one command can fix.">
+<link rel="canonical" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/audits.html">
+<meta property="og:title" content="Audits — two large public repos, real findings">
+<meta property="og:description" content="Full-dimension audits of microsoft/azure-skills and prisma/skills, with the findings and the part that one command can fix.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"lgd-skill-review",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "description":"Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result includes a remediation order.",
+  "url":"https://zhaoxinghua09-cell.github.io/lgd-skill-review/",
+  "codeRepository":"https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "license":"https://opensource.org/licenses/MIT",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}</script>
+
+</head>
+<body>
+<div class="wrap">
+<nav>
+<nav><a href="./index.html">Home</a><a href="./rubric.html">Rubric</a><a href="./skill-review.html">Audit</a><a href="./quickfix.html">QuickFix</a><a href="./benchmark.html">Benchmark</a><a href="./compare.html">Compare</a><a href="./guide.html">Guide</a><a href="./badge.html">Badge</a><a href="./audits.html">Audits</a><a href="./registry.html">Registry</a><a href="./discover.html">Discover</a><a href="https://github.com/zhaoxinghua09-cell/lgd-skill-review">GitHub</a></nav>
+
+<div class="kick">audits</div>
+<h1>We looked at two 400k+ install repositories. Here is what we found.</h1>
+<p class="lead">Not opinions — dimension scores, the exact items that cost points, and how far a
+one-command mechanical fix gets you. Every number below is reproducible with the command at the bottom.</p>
+
+<div class="card">
+<h3>microsoft / azure-skills · <code>skills/azure-deploy</code> · installs ≈731k</h3>
+<table>
+<tr><th>Stage</th><th style="text-align:right">Score</th></tr>
+<tr><td>As shipped</td><td class="num bad">20</td></tr>
+<tr><td>After mechanical fixes only</td><td class="num">24</td></tr>
+</table>
+<p style="margin-top:10px;font-size:13px">Dimensions as shipped: structure 6 / consistency 0 / reproducible 0 / hygiene 8 / discoverable 4 / licensing 2</p>
+<h3 style="margin-top:16px">Findings</h3><ul><li>frontmatter 缺 version（structure 扣分）</li><li>references/recipes/azcli/errors.md 层级超过 3 段</li><li>无测试文件（tests/*.json）与执行器，别人无法复跑</li><li>无 demo，首次使用者无从验证</li><li>SKILL.md 未声明安全边界与降级规则</li><li>标签 0 个；缺互链段；无 AI-INDEX.json / llms.txt</li><li>缺 author；无独立许可文件（仅 frontmatter 声明）</li></ul>
+<h3 style="margin-top:16px">What one command fixes</h3><ul><li>补 LICENSE（MIT）→ licensing 2→3</li><li>生成 AI-INDEX.json → discoverable 4→7</li></ul>
+<h3 style="margin-top:16px">Fix order if you are the maintainer</h3><ul><li>P0 · 5 分钟：加 LICENSE 文件、给 frontmatter 补 version 与 author</li><li>P1 · 半小时：加 tags、触发词段、AI-INDEX.json 或 llms.txt、互链段</li><li>P2 · 作者工作：写 tests/*.json 与执行器、补 demo、声明安全边界</li></ul>
+</div>
+
+<div class="card">
+<h3>prisma / skills · <code>prisma-cli</code> · installs ≈435k</h3>
+<table>
+<tr><th>Stage</th><th style="text-align:right">Score</th></tr>
+<tr><td>As shipped</td><td class="num bad">20</td></tr>
+<tr><td>After mechanical fixes only</td><td class="num">未实测</td></tr>
+</table>
+<p style="margin-top:10px;font-size:13px">Dimensions as shipped: structure 10 / consistency 0 / reproducible 0 / hygiene 8 / discoverable 0 / licensing 2</p>
+<h3 style="margin-top:16px">Findings</h3><ul><li>frontmatter 缺 version（且非 SemVer）</li><li>无测试文件与执行器，无法复跑</li><li>无 demo</li><li>未声明安全边界与降级规则</li><li>标签 0 个；缺触发词段；缺互链段；无机器可读索引</li><li>缺 author；无独立许可文件</li></ul>
+<h3 style="margin-top:16px">What one command fixes</h3><ul><li>同上四类机械动作可补，未在本轮实测（避免对未验证项下结论）</li></ul>
+<h3 style="margin-top:16px">Fix order if you are the maintainer</h3><ul><li>P0 · 5 分钟：加 LICENSE 文件、给 frontmatter 补 version（SemVer）与 author</li><li>P1 · 半小时：加 tags、触发词段、AI-INDEX.json 或 llms.txt、互链段</li><li>P2 · 作者工作：写 tests/*.json 与执行器、补 demo、声明安全边界</li></ul>
+</div>
+
+<h2>Fairness test: can a package we did not write reach 90?</h2>
+<div class="card">
+<p>Same rubric, same engine, applied to microsoft's <code>azure-deploy</code> in a copy. Each stage is
+real work, scored after each step. Nothing was padded to inflate the number.</p>
+<table><tr><th>stage</th><th style="text-align:right">score</th><th>what changed</th></tr>
+<tr><td>原样 / as shipped</td><td class='num'>20</td><td style='font-size:13px'>structure 6 · consistency 0 · reproducible 0 · hygiene 8 · discoverable 4 · licensing 2</td></tr><tr><td>仅机械整改 / mechanical only</td><td class='num'>24</td><td style='font-size:13px'>补 LICENSE + AI-INDEX.json；licensing 2→3，discoverable 4→7</td></tr><tr><td>机械 + 补测试与 demo / + tests & demo</td><td class='num'>57</td><td style='font-size:13px'>加 tests/golden.json、可跑 runner、llms.txt、tags、version；reproducible 0→16</td></tr><tr><td>再补作者工作 / + authored CLI</td><td class='num'>86</td><td style='font-size:13px'>写 scripts/check_prereqs.py（argparse）、在 SKILL.md 声明其命令、补安全边界与生态段；consistency 0→15，hygiene 8→15</td></tr>
+</table>
+<p style="margin-top:12px;font-size:13px">剩 14 分：references/recipes/azcli 层级超过 3 段（structure −4）、以及只实现了一条声明命令（consistency −10）</p>
+<p style="margin-top:8px">Why this matters: our four packages score 96 partly because they were
+written to this rubric. That is a weakness, not a strength. This test removes it: a package by another
+author reaches 86 with work any maintainer can do, and the remaining 14 points are specific, named,
+and fixable. If the ruler only ever fit the ruler's authors, this table could not exist.</p>
+</div>
+
+<h2>How to reproduce</h2>
+<div class="card"><pre><code>git clone --depth 1 https://github.com/microsoft/azure-skills.git
+python scripts/review.py azure-skills/skills/azure-deploy --json</code></pre>
+<p style="margin-top:10px">The mechanical part:</p>
+<pre><code>python scripts/quickfix.py &lt;copy-of-skill-dir&gt; --apply</code></pre>
+</div>
+
+<h2>Why publish this instead of sending them issues</h2>
+<div class="card"><p>Because an issue we file is a request; a public report with a reproducible runner
+is evidence. Anyone — including the maintainers — can rerun the command and check whether we are right.
+If we are wrong about a single item, the runner will show it.</p>
+<p style="margin-top:10px">These are third-party projects. We are not claiming they are bad packages.
+A score of 20 means <b>a stranger cannot verify the claims in ten minutes</b>, which is a property of
+the package's evidence, not of its usefulness.</p></div>
+
+<div class="foot">
+Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad. Snapshot at a point in time; the sample is not random. Data: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json">leaderboard.json</a> · Machine entry: <a class="a" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/llms.txt">llms.txt</a> · Request a review: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">open an issue</a>
+</div>
+</div>
+</body>
+</html>

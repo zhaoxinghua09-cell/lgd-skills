@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "generator": "lgd-skill-review/scripts/gen_site.py",
+  "rubric": "https://zhaoxinghua09-cell.github.io/lgd-skill-review/rubric.html",
+  "note": "静态审计结果，不执行被审代码；分数衡量可验证性，不衡量有用性。",
+  "remediation_experiment": {
+    "target": "microsoft/azure-skills · skills/azure-deploy（第三方包，我们未作者）",
+    "purpose": "检验同一把尺子能否被非作者的包满足，回应「标准为作者量身定做」的质疑",
+    "stages": [
+      {
+        "stage": "原样 / as shipped",
+        "score": 20,
+        "change": "structure 6 · consistency 0 · reproducible 0 · hygiene 8 · discoverable 4 · licensing 2"
+      },
+      {
+        "stage": "仅机械整改 / mechanical only",
+        "score": 24,
+        "change": "补 LICENSE + AI-INDEX.json；licensing 2→3，discoverable 4→7"
+      },
+      {
+        "stage": "机械 + 补测试与 demo / + tests & demo",
+        "score": 57,
+        "change": "加 tests/golden.json、可跑 runner、llms.txt、tags、version；reproducible 0→16"
+      },
+      {
+        "stage": "再补作者工作 / + authored CLI",
+        "score": 86,
+        "change": "写 scripts/check_prereqs.py（argparse）、在 SKILL.md 声明其命令、补安全边界与生态段；consistency 0→15，hygiene 8→15"
+      }
+    ],
+    "remaining": "剩 14 分：references/recipes/azcli 层级超过 3 段（structure −4）、以及只实现了一条声明命令（consistency −10）"
+  },
+  "audits": [
+    {
+      "target": "microsoft / azure-skills",
+      "skill_path": "skills/azure-deploy",
+      "reported_installs": "≈731k",
+      "score_before": 20,
+      "score_after_mechanical": 24,
+      "dimensions_before": "structure 6 / consistency 0 / reproducible 0 / hygiene 8 / discoverable 4 / licensing 2",
+      "findings": [
+        "frontmatter 缺 version（structure 扣分）",
+        "references/recipes/azcli/errors.md 层级超过 3 段",
+        "无测试文件（tests/*.json）与执行器，别人无法复跑",
+        "无 demo，首次使用者无从验证",
+        "SKILL.md 未声明安全边界与降级规则",
+        "标签 0 个；缺互链段；无 AI-INDEX.json / llms.txt",
+        "缺 author；无独立许可文件（仅 frontmatter 声明）"
+      ],
+      "mechanical_fixes": [
+        "补 LICENSE（MIT）→ licensing 2→3",
+        "生成 AI-INDEX.json → discoverable 4→7"
+      ],
+      "fix_order": [
+        "P0 · 5 分钟：加 LICENSE 文件、给 frontmatter 补 version 与 author",
+        "P1 · 半小时：加 tags、触发词段、AI-INDEX.json 或 llms.txt、互链段",
+        "P2 · 作者工作：写 tests/*.json 与执行器、补 demo、声明安全边界"
+      ],
+      "reproduce": "python scripts/review.py <local-clone>/skills/azure-deploy --json"
+    },
+    {
+      "target": "prisma / skills",
+      "skill_path": "prisma-cli",
+      "reported_installs": "≈435k",
+      "score_before": 20,
+      "score_after_mechanical": null,
+      "dimensions_before": "structure 10 / consistency 0 / reproducible 0 / hygiene 8 / discoverable 0 / licensing 2",
+      "findings": [
+        "frontmatter 缺 version（且非 SemVer）",
+        "无测试文件与执行器，无法复跑",
+        "无 demo",
+        "未声明安全边界与降级规则",
+        "标签 0 个；缺触发词段；缺互链段；无机器可读索引",
+        "缺 author；无独立许可文件"
+      ],
+      "mechanical_fixes": [
+        "同上四类机械动作可补，未在本轮实测（避免对未验证项下结论）"
+      ],
+      "fix_order": [
+        "P0 · 5 分钟：加 LICENSE 文件、给 frontmatter 补 version（SemVer）与 author",
+        "P1 · 半小时：加 tags、触发词段、AI-INDEX.json 或 llms.txt、互链段",
+        "P2 · 作者工作：写 tests/*.json 与执行器、补 demo、声明安全边界"
+      ],
+      "reproduce": "python scripts/review.py <local-clone>/prisma-cli --json"
+    }
+  ]
+}

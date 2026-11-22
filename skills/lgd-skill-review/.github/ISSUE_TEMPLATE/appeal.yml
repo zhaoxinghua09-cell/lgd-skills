@@ -1,0 +1,70 @@
+name: Appeal a score
+description: 对 lgd-skill-review 的某条判定提出申诉。/ Appeal a deduction you believe is wrong.
+title: "[appeal] <skill name> — <semantic key>"
+labels: ["appeal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Before you file** — this is not a complaint form. An appeal must point at a
+        file and a check the engine can open and verify. If you cannot name a path,
+        this is a rule discussion, not an appeal.
+        **提交前请确认**：申诉必须指到一个能被打开核验的文件。指不出路径的，属于规则讨论，不在此列。
+
+  - type: input
+    id: skill
+    attributes:
+      label: 被评测的包 / Skill under review
+      description: 仓库地址或包名 + 版本 / repo URL or package name + version
+      placeholder: "https://github.com/you/your-skill @ 1.2.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: finding
+    attributes:
+      label: 你认为哪条判定错了 / Which finding is wrong
+      description: |
+        抄报告里的那一行，含语义键（`R03·reproducible:no-runner`）。
+        语义键跨报告稳定，比序号更好用。/
+        Paste the line from the report, including its semantic key.
+      placeholder: |
+        [P1] R03·reproducible:no-runner
+             包内不存在（tests/）  无测试执行器
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 证据文件 / Evidence file
+      description: |
+        相对包根目录的路径，以及引擎应该在那里看到什么。/
+        Path relative to the package root, and what the engine should see there.
+      placeholder: |
+        path: tests/test_runner.py
+        expect: file_exists
+        # 或 / or
+        path: SKILL.md
+        expect: contains:python scripts/review.py --version
+    validations:
+      required: true
+
+  - type: input
+    id: key
+    attributes:
+      label: 语义键（可选）/ Semantic key (optional)
+      description: 只填键本身，如 `reproducible:no-runner`
+      placeholder: "reproducible:no-runner"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 确认 / Acknowledgement
+      options:
+        - label: 我理解裁决只核验「原判定依据是否成立」，不会修改已给出的分数。/ I understand the ruling verifies the basis of the finding and never changes the score itself.
+          required: true
+        - label: 我提供的证据文件真实存在，且内容如我所述。/ The evidence file exists and contains what I claim.
+          required: true

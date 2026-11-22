@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compare — where the difference actually is</title>
+<meta name="description" content="The strongest third-party skill in the sample and our own package, dimension by dimension. Same engine, same moment, both reproducible.">
+<link rel="canonical" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/compare.html">
+<meta property="og:title" content="Compare — where the difference actually is">
+<meta property="og:description" content="The strongest third-party skill in the sample and our own package, dimension by dimension. Same engine, same moment, both reproducible.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"lgd-skill-review",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "description":"Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result includes a remediation order.",
+  "url":"https://zhaoxinghua09-cell.github.io/lgd-skill-review/",
+  "codeRepository":"https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "license":"https://opensource.org/licenses/MIT",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}</script>
+
+</head>
+<body>
+<div class="wrap">
+<nav>
+<nav><a href="./index.html">Home</a><a href="./rubric.html">Rubric</a><a href="./skill-review.html">Audit</a><a href="./quickfix.html">QuickFix</a><a href="./benchmark.html">Benchmark</a><a href="./compare.html">Compare</a><a href="./guide.html">Guide</a><a href="./badge.html">Badge</a><a href="./audits.html">Audits</a><a href="./registry.html">Registry</a><a href="./discover.html">Discover</a><a href="https://github.com/zhaoxinghua09-cell/lgd-skill-review">GitHub</a></nav>
+
+<div class="kick">compare</div>
+<h1>Same ruler, two packages, six dimensions.</h1>
+<p class="lead">竞品只给一个总分，读者没法知道差在哪。这里把每一维拆开：
+<b>anthropics/skills@skills/skill-creator</b>（样本内最高分，38 分）与我们自己的
+<b>lgd-skill-review</b>（96 分）。</p>
+
+<div class="card"><table>
+<tr><th>维度</th><th style="text-align:right">第三方</th><th style="text-align:right">LGD</th>
+<th style="text-align:right">差值</th><th>满分</th></tr>
+<tr><td>structure · 结构</td><td class="num bad">10</td><td class="num good">20</td><td class="num">10</td><td style="font-size:13px">20 / 20</td></tr><tr><td>consistency · 一致性</td><td class="num bad">15</td><td class="num good">25</td><td class="num">10</td><td style="font-size:13px">25 / 25</td></tr><tr><td>reproducible · 可复现</td><td class="num bad">0</td><td class="num good">16</td><td class="num">16</td><td style="font-size:13px">20 / 20</td></tr><tr><td>hygiene · 卫生</td><td class="num bad">8</td><td class="num good">15</td><td class="num">7</td><td style="font-size:13px">15 / 15</td></tr><tr><td>discoverable · 可发现</td><td class="num bad">4</td><td class="num good">15</td><td class="num">11</td><td style="font-size:13px">15 / 15</td></tr><tr><td>licensing · 许可</td><td class="num bad">1</td><td class="num good">5</td><td class="num">4</td><td style="font-size:13px">5 / 5</td></tr>
+<tr><td><b>合计</b></td><td class="num bad">38</td><td class="num good">96</td>
+<td class="num">58</td><td style="font-size:13px">100</td></tr>
+</table>
+<p style="margin-top:12px;font-size:13px">Generated 2026-11-19T05:07:44Z · static mode · 同一引擎、同一时点</p></div>
+
+<h2>差在哪，不是靠形容词</h2>
+<div class="card"><table>
+<tr><th>差距最大的两维</th><th>对方实际缺什么（在仓库里可查）</th></tr>
+<tr><td>consistency 25</td><td>文档里写的子命令在脚本里不存在；或存在但从不校验参数——这是「声称」与「实现」的差</td></tr>
+<tr><td>reproducible 20</td><td>没有 tests/golden，没有可跑 runner：陌生人无法验证「它到底跑不跑」</td></tr>
+</table>
+<p style="margin-top:12px">这两项占了 45 分。它们不是文笔问题，是<b>证据缺失</b>——
+补上就能得分，补不上就只能停在那里。</p></div>
+
+<h2>自己复现这两行</h2>
+<div class="card"><pre><code># 任意一个包，同一把尺子
+python scripts/review.py &lt;package-dir&gt; --json
+
+# 整张榜重新跑（含上面两个目标）
+cd bench &amp;&amp; python bench.py</code></pre>
+<p style="margin-top:10px;font-size:13px">数字来自 <code>bench/leaderboard.json</code>；
+本页在构建时读取它，所以不会与榜单单据脱节。</p></div>
+
+<div class="foot">
+Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad. Snapshot at a point in time; the sample is not random. Data: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json">leaderboard.json</a> · Machine entry: <a class="a" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/llms.txt">llms.txt</a> · Request a review: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">open an issue</a>
+</div>
+</div>
+</body>
+</html>

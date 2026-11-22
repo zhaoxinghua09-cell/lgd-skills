@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rubric — six dimensions, 100 points</title>
+<meta name="description" content="The exact scoring rules, weights and what each dimension can and cannot prove.">
+<link rel="canonical" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/rubric.html">
+<meta property="og:title" content="Rubric — six dimensions, 100 points">
+<meta property="og:description" content="The exact scoring rules, weights and what each dimension can and cannot prove.">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="assets/site.css">
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"lgd-skill-review",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "description":"Six-dimension verifiability auditor for agent skills. Every deduction cites evidence; every result includes a remediation order.",
+  "url":"https://zhaoxinghua09-cell.github.io/lgd-skill-review/",
+  "codeRepository":"https://github.com/zhaoxinghua09-cell/lgd-skill-review",
+  "license":"https://opensource.org/licenses/MIT",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
+}</script>
+
+</head>
+<body>
+<div class="wrap">
+<nav>
+<nav><a href="./index.html">Home</a><a href="./rubric.html">Rubric</a><a href="./skill-review.html">Audit</a><a href="./quickfix.html">QuickFix</a><a href="./benchmark.html">Benchmark</a><a href="./compare.html">Compare</a><a href="./guide.html">Guide</a><a href="./badge.html">Badge</a><a href="./audits.html">Audits</a><a href="./registry.html">Registry</a><a href="./discover.html">Discover</a><a href="https://github.com/zhaoxinghua09-cell/lgd-skill-review">GitHub</a></nav>
+
+<div class="kick">rubric</div>
+<h1>Six dimensions, 100 points, no black box.</h1>
+<p class="lead">Weights are public because a score nobody can recompute is an opinion with a number
+stapled to it. Static mode caps at 96; the last 4 points require the target's own tests to actually run.</p>
+<div class="card">
+<table>
+<tr><th>Dimension</th><th style="text-align:right">Weight</th><th>What it can prove</th></tr>
+<tr><td>Consistency</td><td class="num">25</td><td>Documented flags and subcommands exist in the source</td></tr>
+<tr><td>Structure</td><td class="num">20</td><td>Entry file, version, name, description are machine-findable</td></tr>
+<tr><td>Reproducibility</td><td class="num">20</td><td>A golden set exists and a runner actually executes it</td></tr>
+<tr><td>Hygiene</td><td class="num">15</td><td>No absolute paths, secrets or leaked contact details</td></tr>
+<tr><td>Discoverability</td><td class="num">15</td><td>Triggers, ecosystem links, AI-INDEX / llms.txt</td></tr>
+<tr><td>Licensing</td><td class="num">5</td><td>A real license file plus a declared field</td></tr>
+</table>
+</div>
+<h2>Item by item · 23 checks</h2><div class='card'><p>Read the JSON, not this page, if you want to act on it: <a class='a' href='./rubric.json'>rubric.json</a>. Sum of checks per dimension is asserted equal to the weight at generation time (<code>drift_check</code>), so this page cannot silently drift from the engine.</p></div><div class='card'><h3>structure<span style='color:#6f86a6;font-weight:400'> · 20 pts</span></h3><table><tr><th>Check</th><th style='text-align:right'>Pts</th><th>How to fix</th></tr><tr><td>front-matter 有 name / description / version 三项</td><td class='num'>6</td><td style='font-size:13px'>在 SKILL.md 头部补 `name:` `description:` `version:`</td></tr><tr><td>version 是 SemVer（x.y.z）</td><td class='num'>4</td><td style='font-size:13px'>把 version 写成 `1.0.0` 这种三段</td></tr><tr><td>没有任何文件路径层级超过 3 段</td><td class='num'>4</td><td style='font-size:13px'>把深层目录拍平，如 references/a/b/c.md → references/a-c.md</td></tr><tr><td>无 junk 文件（.pyc / .zip / __pycache__）</td><td class='num'>3</td><td style='font-size:13px'>删掉并加 .gitignore</td></tr><tr><td>有展示名（displayName / display_name / name）</td><td class='num'>3</td><td style='font-size:13px'>补 `displayName:`</td></tr></table></div><div class='card'><h3>consistency<span style='color:#6f86a6;font-weight:400'> · 25 pts</span></h3><table><tr><th>Check</th><th style='text-align:right'>Pts</th><th>How to fix</th></tr><tr><td>脚本里存在 add_argument 定义（即真的声明了参数）</td><td class='num'>10</td><td style='font-size:13px'>给脚本加 argparse，并在 SKILL.md 写真实可用的 `--flag`</td></tr><tr><td>SKILL.md 声明的每个 --flag 都在脚本里实现</td><td class='num'>5</td><td style='font-size:13px'>要么实现它，要么从文档删掉——这一条是最常见的失分点</td></tr><tr><td>（替代路径，与前两项互斥）文档写位置参数且脚本真读 sys.argv <span style='color:#9ab;font-size:12px'>(alt path)</span></td><td class='num'>5</td><td style='font-size:13px'>无暇加 argparse 时，至少让 `python x.py <a>` 与实现对齐（仅得部分分）</td></tr><tr><td>声明的子命令在脚本里存在（add_parser）</td><td class='num'>5</td><td style='font-size:13px'>子命令名与实现对齐，或不要宣称子命令</td></tr><tr><td>正文声明了「不编造 / faithful」类保真约束</td><td class='num'>5</td><td style='font-size:13px'>在 SKILL.md 明确写输出保真规则（不虚构、不补全缺失事实）</td></tr></table></div><div class='card'><h3>reproducible<span style='color:#6f86a6;font-weight:400'> · 20 pts</span></h3><table><tr><th>Check</th><th style='text-align:right'>Pts</th><th>How to fix</th></tr><tr><td>存在 tests/*.json（golden 集）</td><td class='num'>6</td><td style='font-size:13px'>放一个最小 case 集：输入 + 期望输出，json 即可</td></tr><tr><td>存在可执行 runner（tests/run_*.py / test_*.py / *_test.py）</td><td class='num'>6</td><td style='font-size:13px'>写一个能离线跑、零依赖的 runner，打印 pass/fail</td></tr><tr><td>存在 demo/（首次使用者能验证）</td><td class='num'>4</td><td style='font-size:13px'>加一个能一键跑的 demo 脚本</td></tr><tr><td>（仅 --run 模式）runner 真实执行且退出码 0</td><td class='num'>4</td><td style='font-size:13px'>让测试真的能跑通；这 4 分辨不在静态 96 之内</td></tr></table></div><div class='card'><h3>hygiene<span style='color:#6f86a6;font-weight:400'> · 15 pts</span></h3><table><tr><th>Check</th><th style='text-align:right'>Pts</th><th>How to fix</th></tr><tr><td>全仓无明文密钥 / 手机号 / 真实个人邮箱</td><td class='num'>8</td><td style='font-size:13px'>删掉或改为占位符；Contact/安全报告语境下的邮箱不计泄露</td></tr><tr><td>SKILL.md 有安全边界或降级规则声明</td><td class='num'>7</td><td style='font-size:13px'>加一段「边界与异常」：不做什么、失败如何降级</td></tr></table></div><div class='card'><h3>discoverable<span style='color:#6f86a6;font-weight:400'> · 15 pts</span></h3><table><tr><th>Check</th><th style='text-align:right'>Pts</th><th>How to fix</th></tr><tr><td>tags ≥ 3 个</td><td class='num'>5</td><td style='font-size:13px'>在 front-matter 补 `tags:` 列表</td></tr><tr><td>有触发词段（Triggers / 触发）</td><td class='num'>4</td><td style='font-size:13px'>写清什么情况下该调用本技能</td></tr><tr><td>有互链段（同系列 / 生态 / 系列技能）</td><td class='num'>3</td><td style='font-size:13px'>指向同系列其他技能或生态入口</td></tr><tr><td>有 AI-INDEX.json 或 llms.txt</td><td class='num'>3</td><td style='font-size:13px'>加机器可读入口，让 agent 不用读全文就能定位</td></tr></table></div><div class='card'><h3>licensing<span style='color:#6f86a6;font-weight:400'> · 5 pts</span></h3><table><tr><th>Check</th><th style='text-align:right'>Pts</th><th>How to fix</th></tr><tr><td>front-matter 有 author</td><td class='num'>2</td><td style='font-size:13px'>补 `author:`</td></tr><tr><td>front-matter 有 license 字段</td><td class='num'>2</td><td style='font-size:13px'>补 `license: MIT` 之类</td></tr><tr><td>有独立许可文件（LICENSE / LICENSE.md）</td><td class='num'>1</td><td style='font-size:13px'>放许可文件本体——只有字段没有文件拿不到这 1 分</td></tr></table></div>
+<h2>What the score cannot tell you</h2>
+<div class="card"><ul>
+<li>Whether the skill is useful, correct, or popular</li>
+<li>Whether the prose is any good</li>
+<li>Whether the maintainer will respond to issues</li>
+<li>Anything about packages it never saw</li>
+</ul>
+<p style="margin-top:12px">Two known measurement biases were found and fixed by testing the ruler
+against real repositories: index detection used to be case-sensitive, and position-argument CLIs
+were scored zero. Both are documented in the repository history.</p></div>
+
+<div class="foot">
+Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad. Snapshot at a point in time; the sample is not random. Data: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/blob/main/bench/leaderboard.json">leaderboard.json</a> · Machine entry: <a class="a" href="https://zhaoxinghua09-cell.github.io/lgd-skill-review/llms.txt">llms.txt</a> · Request a review: <a class="a" href="https://github.com/zhaoxinghua09-cell/lgd-skill-review/issues/new?template=review-request.yml">open an issue</a>
+</div>
+</div>
+</body>
+</html>

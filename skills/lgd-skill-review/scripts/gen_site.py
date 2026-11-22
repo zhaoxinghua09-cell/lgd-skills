@@ -18,6 +18,7 @@ import urllib.request
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BENCH = os.path.join(HERE, "bench", "leaderboard.json")
 DOCS = os.path.join(HERE, "docs")
+CSS_HREF = "assets/site.css"  # 共享样式表，页面只引用不内联（12 页各内联一份会让静态扫描判重复）
 SITE = "https://zhaoxinghua09-cell.github.io/lgd-skill-review"
 REPO = "https://github.com/zhaoxinghua09-cell/lgd-skill-review"
 
@@ -160,7 +161,7 @@ def head(title, desc, path, extra_jsonld=""):
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:type" content="website">
-<style>{CSS}</style>
+<link rel="stylesheet" href="assets/site.css">
 <script type="application/ld+json">{{
   "@context":"https://schema.org",
   "@type":"SoftwareApplication",
@@ -178,29 +179,13 @@ def head(title, desc, path, extra_jsonld=""):
 <body>
 <div class="wrap">
 <nav>
-<a href="./index.html">Home</a>
-<a href="./rubric.html">Rubric</a>
-<a href="./skill-review.html">Audit</a>
-<a href="./quickfix.html">QuickFix</a>
-<a href="./benchmark.html">Benchmark</a>
-<a href="./compare.html">Compare</a>
-<a href="./guide.html">Guide</a>
-<a href="./badge.html">Badge</a>
-<a href="./audits.html">Audits</a>
-<a href="./registry.html">Registry</a>
-<a href="./discover.html">Discover</a>
-<a href="{REPO}">GitHub</a>
-</nav>
+<nav><a href="./index.html">Home</a><a href="./rubric.html">Rubric</a><a href="./skill-review.html">Audit</a><a href="./quickfix.html">QuickFix</a><a href="./benchmark.html">Benchmark</a><a href="./compare.html">Compare</a><a href="./guide.html">Guide</a><a href="./badge.html">Badge</a><a href="./audits.html">Audits</a><a href="./registry.html">Registry</a><a href="./discover.html">Discover</a><a href="{REPO}">GitHub</a></nav>
 """
 
 
 FOOT = f"""
 <div class="foot">
-Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad.
-Snapshot at a point in time; the sample is not random.<br>
-Data: <a class="a" href="{REPO}/blob/main/bench/leaderboard.json">leaderboard.json</a> ·
-Machine entry: <a class="a" href="{SITE}/llms.txt">llms.txt</a> ·
-Request a review: <a class="a" href="{REPO}/issues/new?template=review-request.yml">open an issue</a>
+Measures verifiability, not usefulness or popularity. Low score means evidence is missing, not that the skill is bad. Snapshot at a point in time; the sample is not random. Data: <a class="a" href="{REPO}/blob/main/bench/leaderboard.json">leaderboard.json</a> · Machine entry: <a class="a" href="{SITE}/llms.txt">llms.txt</a> · Request a review: <a class="a" href="{REPO}/issues/new?template=review-request.yml">open an issue</a>
 </div>
 </div>
 </body>
@@ -315,6 +300,12 @@ def main():
     data = json.load(open(BENCH, encoding="utf-8"))
     s = data["summary"]
     os.makedirs(DOCS, exist_ok=True)
+
+    # 共享样式表：所有页面共用一份，样式只在这里写一次
+    assets = os.path.join(DOCS, "assets")
+    os.makedirs(assets, exist_ok=True)
+    with open(os.path.join(assets, "site.css"), "w", encoding="utf-8") as fh:
+        fh.write(CSS.strip() + "\n")
 
     # index
     html = head("LGD SkillBench — verifiability, measured",
@@ -1033,9 +1024,17 @@ directly instead of implying the space was empty.</p>
 verifiers, 18 model-harness configurations, paired with-skills / no-skills evaluation (+16.6 pp)</td>
 <td>We do not measure task efficacy and publish no paired runs. Our ruler asks only whether checkable
 evidence exists, and every check has a probe.</td></tr>
-<tr><td><b>NVIDIA SkillEvaluator</b></td><td>Three tiers: deterministic quality gates, dedup, sandboxed live
-evaluation (Skill Lift, pass@k)</td><td>We overlap on the Tier 1 shape. The difference is 23 checks that each
-get a deliberate-violation probe, plus one-command outsider recomputation.</td></tr>
+<tr><td><b>NVIDIA SkillEvaluator</b> (0.6.0, 2026-10-20; Apache-2.0, Experimental)</td><td>Part of the
+NVIDIA Verified Skills pipeline. Four tiers: a keyless composite quality score (correctness · discoverability
+· reliability · efficiency, <code>--min-score 70</code> plus a block on HIGH/CRITICAL findings), a host
+loadability check, dedup, and sandboxed live evaluation (Skill Lift from paired with-skill / baseline arms,
+pass@k with 95% Wilson intervals and a paired McNemar diagnostic) run through Harbor with Codex, Claude Code
+or OpenCode. A combined <code>doctor</code> / <code>validate</code> pipeline with autopilot, catalog validation
+(<code>--workers N</code>, <code>catalog-summary.json</code>), synthetic trigger cases (explicit · implicit ·
+contextual-positive · negative), SkillSpector security scanning and CI templates. Its changelog records
+0.2.1 (08-24), 0.3.0 (09-17), 0.4.0 (09-30) and 0.6.0 (10-20).</td><td>We overlap on the static shape. The
+difference is 23 checks that each get a deliberate-violation probe, plus one-command outsider recomputation
+with no token and no dependency beyond the standard library.</td></tr>
 <tr><td><b>huajielong/skill-evaluator</b></td><td>Community 100-point scheme (trigger 25 + execution 35 +
 economy 20 + trust 12 + comprehension 8)</td><td>Same 100-point shape. We bind the weight to 23 published
 checks with probe evidence, and we do not cover execution efficacy.</td></tr>
@@ -1044,6 +1043,8 @@ checks with probe evidence, and we do not cover execution efficacy.</td></tr>
 <h2>What we do not measure</h2>
 <div class="card"><ul>
 <li>Whether a skill makes an agent do a task better — that is SkillsBench / SkillEvaluator Tier 3.</li>
+<li>Whether a trigger actually fires — we check that the routing line exists, not that a model activates it.
+That needs synthesized trigger cases and a live run, which SkillEvaluator ships and we do not.</li>
 <li>Whether our sample is representative: 20 rows, 16 third-party targets, one point in time.</li>
 <li>Whether a third party has independently reviewed us — registry entries are still self-audited.</li>
 </ul></div>
@@ -1053,10 +1054,17 @@ checks with probe evidence, and we do not cover execution efficacy.</td></tr>
 <tr><th>capability</th><th>who ships it</th><th>our state</th></tr>
 <tr><td>Semantic deduplication against an existing catalog</td><td>NVIDIA SkillEvaluator Tier 2</td>
 <td>not implemented</td></tr>
+<tr><td>Keyless composite quality score over four axes, gated at a minimum and on HIGH/CRITICAL findings</td>
+<td>NVIDIA <code>quality-check</code></td><td>we publish a 100-point rubric, but no second composite index</td></tr>
+<tr><td>Synthetic trigger-case generation (explicit · implicit · contextual-positive · negative)</td>
+<td>NVIDIA <code>create-eval-dataset</code></td><td>not implemented; we check that a trigger line exists, not
+that it fires</td></tr>
 <tr><td>Sandboxed live evaluation with skill lift / pass@k</td><td>NVIDIA Tier 3, SkillsBench</td>
 <td>not implemented; we only run the package's own tests</td></tr>
 <tr><td>Security scanning via a dedicated engine</td><td>NVIDIA Tier 1 (SkillSpector)</td>
 <td>pattern-based secret leakage only</td></tr>
+<tr><td>Paired statistical reporting on live runs (95% Wilson intervals, McNemar diagnostic)</td>
+<td>NVIDIA SkillEvaluator 0.6.0 Tier 3</td><td>not implemented; we publish point scores, not intervals</td></tr>
 <tr><td>GitHub / GitLab CI templates for adopters</td><td>NVIDIA SkillEvaluator</td>
 <td>we publish our own workflow, not a drop-in template</td></tr>
 <tr><td>Loadability check (will a host load the package?)</td><td>NVIDIA Tier 1 Harness Check</td>

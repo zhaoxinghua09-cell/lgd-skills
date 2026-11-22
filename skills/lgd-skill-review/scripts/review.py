@@ -18,6 +18,12 @@ import os
 import re
 import subprocess
 import sys
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+import safeio  # noqa: E402  （同目录共享模块：所有读写先做根目录包含校验）
+import cliscan  # noqa: E402  （线性扫描 CLI 声明与 front-matter 键，不用回溯型正则）
 import time
 from collections import OrderedDict
 
@@ -65,11 +71,16 @@ def _hash_slice(text, m):
     return len(token) >= 16 and not re.search(r"[g-zG-Z]", token)
 
 
-def read(p):
+def read(p, strict=True):
+    """读文件；strict=True 时只允许读到评测根目录内的路径。
+
+    根目录由 main() 传入的用户参数设定，因此 `review.py ../..` 无法借评测
+    之名把包外的文件读进来（safeio.guard 会把越界路径直接拒掉）。
+    申诉材料是用户显式交给我们的输入文件，可用 strict=False 放行。
+    """
     try:
-        with open(p, encoding="utf-8") as f:
-            return f.read()
-    except (OSError, UnicodeDecodeError):
+        return safeio.read_text(p, errors=None, strict=strict)
+    except (OSError, UnicodeDecodeError, safeio.PathOutside):
         return ""
 
 
@@ -81,11 +92,12 @@ def frontmatter(skill_md):
     body = m.group(1)
     fm, key, buf = {}, None, []
     for line in body.splitlines():
-        if re.match(r"^[A-Za-z_][A-Za-z0-9_]*:\s*", line):
+        kv = cliscan.split_key(line)
+        if kv:
             if key:
                 fm[key] = "\n".join(buf).strip()
-            key, val = line.split(":", 1)
-            buf = [val.strip()]
+            key, val = kv
+            buf = [val]
         elif line.strip().startswith("-") and key:
             buf.append(line.strip())
         elif key:
@@ -197,9 +209,8 @@ def d_consistency(root, fm, files):
         if m:
             declared_cmds.add(m.group(1))
 
-    have_flags = set(re.findall(r'add_argument\(\s*"--([a-z0-9\-]+)', scripts_text(root)))
-    have_flags = {"--" + f for f in have_flags}
-    have_cmds = set(re.findall(r'add_parser\(\s*"([a-z0-9_\-]+)', scripts_text(root)))
+    have_flags = set(cliscan.declared(scripts_text(root))["flags"])
+    have_cmds = set(cliscan.declared(scripts_text(root))["subcommands"])
 
     # 只校验「我们的脚本」承诺的 flag，避免把目标平台自身的 CLI 参数误判为我们的声明。
     # 判据写的是「每个 --flag 都要实现」，原实现却多加了关键词门（我们的工具/子命令/…），
@@ -208,7 +219,8 @@ def d_consistency(root, fm, files):
     repo_names = {os.path.basename(p) for p in files}
     ours_declared = set()
     for l in cmd_lines:
-        scripts_on_line = re.findall(r"([\w./\\-]+\.(?:py|sh|js|ts))", l)
+        scripts_on_line = [t.strip("`'\"(),;") for t in l.split()]
+        scripts_on_line = [t for t in scripts_on_line if t.endswith((".py", ".sh", ".js", ".ts"))]
         if any(os.path.basename(s) in repo_names for s in scripts_on_line):
             ours_declared |= set(re.findall(r"--[a-z][a-z0-9\-]{1,20}", l))
     unknown = {f for f in (declared_flags | ours_declared)
@@ -254,17 +266,34 @@ def d_consistency(root, fm, files):
     return got, notes, blocking
 
 
+RUNNER_NAMES = ("run_tests.py", "runtests.py", "make_test.py")
+
+
+def _is_runner_path(path):
+    """测试执行器的命名判定（纯字符串，不用回溯型正则）。
+
+    只认「文件直接位于 tests/ 下」这一种布局——再往深处走就成了猜测目录约定，
+    判据在别人的仓库上会失真。
+    """
+    parts = path.replace("\\", "/").split("/")
+    if len(parts) < 2 or parts[-2] != "tests":
+        return False
+    name = parts[-1]
+    if not name.endswith(".py"):
+        return False
+    return (name.startswith(("run_", "test_")) or name.endswith("_test.py")
+            or name in RUNNER_NAMES)
+
+
 def d_reproducible(root, files, do_run):
     got, notes = 0, []
-    has_golden = any(re.search(r"tests[/\\].*\.json", p) for p in files)
+    norm = [p.replace("\\", "/") for p in files]
+    has_golden = any(("tests/" in p or p.startswith("tests/")) and p.endswith(".json")
+                     for p in norm)
     # 测试执行器：不限于 tests/run_*.py 这一种命名。
     # 申诉反馈暴露过这个问题——tests/test_runner.py 真实存在却被判「无执行器」。
     # 常见合法命名一并识别：run_*.py / test_*.py / *_test.py / run_tests.py / conftest.py 之外的 runner。
-    has_runner = any(
-        re.search(r"(?:^|[/\\])tests[/\\](?:run_.*\.py|test_.*\.py|.*_test\.py|run_tests\.py)", p)
-        or re.search(r"(?:^|[/\\])(?:run_tests|runtests|make_test)\.py$", p)
-        for p in files
-    )
+    has_runner = any(_is_runner_path(p) for p in files)
     has_demo = any(re.search(r"demo[/\\]", p) for p in files)
     if has_golden:
         got += 6
@@ -597,13 +626,13 @@ def appeal_check(root, data, appeal_path):
             out.append((rid, claim, "UPHELD", "所述路径不存在：%s" % path))
             continue
         if expect.startswith("contains:"):
-            body = read(fp) or ""
+            body = read(fp, strict=False) or ""
             needle = expect[9:]
             ok = needle in body
             out.append((rid, claim, "OVERTURNED" if ok else "UPHELD",
                         "文件存在且包含所述内容" if ok else "文件存在但不含所述内容"))
         elif expect.startswith("regex:"):
-            body = read(fp) or ""
+            body = read(fp, strict=False) or ""
             try:
                 ok = bool(re.search(expect[6:], body, re.S))
             except re.error as e:
@@ -628,8 +657,7 @@ def appeal_check(root, data, appeal_path):
         "items": [{"id": r[0], "claim": r[1], "verdict": r[2], "reason": r[3]} for r in out],
     })
     try:
-        with open(log, "w", encoding="utf-8", newline="\n") as f:
-            json.dump(hist, f, ensure_ascii=False, indent=2)
+        safeio.write_text(log, json.dumps(hist, ensure_ascii=False, indent=2), newline="\n")
     except Exception:
         pass
 
@@ -665,12 +693,21 @@ def eight_report(root, fm, files):
         d1 = 9
     else:
         d1 = 4
-    if re.search(r'(?m)^#+\s*(什么是|What is|Introduction|简介)', body, re.I):
+    heads = [l.lstrip("#").strip().lower() for l in body.splitlines() if l.startswith("#")]
+    if any(h.startswith(("什么是", "what is", "introduction", "简介")) for h in heads):
         d1 = max(0, d1 - 3)
     rows.append(("D1", "Knowledge Delta 知识增量", d1, 20, "说明性 %d%%" % nar))
 
     # D2 思维模式与流程：决策树 + 有序步骤 + 取舍理由
-    tree = 1 if re.search(r'(\|.*(如果|when|若|fallback|备选).*\|)|备选方案|Fallback', body, re.I) else 0
+    tree = 0
+    for line in body.splitlines():
+        low = line.lower()
+        if line.count("|") >= 2 and any(k in low for k in ("如果", "when", "若", "fallback", "备选")):
+            tree = 1
+            break
+        if "备选方案" in low or "fallback" in low:
+            tree = 1
+            break
     steps = len(re.findall(r'(?m)^\s*(?:第[一二三四五六七八九十]步|Step\s+\d)', body))
     ordered = len(re.findall(r'(?m)^\s*\d+\.\s', body))
     d2 = (6 if tree else 0) + \
@@ -924,7 +961,7 @@ def focus_report(root, files):
     lines = []
     if os.path.isfile(skillp):
         try:
-            lines = open(skillp, encoding="utf-8", errors="ignore").read().splitlines()
+            lines = safeio.read_text(skillp, errors="ignore").splitlines()
         except Exception:
             lines = []
     n = len(lines)
@@ -973,6 +1010,9 @@ def main():
         print(json.dumps({"ok": False, "error_id": "R002", "msg": "路径不是目录"},
                          ensure_ascii=False))
         sys.exit(2)
+
+    # 评测根目录 = 用户显式给出的包目录；此后所有读写都被限制在这个目录内。
+    safeio.set_root(a.path)
 
     r = review(os.path.abspath(a.path), a.run,
                None if (a.type in (None, "auto")) else a.type)

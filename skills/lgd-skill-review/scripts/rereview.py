@@ -10,6 +10,11 @@ import json
 import os
 import re
 import sys
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+import safeio  # noqa: E402
 import urllib.request
 
 
@@ -43,7 +48,9 @@ def last_score(bodies):
 def main():
     number, slug, path = int(sys.argv[1]), sys.argv[2], sys.argv[3]
     owner, repo = slug.split("/", 1)
-    text = open(path, encoding="utf-8").read()
+    # 报告文件是命令行显式给的那一个；把它所在目录设为根，其他路径一律不可达。
+    safeio.set_root(os.path.dirname(os.path.abspath(path)) or ".")
+    text = safeio.read_text(path)
 
     m = re.search(r'```json\s*(\{.*?\})\s*```', text, re.S)
     if not m:

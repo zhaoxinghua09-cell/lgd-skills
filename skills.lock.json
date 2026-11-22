@@ -4,24 +4,28 @@
     {
       "root_digest": "14da49b990cb343b07b8e69212805a431dd8b90e572efc605ad41f151bab0d14",
       "sequence": 1
+    },
+    {
+      "root_digest": "f8a17192384973276e14a05bfe87632b27581cd42defd14665ee147dbe48ddd3",
+      "sequence": 2
     }
   ],
-  "root_digest": "14da49b990cb343b07b8e69212805a431dd8b90e572efc605ad41f151bab0d14",
+  "root_digest": "f8a17192384973276e14a05bfe87632b27581cd42defd14665ee147dbe48ddd3",
   "schema_version": 2,
-  "sequence": 1,
+  "sequence": 2,
   "skill_count": 5,
   "skills": [
     {
       "declared_name": "debug-pro",
-      "digest": "ebfc391702175e04874644d3b3579bde3fb524e69a161347d4c8fe23ad677b76",
-      "file_count": 23,
+      "digest": "95055121e87eaaa54417ed066b2347436f2c64c2b00a1f1efec28db937f5d62e",
+      "file_count": 24,
       "has_description": true,
       "path": "skills/debug-pro"
     },
     {
       "declared_name": "lgd-skill-review",
-      "digest": "e341f23cd6d96c920d9c9ae2de72798538034f16824fbe8a93c43de96f8ecacd",
-      "file_count": 51,
+      "digest": "918a2f487fd511b4981f932a3c39940f3db57773f6149036430a9dcac0e0190a",
+      "file_count": 77,
       "has_description": true,
       "path": "skills/lgd-skill-review"
     },
@@ -34,15 +38,15 @@
     },
     {
       "declared_name": "summarize-pro",
-      "digest": "646ee29413397636825b57dae27a0a3bdad323d041415413cff999c4ce33851c",
-      "file_count": 26,
+      "digest": "0756b78db31eeb201ceb1cc85bc79b11f5de8220f2bebbd62b20905564f6dcfb",
+      "file_count": 27,
       "has_description": true,
       "path": "skills/summarize-pro"
     },
     {
       "declared_name": "wechat-viral-topic",
-      "digest": "77b6e365bf4971c843d768d301ca6f56e6dc74a30e142669c1291d18fe68e241",
-      "file_count": 28,
+      "digest": "268be0f12860330b6f5f3c953b70faa272d252eb88fc8c2ab794c52e6ddc36f9",
+      "file_count": 29,
       "has_description": true,
       "path": "skills/wechat-viral-topic"
     }
