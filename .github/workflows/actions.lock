@@ -13,3 +13,10 @@ dependencies:
         commit: 'sha1-4d101475d8b20a2381f78447822ac1eab6504dd8'
         owner_id: 44036562
         repo_id: 760702757
+        uses:
+            - 'actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d'
+    'actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d':
+        ref: 'main'
+        commit: 'sha1-508db95dd578ae2727ebd6217d5ba78e4fbda05d'
+        owner_id: 44036562
+        repo_id: 760701061
