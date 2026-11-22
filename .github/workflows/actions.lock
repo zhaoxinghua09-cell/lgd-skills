@@ -5,3 +5,11 @@ version: 'v0.0.3'
 workflows:
     '.github/workflows/lgd-ci.yml': []
     '.github/workflows/skill-lock.yml': []
+    '.github/workflows/attest.yml':
+        - 'actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8'
+dependencies:
+    'actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8':
+        ref: '4d101475d8b20a2381f78447822ac1eab6504dd8'
+        commit: 'sha1-4d101475d8b20a2381f78447822ac1eab6504dd8'
+        owner_id: 44036562
+        repo_id: 760702757
